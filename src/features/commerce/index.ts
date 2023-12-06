@@ -1,0 +1,1 @@
+export {commerceRoutes} from './presentation/routes/commerce.routes';

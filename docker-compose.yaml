@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:14.3
+    restart: always
+    ports: 
+      - "5500:5432"
+    environment: 
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    container_name: herba_events
+    volumes:
+      - ./db/data/postgres:/var/lib/postgresql/data
+      #- ./postgres:/var/lib/postgresql/data
+
+  db-test:
+    image: postgres:14.3
+    restart: always
+    ports: 
+      - "5501:5432"
+    environment: 
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME_TEST}
+    container_name: herba_events_test
+    volumes:
+      - ./db/data-test/postgres:/var/lib/postgresql/data
