@@ -1,8 +1,10 @@
 import { CriteriaOptionsStatus, CustomError, DataBaseError, NotFoundError, ServerError } from "../../../core";
+import { OptionsValidations, codeDbErrorDuplicated } from "../../../core/shared/constants";
 import { CommerceEntity } from "../domain/commerce.entity";
 import { CommerceRepository } from "../domain/commerce.repository";
 import { CommerceValue } from "../domain/commerce.value";
 import { LocationEntity } from "../domain/location.entity";
+import { ICommerceService } from "./commerce.interfaz";
 
 
 interface commerceInput {
@@ -15,19 +17,49 @@ interface commerceInput {
   dataFinish: string;
 }
 
-export class CommerceUseCase {
+
+export class CommerceUseCase implements ICommerceService {
   constructor(private readonly _commerceRepository: CommerceRepository) { }
+ 
+ 
+ 
+  public validateDuplicatedData = async (option: OptionsValidations, data: string) => {
+
+    try {
+      const result = await this._commerceRepository.findByUniqueColumn(option, data);
+      return result
+        ? true
+        : false
+    } catch (err) {
+      if (err instanceof CustomError) {
+        throw err;
+      }
+      throw new ServerError();
+    }
+
+  };
   public createCommerce = async (input: CommerceEntity) => {
 
     try {
       const commerceValue = new CommerceValue(input);
       return await this._commerceRepository.createCommerce(commerceValue);
     } catch (err) {
-
       if (err instanceof CustomError) {
-        throw err;
-      }
 
+        if (err instanceof DataBaseError) {
+          console.log('****código de error:', err.code);
+
+          //TODO: implement search by PHONE/NAME/EMAIL
+
+          ///Return respective error
+          /// Duplicated phone
+          /// Duplicated email
+          /// Duplicated name
+
+
+        }
+
+      }
       throw new ServerError();
     }
 
@@ -107,8 +139,8 @@ export class CommerceUseCase {
       }
       throw new ServerError();
     }
-
   };
+
 
 
 }

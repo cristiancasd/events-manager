@@ -1,12 +1,13 @@
 import express, { Request, Response } from 'express';
 
 import { CommerceUseCase } from '../../application/commerceUseCase';
-import { ValidationChain, body, param } from 'express-validator';
+import { ValidationChain, body, param, query } from 'express-validator';
 import { CommerceController } from '../controllers/commerce.ctrl';
 //import { MockRepository } from '../../infrastructure/repository/mock.repository';
 import { TypeOrmCommerceRepository } from '../../infrastructure/repository/typeOrm.repository';
 import { validateRequest } from '../../../../core';
 import { validateUUIDParam } from './commerce.validations';
+import { checkCommerceNameMiddleware } from '../middelwares/db.middelwares';
 
 const commerceRoutes = express.Router();
 
@@ -15,12 +16,11 @@ const commerceRoutes = express.Router();
 //const commerceRepo = new MockRepository()   // To use db Mock
 //const commerceRepo = new SequelizeCommerceRepository(); 
 const commerceRepo = new TypeOrmCommerceRepository(); // To use db Dynamo
-
-
 const commerceUseCase = new CommerceUseCase(commerceRepo);
-
 const commerceCtrl = new CommerceController(commerceUseCase);
 
+/// Create Commerce
+//TODO: validate not empty name
 commerceRoutes.post(
   `/create`,
   [
@@ -32,12 +32,13 @@ commerceRoutes.post(
     body('totalFreePrevent').isNumeric().withMessage('totalFreePrevent must be number'),
     body('isActive').optional().isBoolean().withMessage('isActive must be bool'),
     body('dateFinish').isString().withMessage('dateFinish must be date'),
+    checkCommerceNameMiddleware,
   ],
   validateRequest,
   commerceCtrl.insertCtrl
 );
 
-
+/// Delete Commerce
 commerceRoutes.delete(
   '/delete/:idCommerce',
   [
@@ -46,6 +47,7 @@ commerceRoutes.delete(
   commerceCtrl.deleteCtrl
 );
 
+/// disable Commerce
 commerceRoutes.delete(
   '/disable/:idCommerce',
   [
@@ -54,14 +56,16 @@ commerceRoutes.delete(
   commerceCtrl.disableCtrl
 );
 
+/// Enable commerce
 commerceRoutes.put(
-  '/disable/:idCommerce',
+  '/enable/:idCommerce',
   [
     validateUUIDParam('idCommerce'),],
   validateRequest,
   commerceCtrl.enableCtrl
 );
 
+/// Find commerce by UID
 commerceRoutes.get(
   '/find/id/:idCommerce',
   [
@@ -71,14 +75,18 @@ commerceRoutes.get(
   commerceCtrl.findCtrl
 );
 
+/// Find commerce by Criteria
 commerceRoutes.get(
-  '/find/all?{statusQ, locationTypeQ, locationQ}',
+  '/find/all',
   [
-    body('locationQ').isString().optional().withMessage('statusQ must be String'),
+    query('statusQ').optional().isIn(['active', 'inactive']).withMessage('statusQ must be "active" or "inactive"'),
+    query('locationTypeQ').optional().isIn(['city', 'country']).withMessage('locationTypeQ must be "city" or "country"'),
+    query('locationQ').optional().isString().withMessage('locationQ must be string"'),
   ],
   validateRequest,
-  commerceCtrl.findCtrl
+  commerceCtrl.findByCriteriaCtrl
 );
+
 
 export { commerceRoutes };
 
