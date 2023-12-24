@@ -20,6 +20,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     return newCommerce;
   }
 
+  @errorHandlerTypeOrm
   async deleteCommerce(uid: string): Promise<boolean> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
 
@@ -34,6 +35,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     }
   }
 
+  @errorHandlerTypeOrm
   async disableCommerce(uid: string): Promise<boolean> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
 
@@ -49,6 +51,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     }
   }
 
+  @errorHandlerTypeOrm
   async enableCommerce(uid: string): Promise<boolean> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
 
@@ -64,6 +67,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     }
   }
 
+  @errorHandlerTypeOrm
   async findCommerceById(uid: string, onlyAcitve?: boolean): Promise<CommerceEntity> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const commerce = await commerceRepository.findOneBy({ id: uid })
@@ -81,6 +85,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     throw new NotFoundError;
   }
 
+  @errorHandlerTypeOrm
   async findCommerces(status?: CriteriaOptionsStatus, location?: LocationEntity): Promise<CommerceEntity[]> {
 
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
@@ -107,6 +112,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     return await commerceRepository.find(conditions);
   }
 
+  @errorHandlerTypeOrm
   async findByUniqueColumn(option: OptionsValidations, data: string): Promise<CommerceEntity> {
 
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);

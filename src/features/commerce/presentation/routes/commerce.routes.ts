@@ -7,17 +7,12 @@ import { CommerceController } from '../controllers/commerce.ctrl';
 import { TypeOrmCommerceRepository } from '../../infrastructure/repository/typeOrm.repository';
 import { validateRequest } from '../../../../core';
 import { validateUUIDParam } from './commerce.validations';
-import { checkCommerceNameMiddleware } from '../middelwares/db.middelwares';
+import { checkCommerceEmailMiddleware, checkCommerceNameMiddleware, checkCommercePhoneMiddleware } from '../middelwares/db.middelwares';
+import { configureDependencies } from '../../../../config/configureDependencies';
 
+
+const { commerceRepository, commerceUseCase, commerceCtrl } = configureDependencies();
 const commerceRoutes = express.Router();
-
-
-
-//const commerceRepo = new MockRepository()   // To use db Mock
-//const commerceRepo = new SequelizeCommerceRepository(); 
-const commerceRepo = new TypeOrmCommerceRepository(); // To use db Dynamo
-const commerceUseCase = new CommerceUseCase(commerceRepo);
-const commerceCtrl = new CommerceController(commerceUseCase);
 
 /// Create Commerce
 //TODO: validate not empty name
@@ -32,7 +27,10 @@ commerceRoutes.post(
     body('totalFreePrevent').isNumeric().withMessage('totalFreePrevent must be number'),
     body('isActive').optional().isBoolean().withMessage('isActive must be bool'),
     body('dateFinish').isString().withMessage('dateFinish must be date'),
+
     checkCommerceNameMiddleware,
+    checkCommerceEmailMiddleware,
+    checkCommercePhoneMiddleware,
   ],
   validateRequest,
   commerceCtrl.insertCtrl
