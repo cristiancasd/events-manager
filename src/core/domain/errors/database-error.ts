@@ -1,4 +1,7 @@
-import { CustomError, codeError } from "../..";
+//import { CustomError, codeError } from "../..";
+
+import { codeError } from "../../shared/constants";
+import { CustomError } from "./custom-error";
 
 
 export class DataBaseError extends CustomError {

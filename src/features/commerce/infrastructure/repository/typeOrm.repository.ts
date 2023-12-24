@@ -14,7 +14,9 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
 
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const newCommerce = commerceRepository.create(data);
+
     await commerceRepository.save(newCommerce);
+
     return newCommerce;
   }
 
@@ -117,6 +119,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
 
     if (option == OptionsValidations.name) {
       const result = await commerceRepository.find({ where: { name: data } });
+
       if (result.length > 0) {
         return result[0];
       }

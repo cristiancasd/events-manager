@@ -1,7 +1,6 @@
 // routes.ts
 import { Router } from 'express';
-import {commerceRoutes} from './features/commerce';
-
+import {commerceRoutes} from './features';
 
 const router = Router();
 

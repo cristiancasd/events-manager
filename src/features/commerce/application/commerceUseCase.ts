@@ -28,7 +28,9 @@ export class CommerceUseCase implements ICommerceService {
 
   @errorHandlerUseCase
   async createCommerce(input: CommerceEntity): Promise<CommerceEntity> {
+
     const commerceValue = new CommerceValue(input);
+
     return await this._commerceRepository.createCommerce(commerceValue);
   };
 

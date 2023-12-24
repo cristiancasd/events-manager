@@ -1,5 +1,5 @@
 import { QueryFailedError } from "typeorm";
-import { DataBaseError, ServerError, codeDbError, codeDbErrorDuplicated } from "../..";
+import { CustomError, DataBaseError, ServerError, codeDbError, codeDbErrorDuplicated } from "../..";
 
 export const errorHandlerTypeOrm = (target: any, key: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
@@ -14,9 +14,14 @@ export const errorHandlerTypeOrm = (target: any, key: string, descriptor: Proper
                     throw new DataBaseError(': Error de duplicado', codeDbErrorDuplicated);
                 }
                 throw new DataBaseError('', codeDbError);
-            } else {
-                throw new ServerError();
             }
+
+            if (error instanceof CustomError) {
+                throw error;
+            }
+
+            throw new ServerError();
+
         }
     };
     return descriptor;
