@@ -1,8 +1,6 @@
 import { QueryFailedError } from "typeorm";
-import { DataBaseError, ServerError } from "../..";
-import { codeDbError, codeDbErrorDuplicated } from "../../shared/constants";
+import { DataBaseError, ServerError, codeDbError, codeDbErrorDuplicated } from "../..";
 
-// Middleware de manejo de errores
 export const errorHandlerTypeOrm = (target: any, key: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 

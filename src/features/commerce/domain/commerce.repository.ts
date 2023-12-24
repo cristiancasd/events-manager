@@ -1,6 +1,6 @@
+import { CommerceEntity, LocationEntity } from ".";
 import { CriteriaOptionsStatus, OptionsValidations } from "../../../core";
-import { CommerceEntity } from "./commerce.entity";
-import { LocationEntity } from "./location.entity";
+
 
 export interface CommerceRepository {
   createCommerce(commerce: CommerceEntity): Promise<CommerceEntity>;

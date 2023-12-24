@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { CommerceUseCase } from '../../application/commerceUseCase';
 import { CriteriaOptionsLocation, CriteriaOptionsStatus } from '../../../../core';
-import { LocationEntity } from '../../domain/location.entity';
+import { CommerceUseCase } from '../../application';
+import { LocationEntity } from '../../domain';
 
 export class CommerceController {
   constructor(

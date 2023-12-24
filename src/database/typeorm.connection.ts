@@ -23,4 +23,4 @@ connectDB
     console.error(`Data Source initialization error`, err);
   })
 
-export default connectDB;
+export { connectDB };

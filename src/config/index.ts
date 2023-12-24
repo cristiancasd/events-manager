@@ -1,0 +1,1 @@
+export { configureDependencies } from "./configureDependencies";

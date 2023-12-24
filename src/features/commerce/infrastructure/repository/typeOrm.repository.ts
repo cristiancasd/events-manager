@@ -1,12 +1,10 @@
-import { CommerceEntity } from '../../domain/commerce.entity';
-import { CommerceRepository } from '../../domain/commerce.repository';
-import { CommerceTypeORMEntity } from '../models/commerce.dto';
-import connectDB from '../../../../database/typeorm.connection';
-import { NotFoundError, errorHandlerTypeOrm, InactiveDataError, CriteriaOptionsStatus, CriteriaOptionsLocation, DataBaseError, ServerError, OptionsValidations } from '../../../../core';
+
 import { FindManyOptions } from 'typeorm';
-import { LocationEntity } from '../../domain/location.entity';
-import { where } from 'sequelize';
-import { codeDbError } from '../../../../core/shared/constants';
+import {codeDbError, NotFoundError, errorHandlerTypeOrm, InactiveDataError, CriteriaOptionsStatus, CriteriaOptionsLocation, DataBaseError, ServerError, OptionsValidations } from '../../../../core';
+import { CommerceEntity, CommerceRepository, LocationEntity } from '../..';
+import { CommerceTypeORMEntity } from '..';
+import { connectDB } from '../../../../database';
+
 
 
 export class TypeOrmCommerceRepository implements CommerceRepository {

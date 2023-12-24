@@ -1,5 +1,5 @@
-import { CustomError } from "../../domain/errors/custom-error";
-import { ServerError } from "../../domain/errors/server-error";
+import { CustomError, ServerError } from "../..";
+
 
 // Middleware de manejo de errores
 export const errorHandlerUseCase = (target: any, key: string, descriptor: PropertyDescriptor) => {

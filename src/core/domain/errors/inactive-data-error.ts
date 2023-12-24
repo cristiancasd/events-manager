@@ -1,5 +1,6 @@
-import { codeDbErrorInactive, codeError } from '../../shared/constants';
-import { CustomError } from './custom-error';
+import { codeDbErrorInactive } from "../..";
+import { CustomError } from "./custom-error";
+
 
 export class InactiveDataError extends CustomError {
   statusCode = 400;
@@ -11,6 +12,6 @@ export class InactiveDataError extends CustomError {
   }
 
   serializeErrors() {
-    return [{ message: 'Not Found', code: this.code??codeDbErrorInactive }];
+    return [{ message: 'Not Found', code: this.code ?? codeDbErrorInactive }];
   }
 }

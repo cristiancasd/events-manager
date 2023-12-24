@@ -3,8 +3,7 @@ import 'express-async-errors';
 import express from 'express';
 import cors from 'cors';
 //import addRoute from './common/infrastructure/route/add.route';
-import { NotFoundError } from './core/domain/errors/not-found-error';
-import { errorHandler } from './core/presentation/middlewares/error-handler';
+import { NotFoundError, errorHandler } from './core';
 import router from './routes';
 
 const app = express();

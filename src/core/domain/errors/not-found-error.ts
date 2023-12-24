@@ -1,5 +1,5 @@
-import { codeError } from '../../shared/constants';
-import { CustomError } from './custom-error';
+import { CustomError, codeError } from "../..";
+
 
 export class NotFoundError extends CustomError {
   statusCode = 404;

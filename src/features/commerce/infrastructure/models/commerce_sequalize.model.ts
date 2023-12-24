@@ -1,6 +1,5 @@
 import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from 'sequelize';
 import sequelize from '../../../../database/sequelize';
-import { CommerceEntity } from '../../domain/commerce.entity';
 
 class CommerceSequealizeModel extends Model<InferAttributes<CommerceSequealizeModel>, InferCreationAttributes<CommerceSequealizeModel>> {
 

@@ -1,9 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { CustomError, DataBaseError, OptionsValidations, RequestValidationError, ServerError, codeDbEmailDuplicated, codeDbNameDuplicated, codeDbPhoneDuplicated } from '../../../../core';
 import { validationResult } from 'express-validator';
-import { TypeOrmCommerceRepository } from '../../infrastructure/repository/typeOrm.repository';
-import { configureDependencies } from '../../../../config/configureDependencies';
-const { commerceRepository, commerceUseCase, commerceCtrl } = configureDependencies();
+import { configureDependencies } from '../../../../config';
+const { commerceUseCase, } = configureDependencies();
 
 
 export const checkCommerceNameMiddleware = async (req: Request, res: Response, next: NextFunction,) => {

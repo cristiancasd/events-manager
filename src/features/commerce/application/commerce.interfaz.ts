@@ -1,6 +1,6 @@
+import { CommerceEntity, LocationEntity } from "..";
 import { CriteriaOptionsStatus, OptionsValidations } from "../../../core";
-import { CommerceEntity } from "../domain/commerce.entity";
-import { LocationEntity } from "../domain/location.entity";
+
 
 export interface ICommerceService {
     validateDuplicatedData(option: OptionsValidations, data: string): Promise<boolean>;

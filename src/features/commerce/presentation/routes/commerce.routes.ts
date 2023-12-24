@@ -1,14 +1,11 @@
 import express, { Request, Response } from 'express';
 
-import { CommerceUseCase } from '../../application/commerceUseCase';
-import { ValidationChain, body, param, query } from 'express-validator';
-import { CommerceController } from '../controllers/commerce.ctrl';
+import {  body,  query } from 'express-validator';
 //import { MockRepository } from '../../infrastructure/repository/mock.repository';
-import { TypeOrmCommerceRepository } from '../../infrastructure/repository/typeOrm.repository';
 import { validateRequest } from '../../../../core';
 import { validateUUIDParam } from './commerce.validations';
 import { checkCommerceEmailMiddleware, checkCommerceNameMiddleware, checkCommercePhoneMiddleware } from '../middelwares/db.middelwares';
-import { configureDependencies } from '../../../../config/configureDependencies';
+import { configureDependencies } from '../../../../config';
 
 
 const { commerceRepository, commerceUseCase, commerceCtrl } = configureDependencies();

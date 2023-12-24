@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn } from 'typeorm';
-import { CommerceEntity } from '../../domain/commerce.entity';
 
 @Entity('commerce')
 export class CommerceTypeORMEntity extends BaseEntity {
