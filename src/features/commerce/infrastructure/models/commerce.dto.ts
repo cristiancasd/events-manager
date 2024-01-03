@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn, OneToMany } from 'typeorm';
+import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
 
 @Entity('commerce')
 export class CommerceTypeORMEntity extends BaseEntity {
@@ -35,4 +36,10 @@ export class CommerceTypeORMEntity extends BaseEntity {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn!: Date;
+
+  @OneToMany(
+    () => EventTypeORMEntity,
+    (event) => event.commerce,
+  )
+  events!: EventTypeORMEntity[];
 }

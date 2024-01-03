@@ -22,3 +22,6 @@ export const codeDbNameDuplicated = 703;
 export const codeDbPhoneDuplicated = 704;
 export const codeDbEmailDuplicated = 705;
 
+
+export const codeCommerceNotFound = 801;
+

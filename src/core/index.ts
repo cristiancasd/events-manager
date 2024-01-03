@@ -9,7 +9,7 @@ export { InactiveDataError } from './domain/errors/inactive-data-error';
 export { errorHandlerTypeOrm } from './infrastructure/middlewares/errorHandlerTypeOrm';
 export { validateRequest } from './presentation/middlewares/validate-request';
 
-export { codeError, codeDbErrorInactive, codeDbError, codeDbErrorDuplicated } from './shared/constants';
+export { codeCommerceNotFound,codeError, codeDbErrorInactive, codeDbError, codeDbErrorDuplicated } from './shared/constants';
 
 
 export { errorHandlerUseCase } from "./application/middlewares/errorHandlerUseCase";
