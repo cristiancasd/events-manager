@@ -3,18 +3,6 @@ import { ICommerceService } from ".";
 import { CriteriaOptionsStatus, NotFoundError, OptionsValidations, errorHandlerUseCase } from "../../../core";
 import { CommerceEntity, CommerceRepository,CommerceValue, LocationEntity  } from "../domain";
 
-
-interface commerceInput {
-  name: string;
-  email: string;
-  countryCode: string;
-  city: string;
-  totalFreePrevent: number;
-  isActive: boolean;
-  dataFinish: string;
-}
-
-
 export class CommerceUseCase implements ICommerceService {
   constructor(private readonly _commerceRepository: CommerceRepository) { }
 

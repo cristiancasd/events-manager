@@ -1,2 +1,2 @@
-export { ICommerceService } from "./commerce.interfaz";
-export { CommerceUseCase } from "./commerceUseCase";
+export { ICommerceService } from "../domain/events.useCase";
+export { CommerceUseCase } from "./eventsUseCase";

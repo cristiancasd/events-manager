@@ -28,7 +28,7 @@ export class EventTypeORMEntity {
   @ManyToOne(
     () => CommerceTypeORMEntity,
     (commerce) => commerce.events,
-    // { eager: true } //cargar automaticamente la relación, que en el fron muestre el
+    { eager: true } //cargar automaticamente la relación, que en el fron muestre el
   )
   commerce!: CommerceTypeORMEntity
 

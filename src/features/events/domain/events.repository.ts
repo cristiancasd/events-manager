@@ -1,12 +1,10 @@
 import { CriteriaOptionsStatus } from "../../../core";
-import { EventEntity } from "./events.entity";
+import { EventEntity } from "./event.entity";
 
 
-export interface EventRepository {
+export interface EventsRepository {
   createEvent(commerce: EventEntity, commerceId: string): Promise<EventEntity>;
-  deleteEvent(uid: string, commerceId: string): Promise<boolean>;
-  disableEvent(uid: string, commerceId: string): Promise<boolean>;
-  enableEvent(uid: string, commerceId: string): Promise<boolean>;
-  findEventById(uid: string, commerceId: string, onlyActive?: boolean): Promise<EventEntity>;
-  findEventByCommerce(commerceId: string, status?: CriteriaOptionsStatus, startDate?: Date, finishDate?: Date,): Promise<EventEntity[]>;
+  deleteEvent(uid: string): Promise<boolean>;
+  findEventById(uid: string): Promise<EventEntity>;
+  findEventsByCommerce(commerceId: string, startDate?: Date, finishDate?: Date): Promise<EventEntity[]>;
 }

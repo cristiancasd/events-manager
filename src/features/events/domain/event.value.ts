@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { EventEntity } from './events.entity';
+import { EventEntity } from './event.entity';
 
 export class EventValue implements EventEntity {
   id: string;
@@ -17,9 +17,9 @@ export class EventValue implements EventEntity {
     commerceId,
   }: {
     name: string;
-    description: string;
+    description?: string;
     date: Date;
-    url: string;
+    url?: string;
     commerceId: string;
   }) {
     this.id = uuid();

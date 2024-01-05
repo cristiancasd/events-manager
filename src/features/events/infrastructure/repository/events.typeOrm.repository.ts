@@ -1,28 +1,25 @@
 
-import { FindManyOptions } from 'typeorm';
-import { codeDbError, NotFoundError, errorHandlerTypeOrm, InactiveDataError, CriteriaOptionsStatus, CriteriaOptionsLocation, DataBaseError, ServerError, OptionsValidations, codeCommerceNotFound } from '../../../../core';
+import { NotFoundError, errorHandlerTypeOrm, ServerError, codeCommerceNotFound } from '../../../../core';
 
 import { connectDB } from '../../../../database';
-import { EventRepository } from '../../domain/events.repository';
-import { EventEntity } from '../../domain/events.entity';
+import { EventsRepository } from '../../domain/events.repository';
+import { EventEntity } from '../../domain/event.entity';
 import { EventTypeORMEntity } from '../models/event.dto';
 import { CommerceTypeORMEntity } from '../../../commerce';
 
-export class TypeOrmEventRepository implements EventRepository {
+export class TypeOrmEventRepository implements EventsRepository {
 
   @errorHandlerTypeOrm
   async createEvent(data: EventEntity, commerceId: string): Promise<EventEntity> {
 
-
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
-
     const newEvent = eventRepository.create(data);
     const commerce = await commerceRepository.findOneBy({ id: commerceId })
 
     if (commerce != null) {
       await eventRepository.save({ ...newEvent, commerce: commerce });
-      return { ...newEvent, commerceId: commerce?.id ?? '' };
+      return { ...newEvent, commerceId: commerce.id };
     }
     throw new ServerError(codeCommerceNotFound);
   }
@@ -30,123 +27,50 @@ export class TypeOrmEventRepository implements EventRepository {
   @errorHandlerTypeOrm
   async deleteEvent(uid: string): Promise<boolean> {
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
-
-    const commerceToDelete = await eventRepository.findOneBy({ id: uid })
-
-    if (commerceToDelete) {
-      const deleteResponse = await eventRepository.remove(commerceToDelete);
+    const eventToDelete = await eventRepository.findOneBy({ id: uid })
+    if (eventToDelete) {
+      const deleteResponse = await eventRepository.remove(eventToDelete);
       return true;
-      // ...
     } else {
       return false;
     }
   }
 
-  @errorHandlerTypeOrm
-  async disableEvent(uid: string): Promise<boolean> {
-    const eventRepository = connectDB.getRepository(EventTypeORMEntity);
 
-    const commerce = await eventRepository.findOneBy({ id: uid })
-
-    if (commerce) {
-      commerce.isActive = false;
-      const disabledEvent = await eventRepository.save(commerce);
-      return true;
-      // ...
-    } else {
-      return false;
-    }
-  }
 
   @errorHandlerTypeOrm
-  async enableEvent(uid: string): Promise<boolean> {
+  async findEventById(uid: string): Promise<EventEntity> {
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
-
-    const commerce = await eventRepository.findOneBy({ id: uid })
-
-    if (commerce) {
-      commerce.isActive = true;
-      const disabledEvent = await eventRepository.save(commerce);
-      return true;
-      // ...
-    } else {
-      return false;
-    }
-  }
-
-  @errorHandlerTypeOrm
-  async findEventById(uid: string, onlyAcitve?: boolean): Promise<EventEntity> {
-    const eventRepository = connectDB.getRepository(EventTypeORMEntity);
-    const commerce = await eventRepository.findOneBy({ id: uid })
-
-    if (commerce) {
-      if (onlyAcitve == true) {
-        if (commerce.isActive) {
-          return commerce;
-        } else {
-          throw new InactiveDataError;
-        }
-      }
-    }
-    if (commerce) return commerce;
+    const event = await eventRepository.findOneBy({ id: uid })
+    if (event) return { ...event, commerceId: event.commerce.id };
     throw new NotFoundError;
   }
 
   @errorHandlerTypeOrm
-  async findEvents(status?: CriteriaOptionsStatus, location?: LocationEntity): Promise<EventEntity[]> {
-
-    const eventRepository = connectDB.getRepository(EventTypeORMEntity);
-    const conditions: FindManyOptions<EventTypeORMEntity> = {};
-
-    if (status !== null && status !== undefined) {
-      conditions.where = {
-        ...conditions.where, isActive: status == CriteriaOptionsStatus.active
-      };
-    }
-
-    if (location !== null && location !== undefined) {
-      if (location.type == CriteriaOptionsLocation.city) {
-        conditions.where = {
-          ...conditions.where, city: location.name
-        };
-      } else {
-        conditions.where = {
-          ...conditions.where, countryCode: location.name
-        };
-      }
-    }
-    console.log('conditions ' + conditions);
-    return await eventRepository.find(conditions);
-  }
-
-  @errorHandlerTypeOrm
-  async findByUniqueColumn(option: OptionsValidations, data: string): Promise<EventEntity> {
-
+  async findEventsByCommerce(commerceId: string, startDate?: Date, finishDate?: Date): Promise<EventEntity[]> {
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
 
-    if (option == OptionsValidations.name) {
-      const result = await eventRepository.find({ where: { name: data } });
+    const queryBuilder = eventRepository.createQueryBuilder('event')
+      .where('event.commerce.id = :commerceId', { commerceId });
 
-      if (result.length > 0) {
-        return result[0];
-      }
+    if (startDate && finishDate) {
+      // Caso 3: Si viene ambas fechas entonces traer los eventos creados en dicha fecha
+      queryBuilder.andWhere('event.date BETWEEN :startDate AND :finishDate', {
+        startDate,
+        finishDate,
+      });
+    } else if (startDate) {
+      // Caso 1: Si viene solo start date, entonces buscar todos los eventos desde la fecha inicial dada
+      queryBuilder.andWhere('event.date >= :startDate', { startDate });
+    } else if (finishDate) {
+      // Caso 2: Si viene solo finish date, traer todos los datos hasta la fecha final
+      queryBuilder.andWhere('event.date <= :finishDate', { finishDate });
     }
 
-    if (option == OptionsValidations.phone) {
-      const result = await eventRepository.find({ where: { phone: +data } });
-      if (result.length > 0) {
-        return result[0];
-      }
-    }
+    const events = await queryBuilder.getMany();
 
-    if (option == OptionsValidations.email) {
-      const result = await eventRepository.find({ where: { email: data } });
-      if (result.length > 0) {
-        return result[0];
-      }
-    }
-
-    throw new DataBaseError('', codeDbError);
+    return events.map((data) => {
+      return { ...data, commerceId: data.commerce.id }
+    });
   }
-
 }

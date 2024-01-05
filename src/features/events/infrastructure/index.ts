@@ -1,1 +1,0 @@
-export { TypeOrmCommerceRepository } from './repository/events.typeOrm.repository';
