@@ -9,7 +9,6 @@ export class CommerceController {
   ) { }
 
   public insertCtrl = async ({ body }: Request, res: Response) => {
-    console.log('***** estoy en insertCtrl ')
     const commerce = await this.commerceUseCase.createCommerce(body);
     res.status(201).send(commerce);
   };

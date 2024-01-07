@@ -10,6 +10,14 @@ export class EventsUseCase implements EventsUseCaseInterface {
   constructor(private readonly _eventsRepository: EventsRepository) { }
 
   @errorHandlerUseCase
+  async validateDuplicatedData(commerceId: string, data: string): Promise<boolean> {
+    const result = await this._eventsRepository.findEventByName(commerceId, data);
+    return result
+      ? true
+      : false
+  };
+
+  @errorHandlerUseCase
   async createEvent(input: EventEntity, eventId: string): Promise<EventEntity> {
     const eventValue = new EventValue(input);
     return await this._eventsRepository.createEvent(eventValue, eventId);

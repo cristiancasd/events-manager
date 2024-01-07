@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express';
 
-import {  body,  query } from 'express-validator';
+import { body, query } from 'express-validator';
 //import { MockRepository } from '../../infrastructure/repository/mock.repository';
-import { validateRequest } from '../../../../core';
-import { validateUUIDParam } from './commerce.validations';
+import { validateRequest, validateUUIDParam } from '../../../../core';
 import { checkCommerceEmailMiddleware, checkCommerceNameMiddleware, checkCommercePhoneMiddleware } from '../middelwares/db.middelwares';
 import { configureDependencies } from '../../../../config';
+import { validateCreateCommerceBody } from './commerce.validations';
 
 
 const { commerceRepository, commerceUseCase, commerceCtrl } = configureDependencies();
@@ -16,15 +16,16 @@ const commerceRoutes = express.Router();
 commerceRoutes.post(
   `/create`,
   [
-    body('name').isString().withMessage('name must be String'),
-    body('phone').isNumeric().withMessage('phone must be number'),
-    body('email').isEmail().withMessage('email must be email'),
-    body('countryCode').isString().withMessage('country must be String'),
-    body('city').isString().withMessage('city must be String'),
-    body('totalFreePrevent').isNumeric().withMessage('totalFreePrevent must be number'),
-    body('isActive').optional().isBoolean().withMessage('isActive must be bool'),
-    body('dateFinish').isString().withMessage('dateFinish must be date'),
-
+    /* body('name').isString().withMessage('name must be String'),
+     body('phone').isNumeric().withMessage('phone must be number'),
+     body('email').isEmail().withMessage('email must be email'),
+     body('countryCode').isString().withMessage('country must be String'),
+     body('city').isString().withMessage('city must be String'),
+     body('totalFreePrevent').isNumeric().withMessage('totalFreePrevent must be number'),
+     body('isActive').optional().isBoolean().withMessage('isActive must be bool'),
+     body('dateFinish').isString().withMessage('dateFinish must be date'),
+     */
+    ...validateCreateCommerceBody,
     checkCommerceNameMiddleware,
     checkCommerceEmailMiddleware,
     checkCommercePhoneMiddleware,

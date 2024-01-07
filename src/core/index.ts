@@ -14,3 +14,6 @@ export { codeCommerceNotFound,codeError, codeDbErrorInactive, codeDbError, codeD
 
 export { errorHandlerUseCase } from "./application/middlewares/errorHandlerUseCase";
 export { errorHandler } from './presentation/middlewares/error-handler';
+
+
+export { validateUUIDParam } from './presentation/validations/param.validations';

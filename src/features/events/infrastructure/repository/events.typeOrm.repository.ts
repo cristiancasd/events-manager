@@ -10,6 +10,20 @@ import { CommerceTypeORMEntity } from '../../../commerce';
 export class TypeOrmEventRepository implements EventsRepository {
 
   @errorHandlerTypeOrm
+  async findEventByName(commerceId: string, name: string): Promise<EventEntity> {
+    const eventRepository = connectDB.getRepository(EventTypeORMEntity);
+
+    const queryBuilder = eventRepository.createQueryBuilder('event')
+      .where('event.commerce.id = :commerceId', { commerceId })
+      .andWhere('event.name = :name', { name })
+
+    const event = await queryBuilder.getOne();
+
+    if (event) return { ...event, commerceId: event.commerce.id };
+    throw new NotFoundError;
+  }
+
+  @errorHandlerTypeOrm
   async createEvent(data: EventEntity, commerceId: string): Promise<EventEntity> {
 
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
