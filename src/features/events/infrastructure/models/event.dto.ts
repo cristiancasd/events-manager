@@ -7,7 +7,7 @@ export class EventTypeORMEntity {
   //@PrimaryColumn('string')
   id!: string;
 
-  @Column({ length: 50, unique: true })
+  @Column({ length: 50 })
   name!: string;
 
   @Column({ length: 50 })
@@ -25,11 +25,15 @@ export class EventTypeORMEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
 
+
+
   @ManyToOne(
     () => CommerceTypeORMEntity,
     (commerce) => commerce.events,
-    { eager: true } //cargar automaticamente la relación, que en el fron muestre el
-  )
+    {
+      eager: true,  //cargar automaticamente la relación, que en el fron muestre el
+      onDelete: 'CASCADE',
+    })
   commerce!: CommerceTypeORMEntity
 
 }

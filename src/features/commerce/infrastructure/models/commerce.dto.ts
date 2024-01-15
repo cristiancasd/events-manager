@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn, OneToMany, BeforeUpdate, BeforeInsert } from 'typeorm';
 import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
 
 @Entity('commerce')
@@ -40,6 +40,14 @@ export class CommerceTypeORMEntity extends BaseEntity {
   @OneToMany(
     () => EventTypeORMEntity,
     (event) => event.commerce,
+    //  { cascade: true },
   )
   events!: EventTypeORMEntity[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  convertToUppercase() {
+    this.city = this.city.toUpperCase();
+    this.countryCode = this.countryCode.toUpperCase();
+  }
 }

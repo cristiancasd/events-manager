@@ -10,9 +10,9 @@ export class EventsController {
   ) { }
 
   public insertCtrl = async (req: Request, res: Response) => {
-    const { commerceId } = req.params;
+    const { commerceId } = req.query;
     const body = req.body;
-    const event = await this.eventsUseCase.createEvent(body, commerceId);
+    const event = await this.eventsUseCase.createEvent(body, commerceId?.toString() ?? '');
     res.status(201).send(event);
   };
 
@@ -32,7 +32,7 @@ export class EventsController {
   public findEventsByCommerceCtrl = async (req: Request, res: Response) => {
     const { commerceId } = req.params;
     const { startDate, finishDate } = req.query;
-    const result = await this.eventsUseCase.findEventsByCommerce(commerceId, new Date(startDate as string), new Date(finishDate as string));
+    const result = await this.eventsUseCase.findEventsByCommerce(commerceId, startDate as string|undefined, finishDate as string|undefined);
     res.status(200).send(result);
   };
 }

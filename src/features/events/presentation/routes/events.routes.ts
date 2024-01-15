@@ -16,9 +16,9 @@ const eventsRoutes = express.Router();
 eventsRoutes.post(
   `/create`,
   [
+    query('commerceId').isUUID().withMessage('commerceId must be UUID'),
     ...validateCreateEventBody,
     checkEventNameMiddleware,
-
   ],
   validateRequest,
   eventsCtrl.insertCtrl
@@ -47,12 +47,11 @@ eventsRoutes.get(
 
 /// Find event by commerceId and dates
 eventsRoutes.get(
-  '/find/:commerceId',
+  '/find/commerce/:commerceId',
   validateFindEvents,
   validateRequest,
   eventsCtrl.findEventsByCommerceCtrl
 );
-
 
 export { eventsRoutes };
 

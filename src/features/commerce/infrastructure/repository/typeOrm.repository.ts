@@ -5,8 +5,6 @@ import { CommerceEntity, CommerceRepository, LocationEntity } from '../..';
 import { CommerceTypeORMEntity } from '..';
 import { connectDB } from '../../../../database';
 
-
-
 export class TypeOrmCommerceRepository implements CommerceRepository {
 
   @errorHandlerTypeOrm
@@ -108,7 +106,6 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
         };
       }
     }
-    console.log('conditions ' + conditions);
     return await commerceRepository.find(conditions);
   }
 

@@ -38,27 +38,27 @@ export class CommerceController {
   };
 
   public findByCriteriaCtrl = async (req: Request, res: Response) => {
-    const { statusQ, locationTypeQ, locationQ } = req.query;
+    const { status, locationType, location } = req.query;
 
 
     // Check if statusQ is a valid key in CriteriaOptionsStatus
-    const status: CriteriaOptionsStatus | undefined = Object.values(CriteriaOptionsStatus).includes(statusQ as CriteriaOptionsStatus)
-      ? CriteriaOptionsStatus[statusQ as CriteriaOptionsStatus]
+    const statusQ: CriteriaOptionsStatus | undefined = Object.values(CriteriaOptionsStatus).includes(status as CriteriaOptionsStatus)
+      ? CriteriaOptionsStatus[status as CriteriaOptionsStatus]
       : undefined;
 
-    const locationType: CriteriaOptionsLocation | undefined = Object.values(CriteriaOptionsLocation).includes(locationTypeQ as CriteriaOptionsLocation)
-      ? CriteriaOptionsLocation[locationTypeQ as CriteriaOptionsLocation]
+    const locationTypeQ: CriteriaOptionsLocation | undefined = Object.values(CriteriaOptionsLocation).includes(locationType as CriteriaOptionsLocation)
+      ? CriteriaOptionsLocation[locationType as CriteriaOptionsLocation]
       : undefined;
 
-    let location: LocationEntity | undefined =
-      locationType && typeof locationQ === "string" && locationQ != ''
+    let locationQ: LocationEntity | undefined =
+      locationTypeQ && typeof location === "string" && location != ''
         ? {
-          name: locationQ,
-          type: locationType
+          name: location.toUpperCase(),
+          type: locationTypeQ
         }
         : undefined;
 
-    const result = await this.commerceUseCase.findCommerces(status, location);
+    const result = await this.commerceUseCase.findCommerces(statusQ, locationQ);
     res.status(200).send(result);
   };
 }

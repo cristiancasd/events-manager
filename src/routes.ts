@@ -1,6 +1,7 @@
 // routes.ts
 import { Router } from 'express';
-import {commerceRoutes} from './features';
+import { commerceRoutes } from './features';
+import { eventsRoutes } from './features/events/presentation/routes/events.routes';
 
 const router = Router();
 
@@ -8,6 +9,8 @@ const router = Router();
 
 // Montar las rutas específicas de cada feature
 router.use('/commerce', commerceRoutes);
+router.use('/event', eventsRoutes);
+
 /*router.use('/user', userRoutes);
 router.use('/clients', clientsRoutes);
 router.use('/assistants', assistantsRoutes);

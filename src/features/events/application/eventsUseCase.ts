@@ -11,16 +11,18 @@ export class EventsUseCase implements EventsUseCaseInterface {
 
   @errorHandlerUseCase
   async validateDuplicatedData(commerceId: string, data: string): Promise<boolean> {
+
     const result = await this._eventsRepository.findEventByName(commerceId, data);
+
     return result
       ? true
       : false
   };
 
   @errorHandlerUseCase
-  async createEvent(input: EventEntity, eventId: string): Promise<EventEntity> {
+  async createEvent(input: EventEntity, commerceId: string): Promise<EventEntity> {
     const eventValue = new EventValue(input);
-    return await this._eventsRepository.createEvent(eventValue, eventId);
+    return await this._eventsRepository.createEvent(eventValue, commerceId);
   };
 
   @errorHandlerUseCase
@@ -36,7 +38,18 @@ export class EventsUseCase implements EventsUseCaseInterface {
   };
 
   @errorHandlerUseCase
-  async findEventsByCommerce(commerceId: string, startDate?: Date, finishDate?: Date): Promise<EventEntity[]> {
-    return await this._eventsRepository.findEventsByCommerce(commerceId, startDate, finishDate);
+  async findEventsByCommerce(commerceId: string, startDate?: string, finishDate?: string): Promise<EventEntity[]> {
+ 
+    let startDateTime = startDate ? new Date(startDate) : undefined;
+    let finishDateTime = finishDate ? new Date(finishDate) : undefined;
+
+    if ((startDateTime && isNaN(startDateTime.getTime())) || !startDateTime)
+      startDateTime = undefined;
+
+    if ((finishDateTime && isNaN(finishDateTime.getTime())) || !finishDateTime)
+      finishDateTime = undefined;
+
+ 
+    return await this._eventsRepository.findEventsByCommerce(commerceId, startDateTime, finishDateTime);
   };
 }

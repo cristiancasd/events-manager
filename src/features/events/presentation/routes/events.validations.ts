@@ -4,18 +4,10 @@ import { query, body, ValidationChain } from 'express-validator';
 
 export const validateCreateEventBody: ValidationChain[] = [
   body('name').isString().withMessage('name must be String'),
-  body('phone').isNumeric().withMessage('phone must be number'),
-  body('email').isEmail().withMessage('email must be email'),
-  body('countryCode').isString().withMessage('country must be String'),
-  body('city').isString().withMessage('city must be String'),
-  body('totalFreePrevent').isNumeric().withMessage('totalFreePrevent must be number'),
-  body('isActive').optional().isBoolean().withMessage('isActive must be bool'),
-  body('dateFinish').isString().withMessage('dateFinish must be date'),
+  body('description').optional().isString().withMessage('description must be string'),
+  body('date').isString().withMessage('date must be Date'),
+  body('url').optional().isURL().withMessage('url must be a URL'),
 ];
-
-
-
-
 
 
 export const validateFindEvents: ValidationChain[] = [
@@ -47,6 +39,4 @@ export const validateFindEvents: ValidationChain[] = [
       }
       return true;
     }),
-
 ];
-
