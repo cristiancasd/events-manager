@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn, OneToMany, BeforeUpdate, BeforeInsert } from 'typeorm';
 import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
+import { LevelTypeORMEntity } from '../../../levels';
 
 @Entity('commerce')
 export class CommerceTypeORMEntity extends BaseEntity {
@@ -43,6 +44,13 @@ export class CommerceTypeORMEntity extends BaseEntity {
     //  { cascade: true },
   )
   events!: EventTypeORMEntity[];
+
+  @OneToMany(
+    () => LevelTypeORMEntity,
+    (level) => level.commerce,
+    //  { cascade: true },
+  )
+  levels!: LevelTypeORMEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

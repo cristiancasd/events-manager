@@ -8,7 +8,7 @@ import { checkEventNameMiddleware } from '../middelwares/db.middelwares';
 import { validateCreateEventBody, validateFindEvents } from './events.validations';
 
 
-const { eventRepository, eventsUseCase, eventsCtrl } = configureDependencies();
+const { eventsCtrl } = configureDependencies();
 const eventsRoutes = express.Router();
 
 /// Create Event

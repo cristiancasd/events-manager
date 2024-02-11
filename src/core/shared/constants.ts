@@ -21,7 +21,7 @@ export const codeDbErrorInactive = 702;
 export const codeDbNameDuplicated = 703;
 export const codeDbPhoneDuplicated = 704;
 export const codeDbEmailDuplicated = 705;
-
+export const codeDbTypeIdDuplicated = 706;
 
 export const codeCommerceNotFound = 801;
 
