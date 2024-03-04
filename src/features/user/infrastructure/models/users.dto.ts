@@ -11,6 +11,7 @@ import {
 import { CommerceTypeORMEntity } from '../../../commerce';
 //import { CommerceUserRoles } from '../../../../core';
 import { LevelTypeORMEntity } from '../../../levels';
+import { CommerceUserRoles } from '../../../../core';
 
 @Entity('user')
 export class UserTypeORMEntity {

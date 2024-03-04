@@ -18,3 +18,4 @@ export { errorHandler } from './presentation/middlewares/error-handler';
 
 export { validateUUIDParam } from './presentation/validations/param.validations';
 
+export { CommerceUserRoles } from './shared/constants';

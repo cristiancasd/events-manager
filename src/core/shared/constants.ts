@@ -1,17 +1,33 @@
-export enum CriteriaOptionsLocation { city = 'city', country = 'country' };
+export enum CriteriaOptionsLocation {
+  city = 'city',
+  country = 'country'
+}
 
 export enum CriteriaOptionsStatus {
-    active = 'active',
-    inactive = 'inactive',
-};
+  active = 'active',
+  inactive = 'inactive'
+}
 
 export enum OptionsValidations {
-    name = 'name',
-    phone = 'phone',
-    email = 'email',
+  name = 'name',
+  phone = 'phone',
+  email = 'email'
+}
 
-};
+export enum CommerceUserRoles {
+  superAdmin = 'super-admin',
+  admin = 'admin',
+  user = 'user',
+  other = 'other'
+}
 
+/// En resumen, esta expresión regular establece condiciones para garantizar que una contraseña
+/// cumpla con ciertos criterios de seguridad, como la inclusión de al menos una letra mayúscula,
+/// una letra minúscula, un dígito y un carácter no alfanumérico. También se asegura de que no haya
+/// caracteres especiales o saltos de línea al principio y permite cualquier combinación de caracteres
+/// después de cumplir con los requisitos anteriores
+export const passwordRegex =
+  /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 
 export const codeError = 600;
 export const codeDbError = 700;
@@ -24,4 +40,3 @@ export const codeDbEmailDuplicated = 705;
 export const codeDbTypeIdDuplicated = 706;
 
 export const codeCommerceNotFound = 801;
-
