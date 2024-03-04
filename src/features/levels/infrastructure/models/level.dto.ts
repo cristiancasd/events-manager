@@ -21,7 +21,7 @@ export class LevelTypeORMEntity {
 
   @OneToMany(
     () => UserTypeORMEntity,
-    (user) => user.commerce,
+    (user) => user.level,
     //  { cascade: true },
   )
   users!: UserTypeORMEntity[];

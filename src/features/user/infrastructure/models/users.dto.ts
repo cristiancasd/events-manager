@@ -11,7 +11,7 @@ import {
 import { CommerceTypeORMEntity } from '../../../commerce';
 //import { CommerceUserRoles } from '../../../../core';
 import { LevelTypeORMEntity } from '../../../levels';
-import { CommerceUserRoles } from '../../../../core';
+import { CommerceUserRoles } from '../../../../core/shared/constants';
 
 @Entity('user')
 export class UserTypeORMEntity {
@@ -42,7 +42,7 @@ export class UserTypeORMEntity {
   @Column()
   isActive!: boolean;
 
-  @Column()
+  @Column({ default: '' })
   freeSpace?: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -65,7 +65,9 @@ export class UserTypeORMEntity {
   commerce!: CommerceTypeORMEntity;
 
   @ManyToOne(() => LevelTypeORMEntity, (level) => level.users, {
-    eager: true //cargar automaticamente la relación, que en el fron muestre el
+    eager: true, //cargar automaticamente la relación, que en el fron muestre el
+    onDelete: 'CASCADE'
+
   })
   level!: LevelTypeORMEntity;
 }

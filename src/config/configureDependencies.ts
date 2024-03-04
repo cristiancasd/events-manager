@@ -5,6 +5,7 @@ import { TypeOrmCommerceRepository } from "../features/commerce/infrastructure/r
 import { CommerceController } from "../features/commerce/presentation/controllers/commerce.ctrl";
 import { EventsController, EventsRepository, EventsUseCase, TypeOrmEventRepository } from "../features/events";
 import { LevelController, LevelRepository, LevelUseCase, TypeOrmLevelRepository } from "../features/levels";
+import { TypeOrmUserRepository, UserController, UserRepository, UserUseCase } from "../features/user";
 
 
 export const configureDependencies = () => {
@@ -21,10 +22,15 @@ export const configureDependencies = () => {
     const levelUseCase = new LevelUseCase(levelRepository);
     const levelCtrl = new LevelController(levelUseCase);
 
+    const userRepository: UserRepository = new TypeOrmUserRepository();
+    const userUseCase = new UserUseCase(userRepository);
+    const userCtrl = new UserController(userUseCase);
+
     return {
         commerceRepository, commerceUseCase, commerceCtrl,
         eventRepository, eventsUseCase, eventsCtrl,
         levelRepository, levelUseCase, levelCtrl,
+        userRepository, userUseCase, userCtrl,
     };
 };
 

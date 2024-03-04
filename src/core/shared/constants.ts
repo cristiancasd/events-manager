@@ -38,5 +38,11 @@ export const codeDbNameDuplicated = 703;
 export const codeDbPhoneDuplicated = 704;
 export const codeDbEmailDuplicated = 705;
 export const codeDbTypeIdDuplicated = 706;
+export const codeDbDocumentDuplicated = 707;
+export const codeDbCustoUserIdDuplicated = 708;
+
+
 
 export const codeCommerceNotFound = 801;
+export const codeLevelNotFound = 802;
+
