@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn, ManyToOne } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
+import { UserTypeORMEntity } from '../../../user/infrastructure/models/users.dto';
 
 @Entity('level')
 export class LevelTypeORMEntity {
@@ -17,6 +18,13 @@ export class LevelTypeORMEntity {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
+
+  @OneToMany(
+    () => UserTypeORMEntity,
+    (user) => iuser.commerce,
+    //  { cascade: true },
+  )
+  users!: UserTypeORMEntity[];
 
   @ManyToOne(
     () => CommerceTypeORMEntity,
