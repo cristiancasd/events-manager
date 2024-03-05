@@ -46,3 +46,8 @@ export const codeDbCustoUserIdDuplicated = 708;
 export const codeCommerceNotFound = 801;
 export const codeLevelNotFound = 802;
 
+
+
+export const errorMessageCommerceNotFound='Commerce not found';
+export const errorMessageLevelNotFound='Level not found';
+

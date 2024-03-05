@@ -18,7 +18,7 @@ export const checkUserNameMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { document, commerceUserId,commerceId, levelUid } = req.body;
+  const { document, commerceUserId, commerceId, levelUid } = req.body;
 
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -38,10 +38,12 @@ export const checkUserNameMiddleware = async (
         undefined,
         commerceUserId
       );
-      
+
+
       if (commerceUserIdExist)
         throw new DataBaseError('Duplicated customCommerceId', codeDbCustoUserIdDuplicated);
     } catch (err) {
+
       if (err instanceof CustomError) {
         if (err instanceof DataBaseError) {
           if (err.code == codeDbError) return next();

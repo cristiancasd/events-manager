@@ -10,7 +10,7 @@ export class UserValue implements UserEntity {
   document: number;
   commerceUserId: string;
   role: CommerceUserRoles;
-  levelId: string;
+  levelUid: string;
   commerceId: string;
   isActive: boolean;
   freeSpace?: string | undefined;
@@ -19,7 +19,7 @@ export class UserValue implements UserEntity {
     name,
     email,
     role,
-    levelId,
+    levelUid,
     commerceId,
     document,
     commerceUserId,
@@ -32,7 +32,7 @@ export class UserValue implements UserEntity {
     document: number;
     commerceUserId: string;
     role: CommerceUserRoles;
-    levelId: string;
+    levelUid: string;
     commerceId: string;
     isActive: boolean;
     freeSpace?: string | undefined;
@@ -44,7 +44,7 @@ export class UserValue implements UserEntity {
     this.document = document;
     this.commerceUserId = commerceUserId;
     this.role = role;
-    this.levelId = levelId;
+    this.levelUid = levelUid;
     this.commerceId = commerceId;
     this.isActive = isActive;
     this.freeSpace = freeSpace;

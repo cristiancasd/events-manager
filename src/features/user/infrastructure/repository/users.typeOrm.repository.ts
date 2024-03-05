@@ -3,7 +3,9 @@ import {
   errorHandlerTypeOrm,
   ServerError,
   codeCommerceNotFound,
-  codeLevelNotFound
+  codeLevelNotFound,
+  errorMessageLevelNotFound,
+  errorMessageCommerceNotFound
 } from '../../../../core';
 
 import { connectDB } from '../../../../database';
@@ -12,6 +14,7 @@ import { UserEntity } from '../../domain/users.entity';
 import { UserTypeORMEntity } from '../models/users.dto';
 import { CommerceTypeORMEntity } from '../../../commerce';
 import { LevelTypeORMEntity } from '../../../levels';
+import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
 export class TypeOrmUserRepository implements UserRepository {
   @errorHandlerTypeOrm
@@ -38,13 +41,10 @@ export class TypeOrmUserRepository implements UserRepository {
         }
       )
 
-
-    console.log('get one')
-
     const user = await queryBuilder.getOne();
     console.log(user?.level);
     console.log(user);
-    if (user) return { ...user, commerceId, levelId: user.level.id };
+    if (user) return { ...user, commerceId, levelUid: user.level.id };
     return null;
   }
 
@@ -54,36 +54,45 @@ export class TypeOrmUserRepository implements UserRepository {
     //commerceId: string,
     //levelUid: string
   ): Promise<UserEntity> {
+
+
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
 
-    const newUser = userRepository.create({
-      ...data,
-      password: 'adsad'
-    });
-    console.log('-------99999999999');
-    console.log(newUser)
+    console.log('***************-------*** voy a crear usuaro')
+
     const commerce = await commerceRepository.findOneBy({ id: data.commerceId });
-    const level = await levelRepository.findOneBy({ id: data.levelId });
+    const level = await levelRepository.findOneBy({ id: data.levelUid });
+    console.log('commerce.commerce', commerce);
+
+    console.log('data.levelUid', data.levelUid);
+    console.log('level', level);
+
+    //TODO: hacer validaciones en otra parte
+
+    console.log('level.commerce.id==commerce.id', level?.commerce.id != commerce?.id)
 
     if (commerce != null) {
-      if (level != null) {
+      if (level != null && level.commerce.id == commerce.id) {
+        const newUser = userRepository.create({
+          ...data,
+          password: 'adsad'
+        });
         console.log('***************************');
         const algo = await userRepository.save({ ...newUser, commerce: commerce, level: level });
         console.log(algo);
         console.log('-----------44444444444444')
-        const toSave = { ...newUser, commerceId: commerce.id, levelId: data.levelId }
+        const toSave = { ...newUser, commerceId: commerce.id, levelUid: data.levelUid }
         console.log(toSave);
         console.log('***************************');
 
         return toSave;
 
       }
-      throw new ServerError(codeLevelNotFound);
-
+      throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
     }
-    throw new ServerError(codeCommerceNotFound);
+    throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 
   /*@errorHandlerTypeOrm

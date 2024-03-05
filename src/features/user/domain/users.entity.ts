@@ -8,7 +8,7 @@ export interface UserEntity {
   name: string;
   email: string;
   role: CommerceUserRoles;
-  levelId: string;
+  levelUid: string;
   commerceId: string;
   isActive: boolean;
   freeSpace?: string;
