@@ -27,7 +27,7 @@ export class UserTypeORMEntity {
   @Column({ length: 50 })
   email!: string;
 
-  @Column({ length: 50, select: false })
+  @Column({ length: 200, select: false })
   password!: string;
 
   @Column()

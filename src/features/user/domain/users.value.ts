@@ -13,6 +13,7 @@ export class UserValue implements UserEntity {
   levelUid: string;
   commerceId: string;
   isActive: boolean;
+  password?: string | undefined;
   freeSpace?: string | undefined;
   constructor({
     phone,
@@ -24,6 +25,7 @@ export class UserValue implements UserEntity {
     document,
     commerceUserId,
     freeSpace,
+    password,
     isActive
   }: {
     phone: number;
@@ -36,6 +38,7 @@ export class UserValue implements UserEntity {
     commerceId: string;
     isActive: boolean;
     freeSpace?: string | undefined;
+    password?: string | undefined;
   }) {
     this.id = uuid();
     this.name = name;
@@ -48,5 +51,6 @@ export class UserValue implements UserEntity {
     this.commerceId = commerceId;
     this.isActive = isActive;
     this.freeSpace = freeSpace;
+    this.password = password;
   }
 }

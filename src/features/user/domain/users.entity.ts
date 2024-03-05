@@ -12,4 +12,5 @@ export interface UserEntity {
   commerceId: string;
   isActive: boolean;
   freeSpace?: string;
+  password?:string;
 }

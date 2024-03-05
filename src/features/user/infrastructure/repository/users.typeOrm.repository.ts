@@ -16,6 +16,8 @@ import { CommerceTypeORMEntity } from '../../../commerce';
 import { LevelTypeORMEntity } from '../../../levels';
 import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
+import * as bcrypt from 'bcrypt'
+
 export class TypeOrmUserRepository implements UserRepository {
   @errorHandlerTypeOrm
   async findUserByDocument(
@@ -51,48 +53,38 @@ export class TypeOrmUserRepository implements UserRepository {
   @errorHandlerTypeOrm
   async createUser(
     data: UserEntity,
-    //commerceId: string,
-    //levelUid: string
   ): Promise<UserEntity> {
-
 
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
 
-    console.log('***************-------*** voy a crear usuaro')
 
     const commerce = await commerceRepository.findOneBy({ id: data.commerceId });
     const level = await levelRepository.findOneBy({ id: data.levelUid });
-    console.log('commerce.commerce', commerce);
-
-    console.log('data.levelUid', data.levelUid);
-    console.log('level', level);
 
     //TODO: hacer validaciones en otra parte
+    if (commerce == null) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
+    if (level == null || (level != null && level.commerce.id != commerce.id)) throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
+    if (data.password == null) throw new BadRequestError('');
 
-    console.log('level.commerce.id==commerce.id', level?.commerce.id != commerce?.id)
+    const newUser = userRepository.create({
+      ...data,
+      password: bcrypt.hashSync(data.password, 10)
+    });
+    const algo = await userRepository.save({ ...newUser, commerce: commerce, level: level });
+    console.log(algo);
+    console.log('-----------44444444444444')
+    const {password, ...resto}=newUser;
+    const toSave = { ...resto, commerceId: commerce.id, levelUid: data.levelUid }
+    console.log(toSave);
+    console.log('***************************');
 
-    if (commerce != null) {
-      if (level != null && level.commerce.id == commerce.id) {
-        const newUser = userRepository.create({
-          ...data,
-          password: 'adsad'
-        });
-        console.log('***************************');
-        const algo = await userRepository.save({ ...newUser, commerce: commerce, level: level });
-        console.log(algo);
-        console.log('-----------44444444444444')
-        const toSave = { ...newUser, commerceId: commerce.id, levelUid: data.levelUid }
-        console.log(toSave);
-        console.log('***************************');
+    return toSave;
 
-        return toSave;
 
-      }
-      throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
-    }
-    throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
+
+
   }
 
   /*@errorHandlerTypeOrm
