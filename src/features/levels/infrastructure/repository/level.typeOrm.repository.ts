@@ -1,11 +1,12 @@
 
-import { NotFoundError, errorHandlerTypeOrm, ServerError, codeCommerceNotFound } from '../../../../core';
+import { NotFoundError, errorHandlerTypeOrm, ServerError, codeCommerceNotFound, errorMessageLevelNotFound, codeLevelNotFound } from '../../../../core';
 
 import { connectDB } from '../../../../database';
 import { LevelRepository } from '../../domain/level.repository';
 import { LevelEntity } from '../../domain/level.entity';
 import { LevelTypeORMEntity } from '../models/level.dto';
 import { CommerceTypeORMEntity } from '../../../commerce';
+import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
 export class TypeOrmLevelRepository implements LevelRepository {
 
@@ -69,8 +70,7 @@ export class TypeOrmLevelRepository implements LevelRepository {
       const { commerce, ...resto } = level;
       return { ...resto, commerceId: level.commerce.id };
     }
-
-    throw new NotFoundError;
+    throw new NotFoundError(errorMessageLevelNotFound, codeLevelNotFound);
   }
 
   @errorHandlerTypeOrm

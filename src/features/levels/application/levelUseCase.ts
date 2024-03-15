@@ -1,5 +1,5 @@
 
-import { CriteriaOptionsStatus, NotFoundError, OptionsValidations, errorHandlerUseCase } from "../../../core";
+import { CriteriaOptionsStatus, NotFoundError, OptionsValidations, codeLevelNotFound, errorHandlerUseCase, errorMessageLevelNotFound } from "../../../core";
 import { LevelEntity } from "../domain/level.entity";
 import { LevelValue } from "../domain/level.value";
 import { LevelRepository } from "../domain/level.repository";
@@ -38,7 +38,7 @@ export class LevelUseCase implements LevelUseCaseInterface {
   async deleteLevelByUid(uid: string): Promise<boolean> {
     const result = await this._levelRepository.deleteLevel(uid);
     if (result) return result;
-    throw new NotFoundError();
+    throw new NotFoundError(errorMessageLevelNotFound, codeLevelNotFound);
   };
 
   @errorHandlerUseCase

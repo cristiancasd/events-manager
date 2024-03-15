@@ -1,6 +1,6 @@
 
 import { ICommerceService } from ".";
-import { CriteriaOptionsStatus, NotFoundError, OptionsValidations, errorHandlerUseCase } from "../../../core";
+import { CriteriaOptionsStatus, NotFoundError, OptionsValidations, codeCommerceNotFound, errorHandlerUseCase, errorMessageCommerceNotFound } from "../../../core";
 import { CommerceEntity, CommerceRepository,CommerceValue, LocationEntity  } from "../domain";
 
 export class CommerceUseCase implements ICommerceService {
@@ -26,21 +26,21 @@ export class CommerceUseCase implements ICommerceService {
   async deleteCommerceByUid(uid: string): Promise<boolean> {
     const result = await this._commerceRepository.deleteCommerce(uid);
     if (result) return result;
-    throw new NotFoundError();
+    throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);;
   };
 
   @errorHandlerUseCase
   async disableCommerceByUid(uid: string): Promise<boolean> {
     const result = await this._commerceRepository.disableCommerce(uid);
     if (result) return result;
-    throw new NotFoundError();
+    throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 
   @errorHandlerUseCase
   async enableCommerceByUid(uid: string): Promise<boolean> {
     const result = await this._commerceRepository.enableCommerce(uid);
     if (result) return result;
-    throw new NotFoundError();
+    throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 
   @errorHandlerUseCase

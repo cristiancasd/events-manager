@@ -1,5 +1,6 @@
 
 import { CriteriaOptionsStatus, NotFoundError, OptionsValidations, errorHandlerUseCase } from "../../../core";
+import { codeEventNotFound, errorMessageEventNotFound } from "../../../core";
 import { EventEntity } from "../domain/event.entity";
 import { EventValue } from "../domain/event.value";
 import { EventsRepository } from "../domain/events.repository";
@@ -29,7 +30,7 @@ export class EventsUseCase implements EventsUseCaseInterface {
   async deleteEventByUid(uid: string): Promise<boolean> {
     const result = await this._eventsRepository.deleteEvent(uid);
     if (result) return result;
-    throw new NotFoundError();
+    throw new NotFoundError(errorMessageEventNotFound, codeEventNotFound);
   };
 
   @errorHandlerUseCase

@@ -12,13 +12,21 @@ import { connectDB } from '../../../../database';
 import { UserRepository } from '../../domain/users.repository';
 import { UserEntity } from '../../domain/users.entity';
 import { UserTypeORMEntity } from '../models/users.dto';
-import { CommerceTypeORMEntity } from '../../../commerce';
-import { LevelTypeORMEntity } from '../../../levels';
+import { CommerceRepository, CommerceTypeORMEntity, CommerceUseCase } from '../../../commerce';
+import { LevelRepository, LevelTypeORMEntity, LevelUseCase } from '../../../levels';
 import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
 import * as bcrypt from 'bcrypt'
 
 export class TypeOrmUserRepository implements UserRepository {
+
+  constructor(
+    //private commerceRepository: CommerceRepository,
+    //private levelRepository: LevelRepository
+    private commerceUseCase: CommerceUseCase,
+    private levelUseCase: LevelUseCase
+  ) { }
+
   @errorHandlerTypeOrm
   async findUserByDocument(
     commerceId: string,
@@ -57,15 +65,24 @@ export class TypeOrmUserRepository implements UserRepository {
 
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
-    const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
+    //const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
 
 
-    const commerce = await commerceRepository.findOneBy({ id: data.commerceId });
-    const level = await levelRepository.findOneBy({ id: data.levelUid });
+    //const commerce = await commerceRepository.findOneBy({ id: data.commerceId });
+    //const level = await levelRepository.findOneBy({ id: data.levelUid });
+
+
+    //const commerce = await this.commerceRepository.findCommerceById(data.commerceId);
+    //const level = await this.levelRepository.findLevelByUid(data.levelUid);
+
+    const commerce = await this.commerceUseCase.findComerceByUid(data.commerceId);
+    const level = await this.levelUseCase.findLevelByUid(data.levelUid);
+
 
     //TODO: hacer validaciones en otra parte
-    if (commerce == null) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
-    if (level == null || (level != null && level.commerce.id != commerce.id)) throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
+    //if (commerce == null) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
+    //if (level == null || (level != null && level.commerce.id != commerce.id)) throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
+    if (level == null || (level != null && level.commerceId != commerce.id)) throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound)
     if (data.password == null) throw new BadRequestError('');
 
     const newUser = userRepository.create({
@@ -73,18 +90,10 @@ export class TypeOrmUserRepository implements UserRepository {
       password: bcrypt.hashSync(data.password, 10)
     });
     const algo = await userRepository.save({ ...newUser, commerce: commerce, level: level });
-    console.log(algo);
-    console.log('-----------44444444444444')
-    const {password, ...resto}=newUser;
+  
+    const { password, ...resto } = newUser;
     const toSave = { ...resto, commerceId: commerce.id, levelUid: data.levelUid }
-    console.log(toSave);
-    console.log('***************************');
-
     return toSave;
-
-
-
-
   }
 
   /*@errorHandlerTypeOrm

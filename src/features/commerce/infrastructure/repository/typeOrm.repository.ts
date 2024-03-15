@@ -1,11 +1,32 @@
 
 import { FindManyOptions } from 'typeorm';
-import { codeDbError, NotFoundError, errorHandlerTypeOrm, InactiveDataError, CriteriaOptionsStatus, CriteriaOptionsLocation, DataBaseError, ServerError, OptionsValidations } from '../../../../core';
+import { codeDbError, NotFoundError, errorHandlerTypeOrm, InactiveDataError, CriteriaOptionsStatus, CriteriaOptionsLocation, DataBaseError, ServerError, OptionsValidations, errorMessageCommerceNotFound, codeCommerceNotFound } from '../../../../core';
 import { CommerceEntity, CommerceRepository, LocationEntity } from '../..';
 import { CommerceTypeORMEntity } from '..';
 import { connectDB } from '../../../../database';
+import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
 export class TypeOrmCommerceRepository implements CommerceRepository {
+  
+
+  @errorHandlerTypeOrm
+  async findCommerceById(uid: string, onlyAcitve?: boolean): Promise<CommerceEntity> {
+    const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
+    const commerce = await commerceRepository.findOneBy({ id: uid })
+
+    if (commerce) {
+      if (onlyAcitve == true) {
+        if (commerce.isActive) {
+          return commerce;
+        } else {
+          throw new InactiveDataError;
+        }
+      }
+    }
+    if (commerce) return commerce;
+    if (commerce == null) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
+    throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
+  }
 
   @errorHandlerTypeOrm
   async createCommerce(data: CommerceEntity): Promise<CommerceEntity> {
@@ -65,23 +86,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     }
   }
 
-  @errorHandlerTypeOrm
-  async findCommerceById(uid: string, onlyAcitve?: boolean): Promise<CommerceEntity> {
-    const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
-    const commerce = await commerceRepository.findOneBy({ id: uid })
-
-    if (commerce) {
-      if (onlyAcitve == true) {
-        if (commerce.isActive) {
-          return commerce;
-        } else {
-          throw new InactiveDataError;
-        }
-      }
-    }
-    if (commerce) return commerce;
-    throw new NotFoundError;
-  }
+  
 
   @errorHandlerTypeOrm
   async findCommerces(status?: CriteriaOptionsStatus, location?: LocationEntity): Promise<CommerceEntity[]> {

@@ -1,5 +1,5 @@
 import { QueryFailedError } from "typeorm";
-import { CustomError, DataBaseError, ServerError, codeDbError, codeDbErrorDuplicated } from "../..";
+import { CustomError, DataBaseError, ServerError, codeDbError, codeDbErrorDuplicated, notFoundError } from "../..";
 
 export const errorHandlerTypeOrm = (target: any, key: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
@@ -8,7 +8,6 @@ export const errorHandlerTypeOrm = (target: any, key: string, descriptor: Proper
         try {
             return await originalMethod.apply(this, args);
         } catch (error) {
-            // Aquí puedes manejar los errores de manera coherente
             if (error instanceof QueryFailedError) {
                 if (error.driverError.code === '23505') {
                     throw new DataBaseError(': Error de duplicado', codeDbErrorDuplicated);
@@ -17,6 +16,8 @@ export const errorHandlerTypeOrm = (target: any, key: string, descriptor: Proper
             }
 
             if (error instanceof CustomError) {
+                console.log('llllerror',error)
+                
                 throw error;
             }
 

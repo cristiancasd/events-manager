@@ -29,6 +29,7 @@ export enum CommerceUserRoles {
 export const passwordRegex =
   /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 
+export const notFoundError = 400;
 export const codeError = 600;
 export const codeDbError = 700;
 export const codeDbErrorDuplicated = 701;
@@ -45,9 +46,14 @@ export const codeDbCustoUserIdDuplicated = 708;
 
 export const codeCommerceNotFound = 801;
 export const codeLevelNotFound = 802;
+export const codeEventNotFound = 803;
+export const codeUserNotFound = 804;
 
 
 
-export const errorMessageCommerceNotFound='Commerce not found';
-export const errorMessageLevelNotFound='Level not found';
+
+export const errorMessageCommerceNotFound = 'Commerce not found';
+export const errorMessageLevelNotFound = 'Level not found';
+export const errorMessageEventNotFound = 'Event not found';
+export const errorMessageUserNotFound = 'User not found';
 

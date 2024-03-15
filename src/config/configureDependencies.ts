@@ -22,7 +22,7 @@ export const configureDependencies = () => {
     const levelUseCase = new LevelUseCase(levelRepository);
     const levelCtrl = new LevelController(levelUseCase);
 
-    const userRepository: UserRepository = new TypeOrmUserRepository();
+    const userRepository: UserRepository = new TypeOrmUserRepository(commerceUseCase, levelUseCase);
     const userUseCase = new UserUseCase(userRepository);
     const userCtrl = new UserController(userUseCase);
 
