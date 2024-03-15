@@ -9,8 +9,7 @@ const { levelUseCase } = configureDependencies();
 
 export const checkLevelNameMiddleware = async (req: Request, res: Response, next: NextFunction,) => {
 
-    const { name, typeId } = req.body;
-    const { commerceId } = req.query;
+    const { name, typeId, commerceId } = req.body;
 
 
     const errors = validationResult(req);

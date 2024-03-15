@@ -16,7 +16,6 @@ const levelRoutes = express.Router();
 levelRoutes.post(
   `/create`,
   [
-    query('commerceId').isUUID().withMessage('commerceId must be UUID'),
     ...validateCreateLevelBody,
     checkLevelNameMiddleware,
   ],

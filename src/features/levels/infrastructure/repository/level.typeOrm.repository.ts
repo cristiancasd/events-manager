@@ -1,14 +1,18 @@
 
-import { NotFoundError, errorHandlerTypeOrm, ServerError, codeCommerceNotFound, errorMessageLevelNotFound, codeLevelNotFound } from '../../../../core';
+import { NotFoundError, errorHandlerTypeOrm, ServerError, codeCommerceNotFound, errorMessageLevelNotFound, codeLevelNotFound, errorMessageCommerceNotFound } from '../../../../core';
 
 import { connectDB } from '../../../../database';
 import { LevelRepository } from '../../domain/level.repository';
 import { LevelEntity } from '../../domain/level.entity';
 import { LevelTypeORMEntity } from '../models/level.dto';
-import { CommerceTypeORMEntity } from '../../../commerce';
+import { CommerceTypeORMEntity, CommerceUseCase } from '../../../commerce';
 import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
 export class TypeOrmLevelRepository implements LevelRepository {
+
+  constructor(
+    private commerceUseCase: CommerceUseCase,
+  ) { }
 
   @errorHandlerTypeOrm
   async findLevelByName(commerceId: string, name: string): Promise<LevelEntity | null> {
@@ -34,19 +38,22 @@ export class TypeOrmLevelRepository implements LevelRepository {
 
 
   @errorHandlerTypeOrm
-  async createLevel(data: LevelEntity, commerceId: string): Promise<LevelEntity> {
+  async createLevel(data: LevelEntity): Promise<LevelEntity> {
 
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
-    const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const newLevel = levelRepository.create(data);
-    const commerce = await commerceRepository.findOneBy({ id: commerceId })
+    console.log('aqui**0*');
+    const commerce = await this.commerceUseCase.findComerceByUid(data.commerceId);
+    console.log('aqui**1*', commerce);
     if (commerce != null) {
 
       await levelRepository.save({ ...newLevel, commerce: commerce });
       return { ...newLevel, commerceId: commerce.id };
 
     }
-    throw new ServerError(codeCommerceNotFound);
+    console.log('aqui**2*', commerce);
+
+    throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 
   @errorHandlerTypeOrm

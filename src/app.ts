@@ -3,7 +3,7 @@ import 'express-async-errors';
 import express from 'express';
 import cors from 'cors';
 //import addRoute from './common/infrastructure/route/add.route';
-import { NotFoundError, errorHandler } from './core';
+import { NotFoundError, errorHandler, errorRouteNotFound } from './core';
 import router from './routes';
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(router);
 
 app.all('*', async (req, res) => {
-  throw new NotFoundError();
+  throw new NotFoundError(errorRouteNotFound);
 });
 
 app.use(errorHandler);

@@ -16,7 +16,6 @@ const eventsRoutes = express.Router();
 eventsRoutes.post(
   `/create`,
   [
-    query('commerceId').isUUID().withMessage('commerceId must be UUID'),
     ...validateCreateEventBody,
     checkEventNameMiddleware,
   ],

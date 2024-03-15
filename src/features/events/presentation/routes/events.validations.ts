@@ -7,6 +7,7 @@ export const validateCreateEventBody: ValidationChain[] = [
   body('description').optional().isString().withMessage('description must be string'),
   body('date').isString().withMessage('date must be Date'),
   body('url').optional().isURL().withMessage('url must be a URL'),
+  body('commerceId').isUUID().withMessage('commerceId must be UUID'),
 ];
 
 

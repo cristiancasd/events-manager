@@ -21,8 +21,6 @@ import * as bcrypt from 'bcrypt'
 export class TypeOrmUserRepository implements UserRepository {
 
   constructor(
-    //private commerceRepository: CommerceRepository,
-    //private levelRepository: LevelRepository
     private commerceUseCase: CommerceUseCase,
     private levelUseCase: LevelUseCase
   ) { }
@@ -43,9 +41,7 @@ export class TypeOrmUserRepository implements UserRepository {
       .leftJoinAndSelect('user.level', 'level')
       .where('user.commerce.id = :commerceId', { commerceId })
       .andWhere(
-        //'(user.commerceUserId = :document )',
         '(user.commerceUserId = :document OR user.document = :documentNumber)',
-        //'(user.commerceUserId = :documentNumber OR user.document = :document)',
         {
           document, documentNumber
         }
@@ -64,17 +60,6 @@ export class TypeOrmUserRepository implements UserRepository {
   ): Promise<UserEntity> {
 
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
-    const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
-    //const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
-
-
-    //const commerce = await commerceRepository.findOneBy({ id: data.commerceId });
-    //const level = await levelRepository.findOneBy({ id: data.levelUid });
-
-
-    //const commerce = await this.commerceRepository.findCommerceById(data.commerceId);
-    //const level = await this.levelRepository.findLevelByUid(data.levelUid);
-
     const commerce = await this.commerceUseCase.findComerceByUid(data.commerceId);
     const level = await this.levelUseCase.findLevelByUid(data.levelUid);
 

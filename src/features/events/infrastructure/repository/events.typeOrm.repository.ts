@@ -1,12 +1,12 @@
 
-import { NotFoundError, errorHandlerTypeOrm, ServerError, codeCommerceNotFound } from '../../../../core';
+import { NotFoundError, errorHandlerTypeOrm, ServerError, codeCommerceNotFound, errorMessageCommerceNotFound } from '../../../../core';
 
 import { connectDB } from '../../../../database';
 import { EventsRepository } from '../../domain/events.repository';
 import { EventEntity } from '../../domain/event.entity';
 import { EventTypeORMEntity } from '../models/event.dto';
 import { CommerceTypeORMEntity } from '../../../commerce';
-import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
+import { BadRequestError, codeEventNotFound, errorMessageEventNotFound } from '../../../../core';
 
 export class TypeOrmEventRepository implements EventsRepository {
 
@@ -22,12 +22,12 @@ export class TypeOrmEventRepository implements EventsRepository {
   }
 
   @errorHandlerTypeOrm
-  async createEvent(data: EventEntity, commerceId: string): Promise<EventEntity> {
+  async createEvent(data: EventEntity): Promise<EventEntity> {
 
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const newEvent = eventRepository.create(data);
-    const commerce = await commerceRepository.findOneBy({ id: commerceId })
+    const commerce = await commerceRepository.findOneBy({ id: data.commerceId })
     if (commerce != null) {
 
       const algo = new Date(data.date);
@@ -41,7 +41,7 @@ export class TypeOrmEventRepository implements EventsRepository {
       return { ...newEvent, commerceId: commerce.id };
 
     }
-    throw new ServerError(codeCommerceNotFound);
+    throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 
   @errorHandlerTypeOrm
@@ -67,7 +67,7 @@ export class TypeOrmEventRepository implements EventsRepository {
       return { ...resto, commerceId: event.commerce.id };
     }
 
-    throw new NotFoundError;
+    throw new NotFoundError(errorMessageEventNotFound, codeEventNotFound);
   }
 
   @errorHandlerTypeOrm

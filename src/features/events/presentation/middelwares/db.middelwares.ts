@@ -8,8 +8,7 @@ const { eventsUseCase } = configureDependencies();
 
 export const checkEventNameMiddleware = async (req: Request, res: Response, next: NextFunction,) => {
 
-    const { name } = req.body;
-    const { commerceId } = req.query;
+    const { name, commerceId } = req.body;
 
 
     const errors = validationResult(req);

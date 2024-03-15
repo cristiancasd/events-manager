@@ -21,9 +21,9 @@ export class EventsUseCase implements EventsUseCaseInterface {
   };
 
   @errorHandlerUseCase
-  async createEvent(input: EventEntity, commerceId: string): Promise<EventEntity> {
+  async createEvent(input: EventEntity): Promise<EventEntity> {
     const eventValue = new EventValue(input);
-    return await this._eventsRepository.createEvent(eventValue, commerceId);
+    return await this._eventsRepository.createEvent(eventValue);
   };
 
   @errorHandlerUseCase

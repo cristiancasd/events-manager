@@ -7,9 +7,8 @@ export class LevelController {
   ) { }
 
   public insertCtrl = async (req: Request, res: Response) => {
-    const { commerceId } = req.query;
     const body = req.body;
-    const level = await this.levelUseCase.createLevel(body, commerceId?.toString() ?? '');
+    const level = await this.levelUseCase.createLevel(body);
     res.status(201).send(level);
   };
 

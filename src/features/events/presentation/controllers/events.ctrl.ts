@@ -10,9 +10,8 @@ export class EventsController {
   ) { }
 
   public insertCtrl = async (req: Request, res: Response) => {
-    const { commerceId } = req.query;
     const body = req.body;
-    const event = await this.eventsUseCase.createEvent(body, commerceId?.toString() ?? '');
+    const event = await this.eventsUseCase.createEvent(body);
     res.status(201).send(event);
   };
 

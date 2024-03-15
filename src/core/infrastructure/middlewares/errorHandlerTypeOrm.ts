@@ -15,9 +15,8 @@ export const errorHandlerTypeOrm = (target: any, key: string, descriptor: Proper
                 throw new DataBaseError('', codeDbError);
             }
 
-            if (error instanceof CustomError) {
-                console.log('llllerror',error)
-                
+            if (error instanceof CustomError) {   
+                console.log('aqio***',error)             
                 throw error;
             }
 

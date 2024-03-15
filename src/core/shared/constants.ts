@@ -50,8 +50,7 @@ export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
 
 
-
-
+export const errorRouteNotFound = 'Commerce not found';
 export const errorMessageCommerceNotFound = 'Commerce not found';
 export const errorMessageLevelNotFound = 'Level not found';
 export const errorMessageEventNotFound = 'Event not found';

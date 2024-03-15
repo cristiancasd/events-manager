@@ -24,7 +24,6 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
       }
     }
     if (commerce) return commerce;
-    if (commerce == null) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 

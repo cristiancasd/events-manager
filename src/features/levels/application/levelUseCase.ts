@@ -29,9 +29,9 @@ export class LevelUseCase implements LevelUseCaseInterface {
   };
 
   @errorHandlerUseCase
-  async createLevel(input: LevelEntity, commerceId: string): Promise<LevelEntity> {
+  async createLevel(input: LevelEntity): Promise<LevelEntity> {
     const levelValue = new LevelValue(input);
-    return await this._levelRepository.createLevel(levelValue, commerceId);
+    return await this._levelRepository.createLevel(levelValue);
   };
 
   @errorHandlerUseCase

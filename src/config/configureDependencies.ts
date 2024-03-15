@@ -18,7 +18,7 @@ export const configureDependencies = () => {
     const eventsUseCase = new EventsUseCase(eventRepository);
     const eventsCtrl = new EventsController(eventsUseCase);
 
-    const levelRepository: LevelRepository = new TypeOrmLevelRepository();
+    const levelRepository: LevelRepository = new TypeOrmLevelRepository(commerceUseCase);
     const levelUseCase = new LevelUseCase(levelRepository);
     const levelCtrl = new LevelController(levelUseCase);
 
