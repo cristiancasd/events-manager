@@ -5,7 +5,9 @@ export { ServerError } from './domain/errors/server-error';
 export { CriteriaOptionsStatus, CriteriaOptionsLocation, OptionsValidations, 
     codeDbEmailDuplicated, codeDbNameDuplicated, codeDbPhoneDuplicated, 
     errorMessageCommerceNotFound, errorMessageLevelNotFound, notFoundError,
-     codeEventNotFound, errorMessageEventNotFound, errorRouteNotFound,} from './shared/constants';
+     codeEventNotFound, errorMessageEventNotFound, errorRouteNotFound,
+     codeUserNotFound, errorMessageUserNotFound,
+    } from './shared/constants';
 export { NotFoundError } from './domain/errors/not-found-error';
 export { InactiveDataError } from './domain/errors/inactive-data-error';
 

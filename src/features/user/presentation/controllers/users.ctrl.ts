@@ -12,6 +12,12 @@ export class UserController {
     res.status(201).send(user);
   };
 
+  public findCtrl = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    const result = await this.userUseCase.findUserByUid(userId);
+    res.status(200).send(result);
+  };
+
   /*public deleteCtrl = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const result = await this.userUseCase.deleteUserByUid(userId);
@@ -30,11 +36,7 @@ export class UserController {
     res.status(200).send(result);
   };
 
-  public findCtrl = async (req: Request, res: Response) => {
-    const { userId } = req.params;
-    const result = await this.userUseCase.findUserByUid(userId);
-    res.status(200).send(result);
-  };
+  
 
   public findUserByLevelCtrl = async (req: Request, res: Response) => {
     const { commerceId, levelUid } = req.params;

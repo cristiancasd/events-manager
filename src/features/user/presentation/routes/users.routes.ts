@@ -21,6 +21,14 @@ userRoutes.post(
   validateRequest,
   userCtrl.insertCtrl
 );
+
+/// Find usser by UID
+userRoutes.get(
+  '/find/id/:userId',
+  [validateUUIDParam('userId')],
+  validateRequest,
+  userCtrl.findCtrl
+);
 /*
 /// Delete User
 userRoutes.delete(
@@ -46,13 +54,7 @@ userRoutes.delete(
   userCtrl.disableUserByUidCtrl
 );
 
-/// Find commerce by UID
-userRoutes.get(
-  '/find/id/:userId',
-  [validateUUIDParam('userId')],
-  validateRequest,
-  userCtrl.findCtrl
-);
+
 
 /// Find user by commerceId and levels
 userRoutes.get(

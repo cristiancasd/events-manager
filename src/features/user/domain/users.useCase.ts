@@ -11,11 +11,12 @@ export interface UserUseCaseInterface {
     //commerceId: string,
     //levelUid: string
   ): Promise<UserEntity>;
+  findUserByUid(uid: string): Promise<UserEntity>;
+
   /*
   deleteUserByUid(uid: string): Promise<boolean>;
   disableUserByUid(uid: string): Promise<boolean>;
   enableUserByUid(uid: string): Promise<boolean>;
-  findUserByUid(uid: string): Promise<UserEntity>;
   findUsersByLevelUid(
     commerceId: string,
     levelUid: string

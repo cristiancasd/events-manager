@@ -60,6 +60,12 @@ export class UserUseCase implements UserUseCaseInterface {
     );
   }
 
+  @errorHandlerUseCase
+   async findUserByUid(uid: string): Promise<UserEntity> {
+     return await this._userRepository.findUserByUid(uid);
+   }
+ 
+
   /* @errorHandlerUseCase
    async deleteUserByUid(uid: string): Promise<boolean> {
      const result = await this._userRepository.deleteUser(uid);
@@ -81,11 +87,7 @@ export class UserUseCase implements UserUseCaseInterface {
      throw new NotFoundError();
    }
  
-   @errorHandlerUseCase
-   async findUserByUid(uid: string): Promise<UserEntity> {
-     return await this._userRepository.findUserByUid(uid);
-   }
- 
+   
    @errorHandlerUseCase
    async findUsersByLevelUid(
      commerceId: string,

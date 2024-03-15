@@ -5,7 +5,9 @@ import {
   codeCommerceNotFound,
   codeLevelNotFound,
   errorMessageLevelNotFound,
-  errorMessageCommerceNotFound
+  errorMessageCommerceNotFound,
+  errorMessageUserNotFound,
+  codeUserNotFound
 } from '../../../../core';
 
 import { connectDB } from '../../../../database';
@@ -75,10 +77,21 @@ export class TypeOrmUserRepository implements UserRepository {
       password: bcrypt.hashSync(data.password, 10)
     });
     const algo = await userRepository.save({ ...newUser, commerce: commerce, level: level });
-  
+
     const { password, ...resto } = newUser;
     const toSave = { ...resto, commerceId: commerce.id, levelUid: data.levelUid }
     return toSave;
+  }
+
+  @errorHandlerTypeOrm
+  async findUserByUid(uid: string): Promise<UserEntity> {
+    const userRepository = connectDB.getRepository(UserTypeORMEntity);
+    const user = await userRepository.findOneBy({ id: uid });
+    if (user) {
+      const { commerce, level, ...resto } = user;
+      return { ...resto, commerceId: user.commerce.id, levelUid: user.level.id };
+    }
+    throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
   }
 
   /*@errorHandlerTypeOrm
@@ -124,17 +137,7 @@ export class TypeOrmUserRepository implements UserRepository {
     }
   }
 
-  @errorHandlerTypeOrm
-  async findUserByUid(uid: string): Promise<UserEntity> {
-    const userRepository = connectDB.getRepository(UserTypeORMEntity);
-    const user = await userRepository.findOneBy({ id: uid });
-    if (user) {
-      const { commerce, level, ...resto } = user;
-      return { ...resto, commerceId: user.commerce.id, levelId: user.level.id };
-    }
-
-    throw new NotFoundError();
-  }
+  
 
   @errorHandlerTypeOrm
   async findUsersByLevelUid(
