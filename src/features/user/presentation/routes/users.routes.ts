@@ -29,6 +29,17 @@ userRoutes.get(
   validateRequest,
   userCtrl.findCtrl
 );
+
+/// Find user by commerceId and levels
+userRoutes.get(
+  '/find/level/:commerceId/:levelUid',
+  [
+    validateUUIDParam('commerceId'), validateUUIDParam('levelUid'),
+    validateUUIDParam('levelUid'), validateUUIDParam('levelUid'),
+  ],
+  validateRequest,
+  userCtrl.findUserByLevelCtrl
+);
 /*
 /// Delete User
 userRoutes.delete(
@@ -56,12 +67,6 @@ userRoutes.delete(
 
 
 
-/// Find user by commerceId and levels
-userRoutes.get(
-  '/find/level/:commerceId/:levelUid',
-  [validateUUIDParam('commerceId'), validateUUIDParam('levelUid')],
-  validateRequest,
-  userCtrl.findUserByLevelCtrl
-);*/
+*/
 
 export { userRoutes };

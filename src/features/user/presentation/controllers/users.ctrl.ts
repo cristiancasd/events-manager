@@ -18,6 +18,15 @@ export class UserController {
     res.status(200).send(result);
   };
 
+  public findUserByLevelCtrl = async (req: Request, res: Response) => {
+    const { commerceId, levelUid } = req.params;
+    const result = await this.userUseCase.findUsersByLevelUid(
+      commerceId,
+      levelUid
+    );
+    res.status(200).send(result);
+  };
+
   /*public deleteCtrl = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const result = await this.userUseCase.deleteUserByUid(userId);
@@ -38,12 +47,5 @@ export class UserController {
 
   
 
-  public findUserByLevelCtrl = async (req: Request, res: Response) => {
-    const { commerceId, levelUid } = req.params;
-    const result = await this.userUseCase.findUsersByLevelUid(
-      commerceId,
-      levelUid
-    );
-    res.status(200).send(result);
-  };*/
+  */
 }

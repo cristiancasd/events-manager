@@ -94,6 +94,30 @@ export class TypeOrmUserRepository implements UserRepository {
     throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
   }
 
+  @errorHandlerTypeOrm
+  async findUsersByLevelUid(
+    commerceId: string,
+    levelUid: string
+  ): Promise<UserEntity[]> {
+    const userRepository = connectDB.getRepository(UserTypeORMEntity);
+
+    const queryBuilder = userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.commerce', 'commerce') 
+      .where('user.commerce.id = :commerceId', { commerceId })
+      .andWhere('user.level.id = :levelUid', { levelUid });
+
+    const users = await queryBuilder.getMany();
+    return users.map((data) => {
+      const { commerce, level, password, ...resto } = data;
+      return {
+        ...resto,
+        commerceId: data.commerce.id,
+        levelUid: data.level?.id ?? ''
+      };
+    });
+  }
+
   /*@errorHandlerTypeOrm
   async deleteUser(uid: string): Promise<boolean> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
@@ -139,27 +163,5 @@ export class TypeOrmUserRepository implements UserRepository {
 
   
 
-  @errorHandlerTypeOrm
-  async findUsersByLevelUid(
-    commerceId: string,
-    levelUid: string
-  ): Promise<UserEntity[]> {
-    const userRepository = connectDB.getRepository(UserTypeORMEntity);
-
-    const queryBuilder = userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.commerce', 'commerce') // Carga la relación commerce
-      .where('user.commerce.id = :commerceId', { commerceId })
-      .andWhere('user.level.id = :levelUid', { levelUid });
-
-    const users = await queryBuilder.getMany();
-    return users.map((data) => {
-      const { commerce, level, ...resto } = data;
-      return {
-        ...resto,
-        commerceId: data.commerce?.id ?? '',
-        levelId: data.level?.id ?? ''
-      };
-    });
-  }*/
+  */
 }

@@ -64,6 +64,14 @@ export class UserUseCase implements UserUseCaseInterface {
    async findUserByUid(uid: string): Promise<UserEntity> {
      return await this._userRepository.findUserByUid(uid);
    }
+
+   @errorHandlerUseCase
+   async findUsersByLevelUid(
+     commerceId: string,
+     levelUid: string
+   ): Promise<UserEntity[]> {
+     return await this._userRepository.findUsersByLevelUid(commerceId, levelUid);
+   }
  
 
   /* @errorHandlerUseCase
@@ -88,11 +96,5 @@ export class UserUseCase implements UserUseCaseInterface {
    }
  
    
-   @errorHandlerUseCase
-   async findUsersByLevelUid(
-     commerceId: string,
-     levelUid: string
-   ): Promise<UserEntity[]> {
-     return await this._userRepository.findUsersByLevelUid(commerceId, levelUid);
-   }*/
+   */
 }

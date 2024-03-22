@@ -7,7 +7,10 @@ export interface UserRepository {
   ): Promise<UserEntity | null>;
   createUser(user: UserEntity): Promise<UserEntity>;
   findUserByUid(uid: string): Promise<UserEntity>;
-
+  findUsersByLevelUid(
+    commerceId: string,
+    levelUid: string
+  ): Promise<UserEntity[]>;
   /*
   deleteUser(uid: string): Promise<boolean>;
   disableUser(uid: string): Promise<boolean>;

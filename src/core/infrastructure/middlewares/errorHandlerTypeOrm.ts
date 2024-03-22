@@ -16,7 +16,6 @@ export const errorHandlerTypeOrm = (target: any, key: string, descriptor: Proper
             }
 
             if (error instanceof CustomError) {   
-                console.log('aqio***',error)             
                 throw error;
             }
 
