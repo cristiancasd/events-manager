@@ -27,13 +27,13 @@ export class UserController {
     res.status(200).send(result);
   };
 
-  /*public deleteCtrl = async (req: Request, res: Response) => {
+  public deleteCtrl = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const result = await this.userUseCase.deleteUserByUid(userId);
     res.status(200).send(result);
   };
 
-  public disableUserByUidCtrl = async (req: Request, res: Response) => {
+  /*public disableUserByUidCtrl = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const result = await this.userUseCase.disableUserByUid(userId);
     res.status(200).send(result);

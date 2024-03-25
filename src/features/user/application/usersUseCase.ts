@@ -1,8 +1,9 @@
 import {
-  CriteriaOptionsStatus,
   NotFoundError,
-  OptionsValidations,
-  errorHandlerUseCase
+  codeUserNotFound,
+  errorHandlerUseCase,
+  errorMessageUserNotFound,
+
 } from '../../../core';
 import { UserEntity } from '../domain/users.entity';
 import { UserValue } from '../domain/users.value';
@@ -28,17 +29,12 @@ export class UserUseCase implements UserUseCaseInterface {
       documentFinded = userFinded ? true : false;
     }
 
-    console.log('****commerceUserId')
     if (commerceUserId != null) {
-      console.log('****userFinded')
 
       const userFinded = await this._userRepository.findUserByDocument(
         commerceId,
         commerceUserId
       );
-
-      console.log('****userFinded', userFinded)
-
       commerceUserIdFinded = userFinded ? true : false;
     }
 
@@ -61,40 +57,40 @@ export class UserUseCase implements UserUseCaseInterface {
   }
 
   @errorHandlerUseCase
-   async findUserByUid(uid: string): Promise<UserEntity> {
-     return await this._userRepository.findUserByUid(uid);
-   }
+  async findUserByUid(uid: string): Promise<UserEntity> {
+    return await this._userRepository.findUserByUid(uid);
+  }
 
-   @errorHandlerUseCase
-   async findUsersByLevelUid(
-     commerceId: string,
-     levelUid: string
-   ): Promise<UserEntity[]> {
-     return await this._userRepository.findUsersByLevelUid(commerceId, levelUid);
-   }
- 
+  @errorHandlerUseCase
+  async findUsersByLevelUid(
+    commerceId: string,
+    levelUid: string
+  ): Promise<UserEntity[]> {
+    return await this._userRepository.findUsersByLevelUid(commerceId, levelUid);
+  }
+
+
+  @errorHandlerUseCase
+  async deleteUserByUid(uid: string): Promise<boolean> {
+    const result = await this._userRepository.deleteUser(uid);
+    if (result) return result;
+    throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);;
+  }
 
   /* @errorHandlerUseCase
-   async deleteUserByUid(uid: string): Promise<boolean> {
-     const result = await this._userRepository.deleteUser(uid);
-     if (result) return result;
-     throw new NotFoundError();
-   }
+  async disableUserByUid(uid: string): Promise<boolean> {
+    const result = await this._userRepository.disableUser(uid);
+    if (result) return result;
+    throw new NotFoundError();
+  }
  
-   @errorHandlerUseCase
-   async disableUserByUid(uid: string): Promise<boolean> {
-     const result = await this._userRepository.disableUser(uid);
-     if (result) return result;
-     throw new NotFoundError();
-   }
+  @errorHandlerUseCase
+  async enableUserByUid(uid: string): Promise<boolean> {
+    const result = await this._userRepository.enableUser(uid);
+    if (result) return result;
+    throw new NotFoundError();
+  }
  
-   @errorHandlerUseCase
-   async enableUserByUid(uid: string): Promise<boolean> {
-     const result = await this._userRepository.enableUser(uid);
-     if (result) return result;
-     throw new NotFoundError();
-   }
- 
-   
-   */
+  
+  */
 }

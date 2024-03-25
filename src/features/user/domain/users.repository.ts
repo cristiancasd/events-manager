@@ -11,13 +11,9 @@ export interface UserRepository {
     commerceId: string,
     levelUid: string
   ): Promise<UserEntity[]>;
-  /*
+  
   deleteUser(uid: string): Promise<boolean>;
-  disableUser(uid: string): Promise<boolean>;
+  /*disableUser(uid: string): Promise<boolean>;
   enableUser(uid: string): Promise<boolean>;
-  findUsersByLevelUid(
-    commerceId: string,
-    levelUid: string
-  ): Promise<UserEntity[]>;
   //findUsersByCommerce(commerceId: string): Promise<UserEntity[]>;*/
 }

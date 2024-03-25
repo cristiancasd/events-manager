@@ -18,9 +18,9 @@ export interface UserUseCaseInterface {
     levelUid: string
   ): Promise<UserEntity[]>;
 
-  /*
+  
   deleteUserByUid(uid: string): Promise<boolean>;
-  disableUserByUid(uid: string): Promise<boolean>;
+  /*disableUserByUid(uid: string): Promise<boolean>;
   enableUserByUid(uid: string): Promise<boolean>;
   
   //findUsersByCommerce(commerceId: string): Promise<UserEntity[]>;*/

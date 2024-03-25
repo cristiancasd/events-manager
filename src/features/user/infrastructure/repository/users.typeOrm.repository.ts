@@ -33,11 +33,9 @@ export class TypeOrmUserRepository implements UserRepository {
     document: string
   ): Promise<UserEntity | null> {
 
-    console.log('findUserByDocument repository')
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
     const documentNumber = isNaN(Number(document)) ? 0 : Number(document);
 
-    console.log('documentNumber*--', documentNumber)
     const queryBuilder = userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.level', 'level')
@@ -50,8 +48,6 @@ export class TypeOrmUserRepository implements UserRepository {
       )
 
     const user = await queryBuilder.getOne();
-    console.log(user?.level);
-    console.log(user);
     if (user) return { ...user, commerceId, levelUid: user.level.id };
     return null;
   }
@@ -103,9 +99,10 @@ export class TypeOrmUserRepository implements UserRepository {
 
     const queryBuilder = userRepository
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.commerce', 'commerce') 
+      .leftJoinAndSelect('user.commerce', 'commerce')
       .where('user.commerce.id = :commerceId', { commerceId })
       .andWhere('user.level.id = :levelUid', { levelUid });
+
 
     const users = await queryBuilder.getMany();
     return users.map((data) => {
@@ -118,7 +115,7 @@ export class TypeOrmUserRepository implements UserRepository {
     });
   }
 
-  /*@errorHandlerTypeOrm
+  @errorHandlerTypeOrm
   async deleteUser(uid: string): Promise<boolean> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
     const userToDelete = await userRepository.findOneBy({ id: uid });
@@ -130,7 +127,7 @@ export class TypeOrmUserRepository implements UserRepository {
     }
   }
 
-  @errorHandlerTypeOrm
+  /*@errorHandlerTypeOrm
   async disableUser(uid: string): Promise<boolean> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
 

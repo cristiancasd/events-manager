@@ -34,13 +34,13 @@ userRoutes.get(
 userRoutes.get(
   '/find/level/:commerceId/:levelUid',
   [
-    validateUUIDParam('commerceId'), validateUUIDParam('levelUid'),
-    validateUUIDParam('levelUid'), validateUUIDParam('levelUid'),
+    validateUUIDParam('commerceId'), 
+    validateUUIDParam('levelUid'), 
   ],
   validateRequest,
   userCtrl.findUserByLevelCtrl
 );
-/*
+
 /// Delete User
 userRoutes.delete(
   '/delete/:userId',
@@ -49,6 +49,7 @@ userRoutes.delete(
   userCtrl.deleteCtrl
 );
 
+/*
 /// enable User
 userRoutes.put(
   '/enable/:userId',
