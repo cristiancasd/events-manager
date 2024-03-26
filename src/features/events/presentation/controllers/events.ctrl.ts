@@ -1,10 +1,5 @@
 import { Request, Response } from 'express';
-import {
-  CriteriaOptionsLocation,
-  CriteriaOptionsStatus
-} from '../../../../core';
 import { EventsUseCase } from '../../application/eventsUseCase';
-import { start } from 'repl';
 
 export class EventsController {
   constructor(private eventsUseCase: EventsUseCase) {}

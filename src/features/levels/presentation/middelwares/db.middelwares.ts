@@ -4,12 +4,15 @@ import {
   DataBaseError,
   ServerError,
   codeDbError,
-  codeDbNameDuplicated
+  codeDbNameDuplicated,
+  codeDbTypeIdDuplicated,
+  commerceIdInvalidMessage,
+  duplicatedNameMessage,
+  duplicatedTypeIdMessage
 } from '../../../../core';
 import { validationResult } from 'express-validator';
 import { configureDependencies } from '../../../../config';
 import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
-import { codeDbTypeIdDuplicated } from '../../../../core/shared/constants';
 
 const { levelUseCase } = configureDependencies();
 
@@ -23,21 +26,21 @@ export const checkLevelNameMiddleware = async (
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-      if (!commerceId) throw new BadRequestError('commerceId invalid');
+      if (!commerceId) throw new BadRequestError(commerceIdInvalidMessage);
       const nameExist = await levelUseCase.validateDuplicatedData(
         commerceId?.toString() ?? '',
         name,
         undefined
       );
       if (nameExist)
-        throw new DataBaseError('Duplicated Name', codeDbNameDuplicated);
+        throw new DataBaseError(duplicatedNameMessage, codeDbNameDuplicated);
       const typeIdExist = await levelUseCase.validateDuplicatedData(
         commerceId?.toString() ?? '',
         undefined,
         typeId
       );
       if (typeIdExist)
-        throw new DataBaseError('Duplicated typeId', codeDbTypeIdDuplicated);
+        throw new DataBaseError(duplicatedTypeIdMessage, codeDbTypeIdDuplicated);
     } catch (err) {
       if (err instanceof CustomError) {
         if (err instanceof DataBaseError) {

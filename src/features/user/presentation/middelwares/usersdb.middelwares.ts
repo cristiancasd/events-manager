@@ -2,10 +2,12 @@ import express, { NextFunction, Request, Response } from 'express';
 import {
   CustomError,
   DataBaseError,
+  LevelUidInvalidMessage,
   ServerError,
   codeDbCustoUserIdDuplicated,
   codeDbDocumentDuplicated,
-  codeDbError
+  codeDbError,
+  commerceIdInvalidMessage
 } from '../../../../core';
 import { validationResult } from 'express-validator';
 import { configureDependencies } from '../../../../config';
@@ -23,8 +25,8 @@ export const checkUserNameMiddleware = async (
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-      if (!commerceId) throw new BadRequestError('commerceId invalid');
-      if (!levelUid) throw new BadRequestError('levelUid invalid');
+      if (!commerceId) throw new BadRequestError(commerceIdInvalidMessage);
+      if (!levelUid) throw new BadRequestError(LevelUidInvalidMessage);
       const documentExist = await userUseCase.validateDuplicatedData(
         commerceId?.toString() ?? '',
         document,

@@ -104,7 +104,6 @@ export class TypeOrmEventRepository implements EventsRepository {
     }
     const events = await queryBuilder.getMany();
     const algo: EventEntity[] = events.map((data) => {
-      console.log('dataaaaa ...', data);
       const { commerce, ...resto } = data;
       return { ...resto, commerceId: data.commerce?.id ?? '' };
     });

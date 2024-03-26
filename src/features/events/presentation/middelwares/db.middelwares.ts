@@ -4,7 +4,9 @@ import {
   DataBaseError,
   ServerError,
   codeDbError,
-  codeDbNameDuplicated
+  codeDbNameDuplicated,
+  commerceIdInvalidMessage,
+  duplicatedNameMessage
 } from '../../../../core';
 import { validationResult } from 'express-validator';
 import { configureDependencies } from '../../../../config';
@@ -22,14 +24,14 @@ export const checkEventNameMiddleware = async (
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-      if (!commerceId) throw new BadRequestError('commerceId invalid');
+      if (!commerceId) throw new BadRequestError(commerceIdInvalidMessage);
       const nameExist = await eventsUseCase.validateDuplicatedData(
         commerceId?.toString() ?? '',
         name
       );
 
       if (nameExist)
-        throw new DataBaseError('Duplicated Name', codeDbNameDuplicated);
+        throw new DataBaseError(duplicatedNameMessage, codeDbNameDuplicated);
     } catch (err) {
       if (err instanceof CustomError) {
         if (err instanceof DataBaseError) {

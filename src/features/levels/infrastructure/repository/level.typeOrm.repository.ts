@@ -1,7 +1,6 @@
 import {
   NotFoundError,
   errorHandlerTypeOrm,
-  ServerError,
   codeCommerceNotFound,
   errorMessageLevelNotFound,
   codeLevelNotFound,
@@ -52,17 +51,13 @@ export class TypeOrmLevelRepository implements LevelRepository {
   async createLevel(data: LevelEntity): Promise<LevelEntity> {
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
     const newLevel = levelRepository.create(data);
-    console.log('aqui**0*');
     const commerce = await this.commerceUseCase.findComerceByUid(
       data.commerceId
     );
-    console.log('aqui**1*', commerce);
     if (commerce != null) {
       await levelRepository.save({ ...newLevel, commerce: commerce });
       return { ...newLevel, commerceId: commerce.id };
     }
-    console.log('aqui**2*', commerce);
-
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 

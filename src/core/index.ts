@@ -9,6 +9,7 @@ export {
   codeDbEmailDuplicated,
   codeDbNameDuplicated,
   codeDbPhoneDuplicated,
+  codeDbTypeIdDuplicated,
   errorMessageCommerceNotFound,
   errorMessageLevelNotFound,
   notFoundError,
@@ -19,7 +20,11 @@ export {
   errorMessageUserNotFound,
   duplicatedDataMessage,
   duplicatedPhoneMessage,
-  duplicatedEmailMessage
+  duplicatedEmailMessage,
+  duplicatedNameMessage,
+  duplicatedTypeIdMessage,
+  commerceIdInvalidMessage,
+  LevelUidInvalidMessage,
 } from './shared/constants';
 export { NotFoundError } from './domain/errors/not-found-error';
 export { InactiveDataError } from './domain/errors/inactive-data-error';

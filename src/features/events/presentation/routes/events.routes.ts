@@ -1,7 +1,5 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 
-import { body, query } from 'express-validator';
-//import { MockRepository } from '../../infrastructure/repository/mock.repository';
 import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkEventNameMiddleware } from '../middelwares/db.middelwares';

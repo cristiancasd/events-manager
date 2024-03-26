@@ -47,15 +47,26 @@ export const codeLevelNotFound = 802;
 export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
 
+//Not found messages
 export const errorRouteNotFound = 'Commerce not found';
 export const errorMessageCommerceNotFound = 'Commerce not found';
 export const errorMessageLevelNotFound = 'Level not found';
 export const errorMessageEventNotFound = 'Event not found';
 export const errorMessageUserNotFound = 'User not found';
 
+// Duplicated messages
 export const duplicatedDataMessage = 'Duplicated data';
 export const duplicatedEmailMessage = 'Duplicated email';
 export const duplicatedPhoneMessage = 'Duplicated phone';
+export const duplicatedNameMessage = 'Duplicated name';
+export const duplicatedTypeIdMessage = 'Duplicated typeId';
+
+// Invalid data message
+export const commerceIdInvalidMessage = 'CommerceId invalid';
+export const LevelUidInvalidMessage = 'levelUid invalid';
+
+
+
 
 export const somethingWrongMessage = 'Something went wrong';
 export const mustBeUidMessage = 'must be UID';
