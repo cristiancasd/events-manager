@@ -1,9 +1,7 @@
-//import { CustomError, codeError } from "../..";
+import { codeError } from '../../shared/constants';
+import { CustomError } from './custom-error';
 
-import { codeError } from "../../shared/constants";
-import { CustomError } from "./custom-error";
-
-
+// Custom error class for handling data base errors
 export class DataBaseError extends CustomError {
   statusCode = 400;
 
@@ -14,6 +12,11 @@ export class DataBaseError extends CustomError {
   }
 
   serializeErrors() {
-    return [{ message: 'Data Base Error' + this.message, code: this.code ?? codeError }];
+    return [
+      {
+        message: 'Data Base Error' + this.message,
+        code: this.code ?? codeError
+      }
+    ];
   }
 }

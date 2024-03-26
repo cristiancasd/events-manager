@@ -10,7 +10,7 @@ export class LevelValue implements LevelEntity {
   constructor({
     typeId,
     name,
-    commerceId,
+    commerceId
   }: {
     typeId: number;
     name: string;

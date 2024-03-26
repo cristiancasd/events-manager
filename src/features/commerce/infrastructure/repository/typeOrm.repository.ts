@@ -1,25 +1,36 @@
-
 import { FindManyOptions } from 'typeorm';
-import { codeDbError, NotFoundError, errorHandlerTypeOrm, InactiveDataError, CriteriaOptionsStatus, CriteriaOptionsLocation, DataBaseError, ServerError, OptionsValidations, errorMessageCommerceNotFound, codeCommerceNotFound } from '../../../../core';
+import {
+  codeDbError,
+  NotFoundError,
+  errorHandlerTypeOrm,
+  InactiveDataError,
+  CriteriaOptionsStatus,
+  CriteriaOptionsLocation,
+  DataBaseError,
+  ServerError,
+  OptionsValidations,
+  errorMessageCommerceNotFound,
+  codeCommerceNotFound
+} from '../../../../core';
 import { CommerceEntity, CommerceRepository, LocationEntity } from '../..';
 import { CommerceTypeORMEntity } from '..';
 import { connectDB } from '../../../../database';
-import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
 export class TypeOrmCommerceRepository implements CommerceRepository {
-  
-
   @errorHandlerTypeOrm
-  async findCommerceById(uid: string, onlyAcitve?: boolean): Promise<CommerceEntity> {
+  async findCommerceById(
+    uid: string,
+    onlyAcitve?: boolean
+  ): Promise<CommerceEntity> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
-    const commerce = await commerceRepository.findOneBy({ id: uid })
+    const commerce = await commerceRepository.findOneBy({ id: uid });
 
     if (commerce) {
       if (onlyAcitve == true) {
         if (commerce.isActive) {
           return commerce;
         } else {
-          throw new InactiveDataError;
+          throw new InactiveDataError();
         }
       }
     }
@@ -29,7 +40,6 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
 
   @errorHandlerTypeOrm
   async createCommerce(data: CommerceEntity): Promise<CommerceEntity> {
-
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const newCommerce = commerceRepository.create(data);
 
@@ -42,12 +52,11 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
   async deleteCommerce(uid: string): Promise<boolean> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
 
-    const commerceToDelete = await commerceRepository.findOneBy({ id: uid })
+    const commerceToDelete = await commerceRepository.findOneBy({ id: uid });
 
     if (commerceToDelete) {
       const deleteResponse = await commerceRepository.remove(commerceToDelete);
       return true;
-      // ...
     } else {
       return false;
     }
@@ -57,13 +66,12 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
   async disableCommerce(uid: string): Promise<boolean> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
 
-    const commerce = await commerceRepository.findOneBy({ id: uid })
+    const commerce = await commerceRepository.findOneBy({ id: uid });
 
     if (commerce) {
       commerce.isActive = false;
-      const disabledCommerce = await commerceRepository.save(commerce);
+      await commerceRepository.save(commerce);
       return true;
-      // ...
     } else {
       return false;
     }
@@ -73,40 +81,42 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
   async enableCommerce(uid: string): Promise<boolean> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
 
-    const commerce = await commerceRepository.findOneBy({ id: uid })
+    const commerce = await commerceRepository.findOneBy({ id: uid });
 
     if (commerce) {
       commerce.isActive = true;
-      const disabledCommerce = await commerceRepository.save(commerce);
+      await commerceRepository.save(commerce);
       return true;
-      // ...
     } else {
       return false;
     }
   }
 
-  
-
   @errorHandlerTypeOrm
-  async findCommerces(status?: CriteriaOptionsStatus, location?: LocationEntity): Promise<CommerceEntity[]> {
-
+  async findCommerces(
+    status?: CriteriaOptionsStatus,
+    location?: LocationEntity
+  ): Promise<CommerceEntity[]> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const conditions: FindManyOptions<CommerceTypeORMEntity> = {};
 
     if (status !== null && status !== undefined) {
       conditions.where = {
-        ...conditions.where, isActive: status == CriteriaOptionsStatus.active
+        ...conditions.where,
+        isActive: status == CriteriaOptionsStatus.active
       };
     }
 
     if (location !== null && location !== undefined) {
       if (location.type == CriteriaOptionsLocation.city) {
         conditions.where = {
-          ...conditions.where, city: location.name
+          ...conditions.where,
+          city: location.name
         };
       } else {
         conditions.where = {
-          ...conditions.where, countryCode: location.name
+          ...conditions.where,
+          countryCode: location.name
         };
       }
     }
@@ -114,8 +124,10 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
   }
 
   @errorHandlerTypeOrm
-  async findByUniqueColumn(option: OptionsValidations, data: string): Promise<CommerceEntity> {
-
+  async findByUniqueColumn(
+    option: OptionsValidations,
+    data: string
+  ): Promise<CommerceEntity> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
 
     if (option == OptionsValidations.name) {
@@ -142,5 +154,4 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
 
     throw new DataBaseError('', codeDbError);
   }
-
 }

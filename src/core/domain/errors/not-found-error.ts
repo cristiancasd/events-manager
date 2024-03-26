@@ -1,6 +1,6 @@
-import { CustomError, codeError } from "../..";
+import { CustomError, codeError } from '../..';
 
-
+// Custom error class for handling not found errors
 export class NotFoundError extends CustomError {
   statusCode = 404;
 

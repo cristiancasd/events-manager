@@ -5,8 +5,10 @@ import { body, query } from 'express-validator';
 import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkEventNameMiddleware } from '../middelwares/db.middelwares';
-import { validateCreateEventBody, validateFindEvents } from './events.validations';
-
+import {
+  validateCreateEventBody,
+  validateFindEvents
+} from './events.validations';
 
 const { eventsCtrl } = configureDependencies();
 const eventsRoutes = express.Router();
@@ -15,10 +17,7 @@ const eventsRoutes = express.Router();
 //TODO: validate not empty name
 eventsRoutes.post(
   `/create`,
-  [
-    ...validateCreateEventBody,
-    checkEventNameMiddleware,
-  ],
+  [...validateCreateEventBody, checkEventNameMiddleware],
   validateRequest,
   eventsCtrl.insertCtrl
 );
@@ -26,20 +25,15 @@ eventsRoutes.post(
 /// Delete Event
 eventsRoutes.delete(
   '/delete/:eventId',
-  [
-    validateUUIDParam('eventId'),],
+  [validateUUIDParam('eventId')],
   validateRequest,
   eventsCtrl.deleteCtrl
 );
 
-
-
 /// Find commerce by UID
 eventsRoutes.get(
   '/find/id/:eventId',
-  [
-    validateUUIDParam('eventId'),
-  ],
+  [validateUUIDParam('eventId')],
   validateRequest,
   eventsCtrl.findCtrl
 );
@@ -53,5 +47,3 @@ eventsRoutes.get(
 );
 
 export { eventsRoutes };
-
-

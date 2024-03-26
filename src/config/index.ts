@@ -1,1 +1,1 @@
-export { configureDependencies } from "./configureDependencies";
+export { configureDependencies } from './configureDependencies';

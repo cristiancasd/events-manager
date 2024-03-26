@@ -7,7 +7,7 @@ export interface UserUseCaseInterface {
     commerceUserId?: string
   ): Promise<boolean>;
   createUser(
-    user: UserEntity,
+    user: UserEntity
     //commerceId: string,
     //levelUid: string
   ): Promise<UserEntity>;
@@ -18,7 +18,6 @@ export interface UserUseCaseInterface {
     levelUid: string
   ): Promise<UserEntity[]>;
 
-  
   deleteUserByUid(uid: string): Promise<boolean>;
   /*disableUserByUid(uid: string): Promise<boolean>;
   enableUserByUid(uid: string): Promise<boolean>;

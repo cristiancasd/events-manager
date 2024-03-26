@@ -14,7 +14,7 @@ export class EventValue implements EventEntity {
     description,
     date,
     url,
-    commerceId,
+    commerceId
   }: {
     name: string;
     description?: string;

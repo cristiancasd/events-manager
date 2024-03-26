@@ -42,13 +42,10 @@ export const codeDbTypeIdDuplicated = 706;
 export const codeDbDocumentDuplicated = 707;
 export const codeDbCustoUserIdDuplicated = 708;
 
-
-
 export const codeCommerceNotFound = 801;
 export const codeLevelNotFound = 802;
 export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
-
 
 export const errorRouteNotFound = 'Commerce not found';
 export const errorMessageCommerceNotFound = 'Commerce not found';
@@ -56,3 +53,9 @@ export const errorMessageLevelNotFound = 'Level not found';
 export const errorMessageEventNotFound = 'Event not found';
 export const errorMessageUserNotFound = 'User not found';
 
+export const duplicatedDataMessage = 'Duplicated data';
+export const duplicatedEmailMessage = 'Duplicated email';
+export const duplicatedPhoneMessage = 'Duplicated phone';
+
+export const somethingWrongMessage = 'Something went wrong';
+export const mustBeUidMessage = 'must be UID';

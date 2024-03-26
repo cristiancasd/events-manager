@@ -1,4 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn, OneToMany, BeforeUpdate, BeforeInsert } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BaseEntity,
+  PrimaryColumn,
+  OneToMany,
+  BeforeUpdate,
+  BeforeInsert
+} from 'typeorm';
 import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
 import { LevelTypeORMEntity } from '../../../levels';
 
@@ -38,18 +49,10 @@ export class CommerceTypeORMEntity extends BaseEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn!: Date;
 
-  @OneToMany(
-    () => EventTypeORMEntity,
-    (event) => event.commerce,
-    //  { cascade: true },
-  )
+  @OneToMany(() => EventTypeORMEntity, (event) => event.commerce)
   events!: EventTypeORMEntity[];
 
-  @OneToMany(
-    () => LevelTypeORMEntity,
-    (level) => level.commerce,
-    //  { cascade: true },
-  )
+  @OneToMany(() => LevelTypeORMEntity, (level) => level.commerce)
   levels!: LevelTypeORMEntity[];
 
   @BeforeInsert()

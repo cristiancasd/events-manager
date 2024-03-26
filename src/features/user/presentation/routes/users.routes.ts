@@ -14,10 +14,7 @@ const userRoutes = express.Router();
 //TODO: validate not empty name
 userRoutes.post(
   `/create`,
-  [
-    ...validateCreateUserBody,
-    checkUserNameMiddleware
-  ],
+  [...validateCreateUserBody, checkUserNameMiddleware],
   validateRequest,
   userCtrl.insertCtrl
 );
@@ -33,10 +30,7 @@ userRoutes.get(
 /// Find user by commerceId and levels
 userRoutes.get(
   '/find/level/:commerceId/:levelUid',
-  [
-    validateUUIDParam('commerceId'), 
-    validateUUIDParam('levelUid'), 
-  ],
+  [validateUUIDParam('commerceId'), validateUUIDParam('levelUid')],
   validateRequest,
   userCtrl.findUserByLevelCtrl
 );

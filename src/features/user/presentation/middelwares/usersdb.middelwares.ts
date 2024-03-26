@@ -5,7 +5,7 @@ import {
   ServerError,
   codeDbCustoUserIdDuplicated,
   codeDbDocumentDuplicated,
-  codeDbError,
+  codeDbError
 } from '../../../../core';
 import { validationResult } from 'express-validator';
 import { configureDependencies } from '../../../../config';
@@ -31,7 +31,10 @@ export const checkUserNameMiddleware = async (
         undefined
       );
       if (documentExist)
-        throw new DataBaseError('Duplicated document', codeDbDocumentDuplicated);
+        throw new DataBaseError(
+          'Duplicated document',
+          codeDbDocumentDuplicated
+        );
 
       const commerceUserIdExist = await userUseCase.validateDuplicatedData(
         commerceId?.toString() ?? '',
@@ -39,11 +42,12 @@ export const checkUserNameMiddleware = async (
         commerceUserId
       );
 
-
       if (commerceUserIdExist)
-        throw new DataBaseError('Duplicated customCommerceId', codeDbCustoUserIdDuplicated);
+        throw new DataBaseError(
+          'Duplicated customCommerceId',
+          codeDbCustoUserIdDuplicated
+        );
     } catch (err) {
-
       if (err instanceof CustomError) {
         if (err instanceof DataBaseError) {
           if (err.code == codeDbError) return next();

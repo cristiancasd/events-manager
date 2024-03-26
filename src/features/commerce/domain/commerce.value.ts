@@ -20,7 +20,7 @@ export class CommerceValue implements CommerceEntity {
     city,
     totalFreePrevent,
     isActive,
-    dateFinish,
+    dateFinish
   }: {
     name: string;
     phone: number;

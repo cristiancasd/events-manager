@@ -1,7 +1,8 @@
-import { codeDbErrorInactive } from "../..";
-import { CustomError } from "./custom-error";
+import { codeDbErrorInactive } from '../..';
+import { CustomError } from './custom-error';
 
-
+//TODO: refactor this. Message
+// Custom error class for handling inactive errors
 export class InactiveDataError extends CustomError {
   statusCode = 400;
 

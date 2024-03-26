@@ -1,5 +1,6 @@
-import { CustomError, codeError } from "../..";
+import { CustomError, codeError } from '../..';
 
+// Custom error class for handling server errors
 export class ServerError extends CustomError {
   statusCode = 500;
   constructor(public code?: Number) {
@@ -7,6 +8,6 @@ export class ServerError extends CustomError {
     Object.setPrototypeOf(this, ServerError.prototype);
   }
   serializeErrors() {
-    return [{ message: 'Internal Server Error', code:this.code??codeError}];
+    return [{ message: 'Internal Server Error', code: this.code ?? codeError }];
   }
 }

@@ -67,7 +67,6 @@ export class UserTypeORMEntity {
   @ManyToOne(() => LevelTypeORMEntity, (level) => level.users, {
     eager: true, //cargar automaticamente la relación, que en el fron muestre el
     onDelete: 'CASCADE'
-
   })
   level!: LevelTypeORMEntity;
 }

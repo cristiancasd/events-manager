@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { CustomError } from '../..';
+import { somethingWrongMessage } from '../../shared/constants';
 
+// error handler
 export const errorHandler = (
   err: Error,
   req: Request,
@@ -12,6 +14,6 @@ export const errorHandler = (
   }
 
   res.status(500).send({
-    errors: [{ message: 'Something went wrong' }]
+    errors: [{ message: somethingWrongMessage }]
   });
 };

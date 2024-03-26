@@ -2,8 +2,7 @@ import {
   NotFoundError,
   codeUserNotFound,
   errorHandlerUseCase,
-  errorMessageUserNotFound,
-
+  errorMessageUserNotFound
 } from '../../../core';
 import { UserEntity } from '../domain/users.entity';
 import { UserValue } from '../domain/users.value';
@@ -11,7 +10,7 @@ import { UserRepository } from '../domain/users.repository';
 import { UserUseCaseInterface } from '../domain/users.useCase';
 
 export class UserUseCase implements UserUseCaseInterface {
-  constructor(private readonly _userRepository: UserRepository) { }
+  constructor(private readonly _userRepository: UserRepository) {}
 
   @errorHandlerUseCase
   async validateDuplicatedData(
@@ -30,7 +29,6 @@ export class UserUseCase implements UserUseCaseInterface {
     }
 
     if (commerceUserId != null) {
-
       const userFinded = await this._userRepository.findUserByDocument(
         commerceId,
         commerceUserId
@@ -38,19 +36,18 @@ export class UserUseCase implements UserUseCaseInterface {
       commerceUserIdFinded = userFinded ? true : false;
     }
 
-
     return documentFinded || commerceUserIdFinded ? true : false;
   }
 
   @errorHandlerUseCase
   async createUser(
-    input: UserEntity,
+    input: UserEntity
     //commerceId: string,
     //levelUid: string
   ): Promise<UserEntity> {
     const userValue = new UserValue(input);
     return await this._userRepository.createUser(
-      userValue,
+      userValue
       //commerceId,
       //levelUid
     );
@@ -69,12 +66,11 @@ export class UserUseCase implements UserUseCaseInterface {
     return await this._userRepository.findUsersByLevelUid(commerceId, levelUid);
   }
 
-
   @errorHandlerUseCase
   async deleteUserByUid(uid: string): Promise<boolean> {
     const result = await this._userRepository.deleteUser(uid);
     if (result) return result;
-    throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);;
+    throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
   }
 
   /* @errorHandlerUseCase
