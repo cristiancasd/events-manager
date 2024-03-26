@@ -1,14 +1,19 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 
-import { body, query } from 'express-validator';
-//import { MockRepository } from '../../infrastructure/repository/mock.repository';
 import { validateRequest, validateUUIDParam } from '../../../../core';
-import { checkCommerceEmailMiddleware, checkCommerceNameMiddleware, checkCommercePhoneMiddleware } from '../middelwares/db.middelwares';
+import {
+  checkCommerceEmailMiddleware,
+  checkCommerceNameMiddleware,
+  checkCommercePhoneMiddleware
+} from '../middelwares/db.middelwares';
 import { configureDependencies } from '../../../../config';
-import { checkBothLocationTypeAndLocation, validateCreateCommerceBody, validateFindAllEvents } from './commerce.validations';
+import {
+  checkBothLocationTypeAndLocation,
+  validateCreateCommerceBody,
+  validateFindAllEvents
+} from './commerce.validations';
 
-
-const { commerceRepository, commerceUseCase, commerceCtrl } = configureDependencies();
+const { commerceCtrl } = configureDependencies();
 const commerceRoutes = express.Router();
 
 /// Create Commerce
@@ -19,7 +24,7 @@ commerceRoutes.post(
     ...validateCreateCommerceBody,
     checkCommerceNameMiddleware,
     checkCommerceEmailMiddleware,
-    checkCommercePhoneMiddleware,
+    checkCommercePhoneMiddleware
   ],
   validateRequest,
   commerceCtrl.insertCtrl
@@ -28,8 +33,7 @@ commerceRoutes.post(
 /// Delete Commerce
 commerceRoutes.delete(
   '/delete/:idCommerce',
-  [
-    validateUUIDParam('idCommerce'),],
+  [validateUUIDParam('idCommerce')],
   validateRequest,
   commerceCtrl.deleteCtrl
 );
@@ -37,8 +41,7 @@ commerceRoutes.delete(
 /// disable Commerce
 commerceRoutes.delete(
   '/disable/:idCommerce',
-  [
-    validateUUIDParam('idCommerce'),],
+  [validateUUIDParam('idCommerce')],
   validateRequest,
   commerceCtrl.disableCtrl
 );
@@ -46,8 +49,7 @@ commerceRoutes.delete(
 /// Enable commerce
 commerceRoutes.put(
   '/enable/:idCommerce',
-  [
-    validateUUIDParam('idCommerce'),],
+  [validateUUIDParam('idCommerce')],
   validateRequest,
   commerceCtrl.enableCtrl
 );
@@ -55,9 +57,7 @@ commerceRoutes.put(
 /// Find commerce by UID
 commerceRoutes.get(
   '/find/id/:idCommerce',
-  [
-    validateUUIDParam('idCommerce'),
-  ],
+  [validateUUIDParam('idCommerce')],
   validateRequest,
   commerceCtrl.findCtrl
 );
@@ -65,15 +65,9 @@ commerceRoutes.get(
 /// Find commerce by Criteria
 commerceRoutes.get(
   '/find/all',
-  [
-    ...validateFindAllEvents,
-    checkBothLocationTypeAndLocation,
-  ],
+  [...validateFindAllEvents, checkBothLocationTypeAndLocation],
   validateRequest,
   commerceCtrl.findByCriteriaCtrl
 );
 
-
 export { commerceRoutes };
-
-

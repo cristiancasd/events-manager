@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { RequestValidationError } from '../..';
 
-
+// Validate request middleware
 export const validateRequest = (
   req: Request,
   res: Response,

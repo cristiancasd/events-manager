@@ -4,9 +4,9 @@ services:
   db:
     image: postgres:14.3
     restart: always
-    ports: 
-      - "5500:5432"
-    environment: 
+    ports:
+      - '5500:5432'
+    environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     container_name: herba_events
@@ -17,9 +17,9 @@ services:
   db-test:
     image: postgres:14.3
     restart: always
-    ports: 
-      - "5501:5432"
-    environment: 
+    ports:
+      - '5501:5432'
+    environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME_TEST}
     container_name: herba_events_test

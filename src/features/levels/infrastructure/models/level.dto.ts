@@ -1,4 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, PrimaryColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BaseEntity,
+  PrimaryColumn,
+  ManyToOne,
+  OneToMany
+} from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
 import { UserTypeORMEntity } from '../../../user/infrastructure/models/users.dto';
 
@@ -21,18 +31,14 @@ export class LevelTypeORMEntity {
 
   @OneToMany(
     () => UserTypeORMEntity,
-    (user) => user.level,
+    (user) => user.level
     //  { cascade: true },
   )
   users!: UserTypeORMEntity[];
 
-  @ManyToOne(
-    () => CommerceTypeORMEntity,
-    (commerce) => commerce.levels,
-    {
-      eager: true,  //cargar automaticamente la relación, que en el fron muestre el
-      onDelete: 'CASCADE',
-    })
-  commerce!: CommerceTypeORMEntity
-
+  @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.levels, {
+    eager: true, //cargar automaticamente la relación, que en el fron muestre el
+    onDelete: 'CASCADE'
+  })
+  commerce!: CommerceTypeORMEntity;
 }

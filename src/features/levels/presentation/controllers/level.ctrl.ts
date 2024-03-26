@@ -2,9 +2,7 @@ import { Request, Response } from 'express';
 import { LevelUseCase } from '../../application/levelUseCase';
 
 export class LevelController {
-  constructor(
-    private levelUseCase: LevelUseCase,
-  ) { }
+  constructor(private levelUseCase: LevelUseCase) {}
 
   public insertCtrl = async (req: Request, res: Response) => {
     const body = req.body;
@@ -17,7 +15,6 @@ export class LevelController {
     const result = await this.levelUseCase.deleteLevelByUid(levelId);
     res.status(200).send(result);
   };
-
 
   public findCtrl = async (req: Request, res: Response) => {
     const { levelId } = req.params;

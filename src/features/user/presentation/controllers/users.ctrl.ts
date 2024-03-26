@@ -6,9 +6,7 @@ export class UserController {
 
   public insertCtrl = async (req: Request, res: Response) => {
     const body = req.body;
-    const user = await this.userUseCase.createUser(
-      body,
-    );
+    const user = await this.userUseCase.createUser(body);
     res.status(201).send(user);
   };
 

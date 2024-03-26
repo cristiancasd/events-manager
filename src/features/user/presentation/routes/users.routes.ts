@@ -1,7 +1,5 @@
 import express, { Request, Response } from 'express';
 
-import { body, query } from 'express-validator';
-//import { MockRepository } from '../../infrastructure/repository/mock.repository';
 import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkUserNameMiddleware } from '../middelwares/usersdb.middelwares';
@@ -14,10 +12,7 @@ const userRoutes = express.Router();
 //TODO: validate not empty name
 userRoutes.post(
   `/create`,
-  [
-    ...validateCreateUserBody,
-    checkUserNameMiddleware
-  ],
+  [...validateCreateUserBody, checkUserNameMiddleware],
   validateRequest,
   userCtrl.insertCtrl
 );
@@ -33,10 +28,7 @@ userRoutes.get(
 /// Find user by commerceId and levels
 userRoutes.get(
   '/find/level/:commerceId/:levelUid',
-  [
-    validateUUIDParam('commerceId'), 
-    validateUUIDParam('levelUid'), 
-  ],
+  [validateUUIDParam('commerceId'), validateUUIDParam('levelUid')],
   validateRequest,
   userCtrl.findUserByLevelCtrl
 );

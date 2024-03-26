@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
-import { CriteriaOptionsLocation, CriteriaOptionsStatus } from '../../../../core';
+import {
+  CriteriaOptionsLocation,
+  CriteriaOptionsStatus
+} from '../../../../core';
 import { CommerceUseCase } from '../../application';
 import { LocationEntity } from '../../domain';
 
 export class CommerceController {
-  constructor(
-    private commerceUseCase: CommerceUseCase,
-  ) { }
+  constructor(private commerceUseCase: CommerceUseCase) {}
 
   public insertCtrl = async ({ body }: Request, res: Response) => {
     const commerce = await this.commerceUseCase.createCommerce(body);
@@ -40,22 +41,24 @@ export class CommerceController {
   public findByCriteriaCtrl = async (req: Request, res: Response) => {
     const { status, locationType, location } = req.query;
 
-
-    // Check if statusQ is a valid key in CriteriaOptionsStatus
-    const statusQ: CriteriaOptionsStatus | undefined = Object.values(CriteriaOptionsStatus).includes(status as CriteriaOptionsStatus)
+    const statusQ: CriteriaOptionsStatus | undefined = Object.values(
+      CriteriaOptionsStatus
+    ).includes(status as CriteriaOptionsStatus)
       ? CriteriaOptionsStatus[status as CriteriaOptionsStatus]
       : undefined;
 
-    const locationTypeQ: CriteriaOptionsLocation | undefined = Object.values(CriteriaOptionsLocation).includes(locationType as CriteriaOptionsLocation)
+    const locationTypeQ: CriteriaOptionsLocation | undefined = Object.values(
+      CriteriaOptionsLocation
+    ).includes(locationType as CriteriaOptionsLocation)
       ? CriteriaOptionsLocation[locationType as CriteriaOptionsLocation]
       : undefined;
 
     let locationQ: LocationEntity | undefined =
-      locationTypeQ && typeof location === "string" && location != ''
+      locationTypeQ && typeof location === 'string' && location != ''
         ? {
-          name: location.toUpperCase(),
-          type: locationTypeQ
-        }
+            name: location.toUpperCase(),
+            type: locationTypeQ
+          }
         : undefined;
 
     const result = await this.commerceUseCase.findCommerces(statusQ, locationQ);

@@ -2,7 +2,6 @@ import 'dotenv/config';
 import 'express-async-errors';
 import express from 'express';
 import cors from 'cors';
-//import addRoute from './common/infrastructure/route/add.route';
 import { NotFoundError, errorHandler, errorRouteNotFound } from './core';
 import router from './routes';
 
