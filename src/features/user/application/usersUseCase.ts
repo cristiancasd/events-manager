@@ -42,15 +42,9 @@ export class UserUseCase implements UserUseCaseInterface {
   @errorHandlerUseCase
   async createUser(
     input: UserEntity
-    //commerceId: string,
-    //levelUid: string
   ): Promise<UserEntity> {
     const userValue = new UserValue(input);
-    return await this._userRepository.createUser(
-      userValue
-      //commerceId,
-      //levelUid
-    );
+    return await this._userRepository.createUser(userValue);
   }
 
   @errorHandlerUseCase

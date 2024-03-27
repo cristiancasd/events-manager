@@ -25,9 +25,13 @@ export {
   duplicatedTypeIdMessage,
   commerceIdInvalidMessage,
   LevelUidInvalidMessage,
+  codeInvalidToken,
+  invalidTokenMessage,
 } from './shared/constants';
 export { NotFoundError } from './domain/errors/not-found-error';
 export { InactiveDataError } from './domain/errors/inactive-data-error';
+export { UnauthorizedError } from './domain/errors/unauthorized-error';
+
 
 export { BadRequestError } from './domain/errors/bad-request-error';
 

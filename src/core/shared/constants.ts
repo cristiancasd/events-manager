@@ -47,6 +47,8 @@ export const codeLevelNotFound = 802;
 export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
 
+export const codeInvalidToken=901;
+
 //Not found messages
 export const errorRouteNotFound = 'Commerce not found';
 export const errorMessageCommerceNotFound = 'Commerce not found';
@@ -64,9 +66,7 @@ export const duplicatedTypeIdMessage = 'Duplicated typeId';
 // Invalid data message
 export const commerceIdInvalidMessage = 'CommerceId invalid';
 export const LevelUidInvalidMessage = 'levelUid invalid';
-
-
-
+export const invalidTokenMessage = 'Token invalido';
 
 export const somethingWrongMessage = 'Something went wrong';
 export const mustBeUidMessage = 'must be UID';
