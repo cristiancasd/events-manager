@@ -1,12 +1,16 @@
 import { QueryFailedError } from 'typeorm';
+import jwt from 'jsonwebtoken';
+
 import {
+  BadRequestError,
   CustomError,
   DataBaseError,
   ServerError,
   codeDbError,
   codeDbErrorDuplicated,
+  codeInvalidToken,
   duplicatedDataMessage,
-  notFoundError
+  invalidTokenMessage,
 } from '../..';
 
 // Error handler respository typeORM
@@ -29,6 +33,10 @@ export const errorHandlerTypeOrm = (
           );
         }
         throw new DataBaseError('', codeDbError);
+      }
+
+      if (error instanceof jwt.JsonWebTokenError) {
+        throw new BadRequestError(invalidTokenMessage, codeInvalidToken);
       }
 
       if (error instanceof CustomError) {

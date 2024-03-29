@@ -24,8 +24,8 @@ import { AuthValue } from '../../domain/auth.value';
 export class AuthRepositoryImpl implements AuthRepository {
 
   constructor(
-    private tokenSecretKey: string = process.env.TOKEN_SECRET_KEY ||'',
-    private refreshTokenSecretKey: string = process.env.REFRESH_TOKEN_SECRET_KEY ||'') { }
+    private tokenSecretKey: string = process.env.TOKEN_SECRET_KEY || '',
+    private refreshTokenSecretKey: string = process.env.REFRESH_TOKEN_SECRET_KEY || '') { }
 
   @errorHandlerTypeOrm
   async validateCredentials(
@@ -34,15 +34,14 @@ export class AuthRepositoryImpl implements AuthRepository {
   ): Promise<UserAuthEntity> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
     const user = await userRepository.findOne({
-      where: { email }, select: { email: true, password: true, id: true },
+      where: { email }, select: { email: true, password: true, id: true, role: true, isActive: true },
     })
 
     if (!user) throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
 
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (bcrypt.compareSync(password, user.password)) {
 
       const userEntity = new UserValue({ ...user, commerceId: '', levelUid: '' });
-
       return new UserAuthValue({
         userUid: userEntity.id,
         role: userEntity.role,
@@ -57,8 +56,11 @@ export class AuthRepositoryImpl implements AuthRepository {
     userAuthInfo: UserAuthEntity,
   ): Promise<AuthEntity> {
 
-    const token = jwt.sign(userAuthInfo, this.tokenSecretKey, { expiresIn: '1h' });
-    const refreshToken = jwt.sign(userAuthInfo, this.refreshTokenSecretKey, { expiresIn: '7d' });
+
+    const userAuthInfoPlainObject = new UserAuthValue(userAuthInfo).toJSON();
+
+    const token = jwt.sign(userAuthInfoPlainObject, this.tokenSecretKey, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(userAuthInfoPlainObject, this.refreshTokenSecretKey, { expiresIn: '7d' });
     return new AuthValue({
       token: token,
       refreshToken: refreshToken,
@@ -70,6 +72,8 @@ export class AuthRepositoryImpl implements AuthRepository {
   async refreshToken(
     refreshToken: string,
   ): Promise<AuthEntity> {
+
+
     const decoded: JwtPayload = jwt.verify(refreshToken, this.refreshTokenSecretKey) as JwtPayload;
     const userTokenData = new UserAuthValue({
       isActive: decoded.isActive,
@@ -83,7 +87,7 @@ export class AuthRepositoryImpl implements AuthRepository {
   async validateToken(
     token: string,
   ): Promise<boolean> {
-    const decoded: JwtPayload = jwt.verify(token, this.refreshTokenSecretKey) as JwtPayload;
+    jwt.verify(token, this.tokenSecretKey) as JwtPayload;
     return true;
   }
 }

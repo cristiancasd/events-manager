@@ -11,7 +11,6 @@
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node-dev",
         "args": ["--inspect", "index.ts"],
         "console": "integratedTerminal",
-        "protocol": "inspector"
       }
     ]
   }

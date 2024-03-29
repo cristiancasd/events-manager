@@ -19,4 +19,12 @@ export class UserAuthValue implements UserAuthEntity {
     this.isActive = isActive;
     this.userUid= userUid;
   }
+
+  toJSON(): UserAuthEntity {
+    return {
+      role: this.role,
+      isActive: this.isActive,
+      userUid: this.userUid,
+    };
+  }
 }

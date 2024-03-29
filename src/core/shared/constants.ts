@@ -70,3 +70,6 @@ export const invalidTokenMessage = 'Token invalido';
 
 export const somethingWrongMessage = 'Something went wrong';
 export const mustBeUidMessage = 'must be UID';
+
+
+
