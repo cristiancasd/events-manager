@@ -28,6 +28,19 @@ export class AuthRepositoryImpl implements AuthRepository {
     private refreshTokenSecretKey: string = process.env.REFRESH_TOKEN_SECRET_KEY || '') { }
 
   @errorHandlerTypeOrm
+  async getTokenData( token: string): Promise<UserAuthEntity> {
+
+    const decodedToken = jwt.verify(token, this.tokenSecretKey) as JwtPayload;
+
+    return new UserAuthValue({
+        userUid: decodedToken.id,
+        role: decodedToken.role,
+        isActive: decodedToken.isActive
+      });
+  }
+
+
+  @errorHandlerTypeOrm
   async validateCredentials(
     email: string,
     password: string

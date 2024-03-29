@@ -2,6 +2,7 @@ import { BadRequestError, codeInvalidToken, errorHandlerUseCase, invalidTokenMes
 import { AuthEntity } from "../domain/auth.entity";
 import { AuthRepository } from "../domain/auth.repository";
 import { AuthUseCaseInterface } from "../domain/auth.useCase";
+import { UserAuthEntity } from "../domain/userAuth.entity";
 
 export class AuthUseCase implements AuthUseCaseInterface {
   constructor(private readonly _authRepository: AuthRepository) { }
@@ -26,5 +27,10 @@ export class AuthUseCase implements AuthUseCaseInterface {
     const tokenData = tokenWithBearer.slice(7);*/
 
     return await this._authRepository.validateToken(token);
+  }
+
+  @errorHandlerUseCase
+  async getTokenData(token: string): Promise<UserAuthEntity> {
+    return await this._authRepository.getTokenData(token);
   }
 }

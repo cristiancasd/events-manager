@@ -6,6 +6,8 @@ export {
   CriteriaOptionsStatus,
   CriteriaOptionsLocation,
   OptionsValidations,
+  codeInvalidRole,
+  invalidRoleMessage,
   codeDbEmailDuplicated,
   codeDbNameDuplicated,
   codeDbPhoneDuplicated,

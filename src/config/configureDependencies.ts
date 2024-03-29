@@ -73,5 +73,6 @@ export const configureDependencies = () => {
     userUseCase,
     userCtrl,
     authCtrl,
+    authUseCase,
   };
 };

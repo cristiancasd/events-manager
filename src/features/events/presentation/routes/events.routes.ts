@@ -7,6 +7,7 @@ import {
   validateCreateEventBody,
   validateFindEvents
 } from './events.validations';
+import { checkTokenMiddleware, isAdminMiddleware } from '../../../auth/presentation/middelwares/auth.middelwares';
 
 const { eventsCtrl } = configureDependencies();
 const eventsRoutes = express.Router();
@@ -15,7 +16,12 @@ const eventsRoutes = express.Router();
 //TODO: validate not empty name
 eventsRoutes.post(
   `/create`,
-  [...validateCreateEventBody, checkEventNameMiddleware],
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    ...validateCreateEventBody,
+    checkEventNameMiddleware
+  ],
   validateRequest,
   eventsCtrl.insertCtrl
 );
@@ -23,7 +29,11 @@ eventsRoutes.post(
 /// Delete Event
 eventsRoutes.delete(
   '/delete/:eventId',
-  [validateUUIDParam('eventId')],
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateUUIDParam('eventId')
+  ],
   validateRequest,
   eventsCtrl.deleteCtrl
 );
@@ -31,7 +41,10 @@ eventsRoutes.delete(
 /// Find commerce by UID
 eventsRoutes.get(
   '/find/id/:eventId',
-  [validateUUIDParam('eventId')],
+  [
+    checkTokenMiddleware,
+    validateUUIDParam('eventId')
+  ],
   validateRequest,
   eventsCtrl.findCtrl
 );
@@ -39,7 +52,10 @@ eventsRoutes.get(
 /// Find event by commerceId and dates
 eventsRoutes.get(
   '/find/commerce/:commerceId',
-  validateFindEvents,
+  [
+    checkTokenMiddleware,
+    ...validateFindEvents,
+  ],
   validateRequest,
   eventsCtrl.findEventsByCommerceCtrl
 );

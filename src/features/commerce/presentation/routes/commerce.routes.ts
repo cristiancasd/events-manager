@@ -12,6 +12,9 @@ import {
   validateCreateCommerceBody,
   validateFindAllEvents
 } from './commerce.validations';
+import { checkTokenMiddleware, validateRolesMiddleware } from '../../../auth/presentation/middelwares/auth.middelwares';
+import { CommerceUserRoles } from '../../../../core/shared/constants';
+//import { checkTokenMiddleware } from '../../../auth';
 
 const { commerceCtrl } = configureDependencies();
 const commerceRoutes = express.Router();
@@ -21,6 +24,8 @@ const commerceRoutes = express.Router();
 commerceRoutes.post(
   `/create`,
   [
+    checkTokenMiddleware,
+    validateRolesMiddleware([CommerceUserRoles.admin]),
     ...validateCreateCommerceBody,
     checkCommerceNameMiddleware,
     checkCommerceEmailMiddleware,
