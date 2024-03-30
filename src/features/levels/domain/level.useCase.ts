@@ -2,12 +2,12 @@ import { LevelEntity } from './level.entity';
 
 export interface LevelUseCaseInterface {
   validateDuplicatedData(
-    commerceId: string,
+    commerceUid: string,
     name?: string,
     typeId?: number
   ): Promise<boolean>;
-  createLevel(input: LevelEntity, commerceId: string): Promise<LevelEntity>;
+  createLevel(input: LevelEntity, commerceUid: string): Promise<LevelEntity>;
   deleteLevelByUid(uid: string): Promise<boolean>;
   findLevelByUid(uid: string): Promise<LevelEntity>;
-  findLevelsByCommerce(commerceId: string): Promise<LevelEntity[]>;
+  findLevelsByCommerce(commerceUid: string): Promise<LevelEntity[]>;
 }

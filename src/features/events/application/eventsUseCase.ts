@@ -15,11 +15,11 @@ export class EventsUseCase implements EventsUseCaseInterface {
 
   @errorHandlerUseCase
   async validateDuplicatedData(
-    commerceId: string,
+    commerceUid: string,
     data: string
   ): Promise<boolean> {
     const result = await this._eventsRepository.findEventByName(
-      commerceId,
+      commerceUid,
       data
     );
 
@@ -46,7 +46,7 @@ export class EventsUseCase implements EventsUseCaseInterface {
 
   @errorHandlerUseCase
   async findEventsByCommerce(
-    commerceId: string,
+    commerceUid: string,
     startDate?: string,
     finishDate?: string
   ): Promise<EventEntity[]> {
@@ -60,7 +60,7 @@ export class EventsUseCase implements EventsUseCaseInterface {
       finishDateTime = undefined;
 
     return await this._eventsRepository.findEventsByCommerce(
-      commerceId,
+      commerceUid,
       startDateTime,
       finishDateTime
     );

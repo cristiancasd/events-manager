@@ -11,12 +11,18 @@ import {
   codeInvalidToken,
   commerceIdInvalidMessage,
   invalidRoleMessage,
-  invalidTokenMessage
+  invalidTokenMessage,
+  invalidCommerceUidMessage,
+  codeInvalidCommerceUid,
+  UnauthorizedError
 } from '../../../../core';
 import { validationResult } from 'express-validator';
 import { configureDependencies } from '../../../../config';
 import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
-import { CommerceUserRoles } from '../../../../core/shared/constants';
+import {
+  CommerceUserRoles,
+  inactiveProfileMessage
+} from '../../../../core/shared/constants';
 
 const { authUseCase } = configureDependencies();
 
@@ -25,11 +31,9 @@ export const checkTokenMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-
       const token = req.headers['authorization'];
       const isValidToken = await authUseCase.validateToken(token ?? '');
       if (isValidToken) {
@@ -47,26 +51,62 @@ export const checkTokenMiddleware = async (
   next();
 };
 
+export const validateRolesMiddleware =
+  (roles: string[]) =>
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      try {
+        const token = req.headers['authorization'];
+        const tokenData = await authUseCase.getTokenData(token ?? '');
 
-export const validateRolesMiddleware = (roles: string[]) => async (
+        if (roles.includes(tokenData.role)) {
+          return next();
+        }
+
+        throw new BadRequestError(invalidRoleMessage, codeInvalidRole);
+      } catch (err) {
+        if (err instanceof CustomError) {
+          throw err;
+        }
+        throw new ServerError();
+      }
+    }
+    next();
+  };
+
+export const validateCommerceUidAndStateMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-
       const token = req.headers['authorization'];
       const tokenData = await authUseCase.getTokenData(token ?? '');
 
-      if (roles.includes(tokenData.role)) {
-        return next();
+      let commerceUid: string | undefined;
+
+      if (req.body && req.body.commerceUid) {
+        commerceUid = req.body.commerceUid;
       }
 
-      throw new BadRequestError(invalidRoleMessage, codeInvalidRole);
+      if (!commerceUid && req.params && req.params.commerceUid) {
+        commerceUid = req.params.commerceUid;
+      }
 
+      if (!tokenData.isActive)
+        throw new UnauthorizedError(inactiveProfileMessage);
+
+      if (commerceUid == tokenData.commerceUid) {
+        return next();
+      } else {
+        throw new BadRequestError(
+          invalidCommerceUidMessage,
+          codeInvalidCommerceUid
+        );
+      }
     } catch (err) {
       if (err instanceof CustomError) {
         throw err;
@@ -82,20 +122,20 @@ export const isAdminMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-
       const token = req.headers['authorization'];
       const tokenData = await authUseCase.getTokenData(token ?? '');
 
-      if (tokenData.role == CommerceUserRoles.admin || tokenData.role == CommerceUserRoles.superAdmin) {
+      if (
+        tokenData.role == CommerceUserRoles.admin ||
+        tokenData.role == CommerceUserRoles.superAdmin
+      ) {
         return next();
       }
 
       throw new BadRequestError(invalidRoleMessage, codeInvalidRole);
-
     } catch (err) {
       if (err instanceof CustomError) {
         throw err;
@@ -105,4 +145,3 @@ export const isAdminMiddleware = async (
   }
   next();
 };
-

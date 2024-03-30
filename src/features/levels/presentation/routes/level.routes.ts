@@ -6,7 +6,11 @@ import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkLevelNameMiddleware } from '../middelwares/db.middelwares';
 import { validateCreateLevelBody } from './level.validations';
-import { checkTokenMiddleware, isAdminMiddleware } from '../../../auth/presentation/middelwares/auth.middelwares';
+import {
+  checkTokenMiddleware,
+  isAdminMiddleware,
+  validateCommerceUidAndStateMiddleware
+} from '../../../auth/presentation/middelwares/auth.middelwares';
 
 const { levelCtrl } = configureDependencies();
 const levelRoutes = express.Router();
@@ -18,8 +22,9 @@ levelRoutes.post(
   [
     checkTokenMiddleware,
     isAdminMiddleware,
-    ...validateCreateLevelBody, 
-    checkLevelNameMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateCreateLevelBody,
+    checkLevelNameMiddleware
   ],
   validateRequest,
   levelCtrl.insertCtrl
@@ -27,11 +32,13 @@ levelRoutes.post(
 
 /// Delete Level
 levelRoutes.delete(
-  '/delete/:levelId',
+  '/delete/:commerceUid/:levelId',
   [
+    validateUUIDParam('levelId'),
+    validateUUIDParam('commerceUid'),
     checkTokenMiddleware,
     isAdminMiddleware,
-    validateUUIDParam('levelId'),
+    validateCommerceUidAndStateMiddleware
   ],
   validateRequest,
   levelCtrl.deleteCtrl
@@ -42,16 +49,18 @@ levelRoutes.get(
   '/find/id/:levelId',
   [
     checkTokenMiddleware,
+    validateCommerceUidAndStateMiddleware,
     validateUUIDParam('levelId')
   ],
   validateRequest,
   levelCtrl.findCtrl
 );
 
-/// Find level by commerceId and dates
+/// Find level by commerceUid and dates
 levelRoutes.get(
-  '/find/commerce/:commerceId',
+  '/find/commerce/:commerceUid',
   checkTokenMiddleware,
+  validateCommerceUidAndStateMiddleware,
   validateRequest,
   levelCtrl.findLevelByCommerceCtrl
 );

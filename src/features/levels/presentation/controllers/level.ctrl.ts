@@ -23,8 +23,8 @@ export class LevelController {
   };
 
   public findLevelByCommerceCtrl = async (req: Request, res: Response) => {
-    const { commerceId } = req.params;
-    const result = await this.levelUseCase.findLevelsByCommerce(commerceId);
+    const { commerceUid } = req.params;
+    const result = await this.levelUseCase.findLevelsByCommerce(commerceUid);
     res.status(200).send(result);
   };
 }

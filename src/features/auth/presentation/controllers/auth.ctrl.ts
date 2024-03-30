@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AuthUseCase } from '../../application/authUseCase';
 
 export class AuthController {
-  constructor(private authUseCase: AuthUseCase) { }
+  constructor(private authUseCase: AuthUseCase) {}
 
   public signInCtrl = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -18,8 +18,7 @@ export class AuthController {
 
   public validateTokenCtrl = async (req: Request, res: Response) => {
     const token = req.headers['authorization'];
-    const authData = await this.authUseCase.validateToken(token??'');
+    const authData = await this.authUseCase.validateToken(token ?? '');
     res.status(200).send(authData);
   };
-
 }

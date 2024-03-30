@@ -16,7 +16,7 @@ export class LevelUseCase implements LevelUseCaseInterface {
 
   @errorHandlerUseCase
   async validateDuplicatedData(
-    commerceId: string,
+    commerceUid: string,
     name?: string,
     typeId?: number
   ): Promise<boolean> {
@@ -24,7 +24,7 @@ export class LevelUseCase implements LevelUseCaseInterface {
     let typeIdFinded = false;
     if (name != null) {
       const levelFinded = await this._levelRepository.findLevelByName(
-        commerceId,
+        commerceUid,
         name
       );
       nameFinded = levelFinded ? true : false;
@@ -32,7 +32,7 @@ export class LevelUseCase implements LevelUseCaseInterface {
 
     if (typeId != null) {
       const levelFinded = await this._levelRepository.findLevelByTypeId(
-        commerceId,
+        commerceUid,
         typeId
       );
       typeIdFinded = levelFinded ? true : false;
@@ -60,7 +60,7 @@ export class LevelUseCase implements LevelUseCaseInterface {
 
   @errorHandlerUseCase
   async findLevelsByCommerce(
-    commerceId: string,
+    commerceUid: string,
     startDate?: string,
     finishDate?: string
   ): Promise<LevelEntity[]> {
@@ -73,6 +73,6 @@ export class LevelUseCase implements LevelUseCaseInterface {
     if ((finishDateTime && isNaN(finishDateTime.getTime())) || !finishDateTime)
       finishDateTime = undefined;
 
-    return await this._levelRepository.findLevelsByCommerce(commerceId);
+    return await this._levelRepository.findLevelsByCommerce(commerceUid);
   }
 }

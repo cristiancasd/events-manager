@@ -4,7 +4,11 @@ import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkUserNameMiddleware } from '../middelwares/usersdb.middelwares';
 import { validateCreateUserBody } from './users.validations';
-import { checkTokenMiddleware, isAdminMiddleware } from '../../../auth/presentation/middelwares/auth.middelwares';
+import {
+  checkTokenMiddleware,
+  isAdminMiddleware,
+  validateCommerceUidAndStateMiddleware
+} from '../../../auth/presentation/middelwares/auth.middelwares';
 
 const { userCtrl } = configureDependencies();
 const userRoutes = express.Router();
@@ -16,8 +20,9 @@ userRoutes.post(
   [
     checkTokenMiddleware,
     isAdminMiddleware,
-    ...validateCreateUserBody, 
-    checkUserNameMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateCreateUserBody,
+    checkUserNameMiddleware
   ],
   validateRequest,
   userCtrl.insertCtrl
@@ -26,22 +31,21 @@ userRoutes.post(
 /// Find usser by UID
 userRoutes.get(
   '/find/id/:userId',
-  [
-    checkTokenMiddleware,
-    isAdminMiddleware,
-    validateUUIDParam('userId')],
+  [checkTokenMiddleware, isAdminMiddleware, validateUUIDParam('userId')],
   validateRequest,
   userCtrl.findCtrl
 );
 
-/// Find user by commerceId and levels
+/// Find user by commerceUid and levels
 userRoutes.get(
-  '/find/level/:commerceId/:levelUid',
+  '/find/level/:commerceUid/:levelUid',
   [
+    validateUUIDParam('commerceUid'),
+    validateUUIDParam('levelUid'),
     checkTokenMiddleware,
     isAdminMiddleware,
-    validateUUIDParam('commerceId'), 
-    validateUUIDParam('levelUid')],
+    validateCommerceUidAndStateMiddleware
+  ],
   validateRequest,
   userCtrl.findUserByLevelCtrl
 );
@@ -52,7 +56,9 @@ userRoutes.delete(
   [
     checkTokenMiddleware,
     isAdminMiddleware,
-    validateUUIDParam('userId')],
+    validateCommerceUidAndStateMiddleware,
+    validateUUIDParam('userId')
+  ],
   validateRequest,
   userCtrl.deleteCtrl
 );

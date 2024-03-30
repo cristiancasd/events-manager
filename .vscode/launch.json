@@ -1,17 +1,14 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "type": "node",
-        "request": "launch",
-        "name": "Debug TS with ts-node-dev",
-        "skipFiles": [
-          "<node_internals>/**"
-        ],
-        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node-dev",
-        "args": ["--inspect", "index.ts"],
-        "console": "integratedTerminal",
-      }
-    ]
-  }
-  
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug TS with ts-node-dev",
+      "skipFiles": ["<node_internals>/**"],
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node-dev",
+      "args": ["--inspect", "index.ts"],
+      "console": "integratedTerminal"
+    }
+  ]
+}

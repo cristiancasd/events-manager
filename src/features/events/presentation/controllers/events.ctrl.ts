@@ -23,10 +23,10 @@ export class EventsController {
   };
 
   public findEventsByCommerceCtrl = async (req: Request, res: Response) => {
-    const { commerceId } = req.params;
+    const { commerceUid } = req.params;
     const { startDate, finishDate } = req.query;
     const result = await this.eventsUseCase.findEventsByCommerce(
-      commerceId,
+      commerceUid,
       startDate as string | undefined,
       finishDate as string | undefined
     );

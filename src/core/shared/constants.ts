@@ -44,7 +44,6 @@ export const codeDbTypeIdDuplicated = 706;
 export const codeDbDocumentDuplicated = 707;
 export const codeDbCustoUserIdDuplicated = 708;
 
-
 // not found code errors
 
 export const codeCommerceNotFound = 801;
@@ -53,9 +52,9 @@ export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
 
 // invalid code errors
-export const codeInvalidToken=901;
-export const codeInvalidRole=902;
-
+export const codeInvalidToken = 901;
+export const codeInvalidRole = 902;
+export const codeInvalidCommerceUid = 903;
 
 //Not found messages
 export const errorRouteNotFound = 'Commerce not found';
@@ -79,7 +78,10 @@ export const invalidTokenMessage = 'Token invalido';
 export const somethingWrongMessage = 'Something went wrong';
 export const mustBeUidMessage = 'must be UID';
 
-export const invalidRoleMessage= 'You role is invalid';
+export const invalidRoleMessage = 'You role is invalid';
+export const invalidCommerceUidMessage =
+  'Invalid commerce UID, you are not authorized';
 
-
-
+export const badCredentialsMessage = 'Bad credentials';
+export const inactiveProfileMessage =
+  'Your profile has been inactivated, talk with the admin';

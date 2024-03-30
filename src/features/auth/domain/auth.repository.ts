@@ -1,5 +1,5 @@
-import { AuthEntity } from "./auth.entity";
-import { UserAuthEntity } from "./userAuth.entity";
+import { AuthEntity } from './auth.entity';
+import { UserAuthEntity } from './userAuth.entity';
 
 export interface AuthRepository {
   validateCredentials(email: string, password: string): Promise<UserAuthEntity>;

@@ -1,6 +1,6 @@
 export interface UserAuthEntity {
-    userUid: string;
-    role: string;
-    isActive: boolean;
+  userUid: string;
+  commerceUid: string;
+  role: string;
+  isActive: boolean;
 }
-  

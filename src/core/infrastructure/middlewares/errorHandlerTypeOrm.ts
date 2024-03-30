@@ -10,7 +10,7 @@ import {
   codeDbErrorDuplicated,
   codeInvalidToken,
   duplicatedDataMessage,
-  invalidTokenMessage,
+  invalidTokenMessage
 } from '../..';
 
 // Error handler respository typeORM

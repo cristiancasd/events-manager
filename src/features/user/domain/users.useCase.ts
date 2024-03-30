@@ -2,19 +2,19 @@ import { UserEntity } from './users.entity';
 
 export interface UserUseCaseInterface {
   validateDuplicatedData(
-    commerceId: string,
+    commerceUid: string,
     document?: number,
     commerceUserId?: string
   ): Promise<boolean>;
   createUser(
     user: UserEntity
-    //commerceId: string,
+    //commerceUid: string,
     //levelUid: string
   ): Promise<UserEntity>;
   findUserByUid(uid: string): Promise<UserEntity>;
 
   findUsersByLevelUid(
-    commerceId: string,
+    commerceUid: string,
     levelUid: string
   ): Promise<UserEntity[]>;
 
@@ -22,5 +22,5 @@ export interface UserUseCaseInterface {
   /*disableUserByUid(uid: string): Promise<boolean>;
   enableUserByUid(uid: string): Promise<boolean>;
   
-  //findUsersByCommerce(commerceId: string): Promise<UserEntity[]>;*/
+  //findUsersByCommerce(commerceUid: string): Promise<UserEntity[]>;*/
 }

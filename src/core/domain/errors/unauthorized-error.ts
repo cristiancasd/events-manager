@@ -4,8 +4,8 @@ import { CustomError, codeError } from '../..';
 export class UnauthorizedError extends CustomError {
   statusCode = 401;
 
-  constructor( public code?: Number) {
-    super('Bad Credentials');
+  constructor(public message: string, public code?: Number) {
+    super(message);
     Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
 

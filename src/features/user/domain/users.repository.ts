@@ -2,18 +2,18 @@ import { UserEntity } from './users.entity';
 
 export interface UserRepository {
   findUserByDocument(
-    commerceId: string,
+    commerceUid: string,
     document: string
   ): Promise<UserEntity | null>;
   createUser(user: UserEntity): Promise<UserEntity>;
   findUserByUid(uid: string): Promise<UserEntity>;
   findUsersByLevelUid(
-    commerceId: string,
+    commerceUid: string,
     levelUid: string
   ): Promise<UserEntity[]>;
 
   deleteUser(uid: string): Promise<boolean>;
   /*disableUser(uid: string): Promise<boolean>;
   enableUser(uid: string): Promise<boolean>;
-  //findUsersByCommerce(commerceId: string): Promise<UserEntity[]>;*/
+  //findUsersByCommerce(commerceUid: string): Promise<UserEntity[]>;*/
 }

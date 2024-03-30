@@ -3,11 +3,10 @@ import { AuthEntity } from './auth.entity';
 export class AuthValue implements AuthEntity {
   token: string;
   refreshToken: string;
-  
 
   constructor({
     token,
-    refreshToken,
+    refreshToken
   }: {
     token: string;
     refreshToken: string;

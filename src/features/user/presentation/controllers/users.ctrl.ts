@@ -17,9 +17,9 @@ export class UserController {
   };
 
   public findUserByLevelCtrl = async (req: Request, res: Response) => {
-    const { commerceId, levelUid } = req.params;
+    const { commerceUid, levelUid } = req.params;
     const result = await this.userUseCase.findUsersByLevelUid(
-      commerceId,
+      commerceUid,
       levelUid
     );
     res.status(200).send(result);

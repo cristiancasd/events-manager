@@ -5,20 +5,20 @@ export class LevelValue implements LevelEntity {
   id: string;
   typeId: number;
   name: string;
-  commerceId: string;
+  commerceUid: string;
 
   constructor({
     typeId,
     name,
-    commerceId
+    commerceUid
   }: {
     typeId: number;
     name: string;
-    commerceId: string;
+    commerceUid: string;
   }) {
     this.id = uuid();
     this.name = name;
     this.typeId = typeId;
-    this.commerceId = commerceId;
+    this.commerceUid = commerceUid;
   }
 }

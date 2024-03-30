@@ -14,7 +14,7 @@ export class UserUseCase implements UserUseCaseInterface {
 
   @errorHandlerUseCase
   async validateDuplicatedData(
-    commerceId: string,
+    commerceUid: string,
     document?: number,
     commerceUserId?: string
   ): Promise<boolean> {
@@ -22,7 +22,7 @@ export class UserUseCase implements UserUseCaseInterface {
     let commerceUserIdFinded = false;
     if (document != null) {
       const userFinded = await this._userRepository.findUserByDocument(
-        commerceId,
+        commerceUid,
         document.toString()
       );
       documentFinded = userFinded ? true : false;
@@ -30,7 +30,7 @@ export class UserUseCase implements UserUseCaseInterface {
 
     if (commerceUserId != null) {
       const userFinded = await this._userRepository.findUserByDocument(
-        commerceId,
+        commerceUid,
         commerceUserId
       );
       commerceUserIdFinded = userFinded ? true : false;
@@ -40,9 +40,7 @@ export class UserUseCase implements UserUseCaseInterface {
   }
 
   @errorHandlerUseCase
-  async createUser(
-    input: UserEntity
-  ): Promise<UserEntity> {
+  async createUser(input: UserEntity): Promise<UserEntity> {
     const userValue = new UserValue(input);
     return await this._userRepository.createUser(userValue);
   }
@@ -54,10 +52,13 @@ export class UserUseCase implements UserUseCaseInterface {
 
   @errorHandlerUseCase
   async findUsersByLevelUid(
-    commerceId: string,
+    commerceUid: string,
     levelUid: string
   ): Promise<UserEntity[]> {
-    return await this._userRepository.findUsersByLevelUid(commerceId, levelUid);
+    return await this._userRepository.findUsersByLevelUid(
+      commerceUid,
+      levelUid
+    );
   }
 
   @errorHandlerUseCase

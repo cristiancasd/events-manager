@@ -1,15 +1,23 @@
-import { BadRequestError, codeInvalidToken, errorHandlerUseCase, invalidTokenMessage } from "../../../core";
-import { AuthEntity } from "../domain/auth.entity";
-import { AuthRepository } from "../domain/auth.repository";
-import { AuthUseCaseInterface } from "../domain/auth.useCase";
-import { UserAuthEntity } from "../domain/userAuth.entity";
+import {
+  BadRequestError,
+  codeInvalidToken,
+  errorHandlerUseCase,
+  invalidTokenMessage
+} from '../../../core';
+import { AuthEntity } from '../domain/auth.entity';
+import { AuthRepository } from '../domain/auth.repository';
+import { AuthUseCaseInterface } from '../domain/auth.useCase';
+import { UserAuthEntity } from '../domain/userAuth.entity';
 
 export class AuthUseCase implements AuthUseCaseInterface {
-  constructor(private readonly _authRepository: AuthRepository) { }
+  constructor(private readonly _authRepository: AuthRepository) {}
 
   @errorHandlerUseCase
   async signIn(email: string, password: string): Promise<AuthEntity> {
-    const userAuthData = await this._authRepository.validateCredentials(email, password);
+    const userAuthData = await this._authRepository.validateCredentials(
+      email,
+      password
+    );
     return await this._authRepository.generateToken(userAuthData);
   }
 
@@ -20,7 +28,6 @@ export class AuthUseCase implements AuthUseCaseInterface {
 
   @errorHandlerUseCase
   async validateToken(token: string): Promise<boolean> {
-
     /*if (!token.startsWith('Bearer ')) {
       throw new BadRequestError(invalidTokenMessage, codeInvalidToken);
     }
