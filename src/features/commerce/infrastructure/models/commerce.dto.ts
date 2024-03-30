@@ -22,8 +22,11 @@ export class CommerceTypeORMEntity extends BaseEntity {
   @Column({ length: 50, unique: true })
   name!: string;
 
-  @Column({ type: 'integer', unique: true })
-  phone!: number;
+  @Column({ length: 30, unique: true })
+  nick!: string;
+
+  @Column({ length: 20, unique: true })
+  phone!: string;
 
   @Column({ length: 50, unique: true })
   email!: string;

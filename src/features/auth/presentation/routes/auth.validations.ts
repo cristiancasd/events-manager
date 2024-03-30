@@ -2,7 +2,8 @@ import { body, header, ValidationChain } from 'express-validator';
 
 export const validateSigInBody: ValidationChain[] = [
   body('email').isEmail().withMessage('invalid email'),
-  body('password').isString().withMessage('invalid password')
+  body('password').isString().withMessage('invalid password'),
+  body('nick').isString().withMessage('invalid nick commerce'),
 ];
 
 export const validateRefreshTokenBody: ValidationChain[] = [

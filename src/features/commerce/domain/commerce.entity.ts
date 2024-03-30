@@ -1,7 +1,7 @@
 export interface CommerceEntity {
   id: string;
   name: string;
-  phone: number;
+  phone: string;
   email: string;
   countryCode: string;
   city: string;

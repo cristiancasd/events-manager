@@ -139,7 +139,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     }
 
     if (option == OptionsValidations.phone) {
-      const result = await commerceRepository.find({ where: { phone: +data } });
+      const result = await commerceRepository.find({ where: { phone: data } });
       if (result.length > 0) {
         return result[0];
       }

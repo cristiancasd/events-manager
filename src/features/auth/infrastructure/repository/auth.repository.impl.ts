@@ -19,13 +19,14 @@ import { UserValue } from '../../../user/domain/users.value';
 
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { AuthValue } from '../../domain/auth.value';
+import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 
 export class AuthRepositoryImpl implements AuthRepository {
   constructor(
     private tokenSecretKey: string = process.env.TOKEN_SECRET_KEY || '',
     private refreshTokenSecretKey: string = process.env
       .REFRESH_TOKEN_SECRET_KEY || ''
-  ) {}
+  ) { }
 
   @errorHandlerTypeOrm
   async getTokenData(token: string): Promise<UserAuthEntity> {
@@ -42,35 +43,56 @@ export class AuthRepositoryImpl implements AuthRepository {
   @errorHandlerTypeOrm
   async validateCredentials(
     email: string,
-    password: string
+    password: string,
+    nick: string,
   ): Promise<UserAuthEntity> {
+    const userCommerceRepository = connectDB.getRepository(UserCommerceTypeORMEntity);
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
-    const user = await userRepository.findOne({
+
+    const userCommerce = await userCommerceRepository.find({
       where: { email },
       select: {
         email: true,
         password: true,
         id: true,
         role: true,
-        isActive: true
+        isActive: true,
       }
     });
 
-    if (!user)
+    const userFinded=userCommerce.find((user)=>user.commerce.nick==nick)
+
+    if (!userFinded)
       throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
 
-    if (bcrypt.compareSync(password, user.password)) {
-      const userEntity = new UserValue({
-        ...user,
-        commerceUid: user.commerce.id,
-        levelUid: ''
+    if (bcrypt.compareSync(password, userFinded.password)) {
+
+      const user = await userRepository.findOne({
+        where: { email:userFinded.email },
       });
-      return new UserAuthValue({
-        userUid: userEntity.id,
-        role: userEntity.role,
-        isActive: userEntity.isActive,
-        commerceUid: userEntity.commerceUid
-      });
+
+      if (user) {
+        const userEntity = new UserValue({
+          name: user.name,
+          document: user.document,
+          email: user.email,
+          phone: user.phone,
+          role: userFinded.role,
+          isActive: userFinded.isActive,
+          commerceUserId: userFinded.commerceUserId,
+          commerceUid: userFinded.commerce.id,
+          levelUid: userFinded.level.id,
+        });
+        
+        return new UserAuthValue({
+          userUid: userEntity.id,
+          role: userEntity.role,
+          isActive: userEntity.isActive,
+          commerceUid: userEntity.commerceUid
+        });
+      }
+      throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
+
     }
     throw new UnauthorizedError(badCredentialsMessage);
   }

@@ -4,10 +4,10 @@ import { CommerceUserRoles } from '../../../core/shared/constants';
 
 export class UserValue implements UserEntity {
   id: string;
-  phone: number;
+  phone: string;
   name: string;
   email: string;
-  document: number;
+  document: string;
   commerceUserId: string;
   role: CommerceUserRoles;
   levelUid: string;
@@ -28,10 +28,10 @@ export class UserValue implements UserEntity {
     password,
     isActive
   }: {
-    phone: number;
+    phone: string;
     name: string;
     email: string;
-    document: number;
+    document: string;
     commerceUserId: string;
     role: CommerceUserRoles;
     levelUid: string;

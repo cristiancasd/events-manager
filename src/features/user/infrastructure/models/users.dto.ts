@@ -4,16 +4,13 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
   BeforeInsert,
-  BeforeUpdate
+  BeforeUpdate,
+  OneToMany
 } from 'typeorm';
-import { CommerceTypeORMEntity } from '../../../commerce';
-//import { CommerceUserRoles } from '../../../../core';
-import { LevelTypeORMEntity } from '../../../levels';
-import { CommerceUserRoles } from '../../../../core/shared/constants';
+import { UserCommerceTypeORMEntity } from './userCommerce.dto';
 
-@Entity('user')
+@Entity('userCommerce')
 export class UserTypeORMEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
@@ -21,29 +18,14 @@ export class UserTypeORMEntity {
   @Column({ length: 50 })
   name!: string;
 
-  @Column()
-  phone!: number;
+  @Column({ length: 15, unique: true })
+  phone!: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 20, unique: true })
   email!: string;
 
-  @Column({ length: 200, select: false })
-  password!: string;
-
-  @Column()
-  document!: number;
-
-  @Column({ length: 50 })
-  commerceUserId!: string;
-
-  @Column()
-  role!: CommerceUserRoles;
-
-  @Column()
-  isActive!: boolean;
-
-  @Column({ default: '' })
-  freeSpace?: string;
+  @Column({ length: 15, unique: true })
+  document!: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   creationDate?: Date;
@@ -58,15 +40,11 @@ export class UserTypeORMEntity {
     this.name = this.name.toLocaleLowerCase();
   }
 
-  @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.levels, {
-    eager: true, //cargar automaticamente la relación, que en el fron muestre el
-    onDelete: 'CASCADE'
-  })
-  commerce!: CommerceTypeORMEntity;
-
-  @ManyToOne(() => LevelTypeORMEntity, (level) => level.users, {
-    eager: true, //cargar automaticamente la relación, que en el fron muestre el
-    onDelete: 'CASCADE'
-  })
-  level!: LevelTypeORMEntity;
+  @OneToMany(
+    () => UserCommerceTypeORMEntity,
+    (userCommerce) => userCommerce.user,
+    { cascade: true },
+  )
+  usersCommerce!: UserCommerceTypeORMEntity[];
 }
+

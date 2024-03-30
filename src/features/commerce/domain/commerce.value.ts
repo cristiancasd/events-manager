@@ -4,7 +4,7 @@ import { CommerceEntity } from './commerce.entity';
 export class CommerceValue implements CommerceEntity {
   id: string;
   name: string;
-  phone: number;
+  phone: string;
   email: string;
   countryCode: string;
   city: string;
@@ -23,7 +23,7 @@ export class CommerceValue implements CommerceEntity {
     dateFinish
   }: {
     name: string;
-    phone: number;
+    phone: string;
     email: string;
     countryCode: string;
     city: string;

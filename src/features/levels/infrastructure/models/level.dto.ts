@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
 import { UserTypeORMEntity } from '../../../user/infrastructure/models/users.dto';
+import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 
 @Entity('level')
 export class LevelTypeORMEntity {
@@ -30,11 +31,11 @@ export class LevelTypeORMEntity {
   updatedOn?: Date;
 
   @OneToMany(
-    () => UserTypeORMEntity,
-    (user) => user.level
+    () => UserCommerceTypeORMEntity,
+    (userCommerce) => userCommerce.level
     //  { cascade: true },
   )
-  users!: UserTypeORMEntity[];
+  usersCommerce!: UserCommerceTypeORMEntity[];
 
   @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.levels, {
     eager: true, //cargar automaticamente la relación, que en el fron muestre el

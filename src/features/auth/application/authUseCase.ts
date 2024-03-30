@@ -13,10 +13,11 @@ export class AuthUseCase implements AuthUseCaseInterface {
   constructor(private readonly _authRepository: AuthRepository) {}
 
   @errorHandlerUseCase
-  async signIn(email: string, password: string): Promise<AuthEntity> {
+  async signIn(email: string, password: string, nick: string): Promise<AuthEntity> {
     const userAuthData = await this._authRepository.validateCredentials(
       email,
-      password
+      password,
+      nick,
     );
     return await this._authRepository.generateToken(userAuthData);
   }

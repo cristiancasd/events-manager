@@ -27,12 +27,15 @@ import {
 import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
 import * as bcrypt from 'bcrypt';
+import { UserCommerceTypeORMEntity } from '../models/userCommerce.dto';
+import { UserValue } from '../../domain/users.value';
+import { buildUserEntityUtil, buildUserEntityWithEmailUtil } from './utils/user.infrastructure.utils';
 
 export class TypeOrmUserRepository implements UserRepository {
   constructor(
     private commerceUseCase: CommerceUseCase,
     private levelUseCase: LevelUseCase
-  ) {}
+  ) { }
 
   @errorHandlerTypeOrm
   async findUserByDocument(
@@ -40,6 +43,7 @@ export class TypeOrmUserRepository implements UserRepository {
     document: string
   ): Promise<UserEntity | null> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
+
     const documentNumber = isNaN(Number(document)) ? 0 : Number(document);
 
     const queryBuilder = userRepository
@@ -53,15 +57,15 @@ export class TypeOrmUserRepository implements UserRepository {
           documentNumber
         }
       );
-
     const user = await queryBuilder.getOne();
-    if (user) return { ...user, commerceUid, levelUid: user.level.id };
-    return null;
+    return await buildUserEntityWithEmailUtil(user);
   }
 
   @errorHandlerTypeOrm
   async createUser(data: UserEntity): Promise<UserEntity> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
+    const userCommerceRepository = connectDB.getRepository(UserCommerceTypeORMEntity);
+
     const commerce = await this.commerceUseCase.findComerceByUid(
       data.commerceUid
     );
@@ -74,17 +78,26 @@ export class TypeOrmUserRepository implements UserRepository {
       throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
     if (data.password == null) throw new BadRequestError('');
 
+    // Create user DB
     const newUser = userRepository.create({
+      ...data,
+      //password: bcrypt.hashSync(data.password, 10)
+    });
+    const user = await userRepository.save(newUser);
+
+    // Create user commerce DB
+    const newUserCommerce = userCommerceRepository.create({
       ...data,
       password: bcrypt.hashSync(data.password, 10)
     });
-    const algo = await userRepository.save({
-      ...newUser,
+    const userCommerce = await userRepository.save({
+      ...newUserCommerce,
       commerce: commerce,
       level: level
     });
 
-    const { password, ...resto } = newUser;
+
+    const { password, ...resto } = userCommerce;
     const toSave = {
       ...resto,
       commerceUid: commerce.id,
@@ -96,14 +109,12 @@ export class TypeOrmUserRepository implements UserRepository {
   @errorHandlerTypeOrm
   async findUserByUid(uid: string): Promise<UserEntity> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
+
     const user = await userRepository.findOneBy({ id: uid });
-    if (user) {
-      const { commerce, level, ...resto } = user;
-      return {
-        ...resto,
-        commerceUid: user.commerce.id,
-        levelUid: user.level.id
-      };
+    const userCompleteData = await buildUserEntityWithEmailUtil(user);
+
+    if (userCompleteData) {
+      return userCompleteData;
     }
     throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
   }
@@ -122,14 +133,15 @@ export class TypeOrmUserRepository implements UserRepository {
       .andWhere('user.level.id = :levelUid', { levelUid });
 
     const users = await queryBuilder.getMany();
-    return users.map((data) => {
-      const { commerce, level, password, ...resto } = data;
-      return {
-        ...resto,
-        commerceUid: data.commerce.id,
-        levelUid: data.level?.id ?? ''
-      };
-    });
+    let userArray: UserEntity[] = [];
+
+    for (const data of users) {
+      const user = await buildUserEntityWithEmailUtil(data);
+      if (user) {
+        userArray.push(user);
+      }
+    }
+    return userArray;
   }
 
   @errorHandlerTypeOrm

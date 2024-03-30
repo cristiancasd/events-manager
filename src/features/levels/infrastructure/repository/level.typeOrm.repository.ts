@@ -55,7 +55,9 @@ export class TypeOrmLevelRepository implements LevelRepository {
       data.commerceUid
     );
     if (commerce != null) {
-      await levelRepository.save({ ...newLevel, commerce: commerce });
+      await levelRepository.save({ ...newLevel, 
+        
+        commerce: commerce });
       return { ...newLevel, commerceUid: commerce.id };
     }
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);

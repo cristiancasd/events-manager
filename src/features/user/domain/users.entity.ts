@@ -2,8 +2,8 @@ import { CommerceUserRoles } from '../../../core/shared/constants';
 
 export interface UserEntity {
   id: string;
-  phone: number;
-  document: number;
+  phone: string;
+  document: string;
   commerceUserId: string;
   name: string;
   email: string;
