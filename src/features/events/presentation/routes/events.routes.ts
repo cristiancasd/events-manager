@@ -7,6 +7,11 @@ import {
   validateCreateEventBody,
   validateFindEvents
 } from './events.validations';
+import {
+  checkTokenMiddleware,
+  isAdminMiddleware,
+  validateCommerceUidAndStateMiddleware
+} from '../../../auth/presentation/middelwares/auth.middelwares';
 
 const { eventsCtrl } = configureDependencies();
 const eventsRoutes = express.Router();
@@ -15,15 +20,27 @@ const eventsRoutes = express.Router();
 //TODO: validate not empty name
 eventsRoutes.post(
   `/create`,
-  [...validateCreateEventBody, checkEventNameMiddleware],
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateCreateEventBody,
+    checkEventNameMiddleware
+  ],
   validateRequest,
   eventsCtrl.insertCtrl
 );
 
 /// Delete Event
 eventsRoutes.delete(
-  '/delete/:eventId',
-  [validateUUIDParam('eventId')],
+  '/delete/:commerceUid/:eventId',
+  [
+    validateUUIDParam('eventId'),
+    validateUUIDParam('commerceUid'),
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware
+  ],
   validateRequest,
   eventsCtrl.deleteCtrl
 );
@@ -31,15 +48,19 @@ eventsRoutes.delete(
 /// Find commerce by UID
 eventsRoutes.get(
   '/find/id/:eventId',
-  [validateUUIDParam('eventId')],
+  [checkTokenMiddleware, validateUUIDParam('eventId')],
   validateRequest,
   eventsCtrl.findCtrl
 );
 
-/// Find event by commerceId and dates
+/// Find event by commerceUid and dates
 eventsRoutes.get(
-  '/find/commerce/:commerceId',
-  validateFindEvents,
+  '/find/commerce/:commerceUid',
+  [
+    checkTokenMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateFindEvents
+  ],
   validateRequest,
   eventsCtrl.findEventsByCommerceCtrl
 );

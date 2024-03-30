@@ -19,31 +19,31 @@ export class TypeOrmLevelRepository implements LevelRepository {
 
   @errorHandlerTypeOrm
   async findLevelByName(
-    commerceId: string,
+    commerceUid: string,
     name: string
   ): Promise<LevelEntity | null> {
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
     const queryBuilder = levelRepository
       .createQueryBuilder('level')
-      .where('level.commerce.id = :commerceId', { commerceId })
+      .where('level.commerce.id = :commerceUid', { commerceUid })
       .andWhere('level.name = :name', { name });
     const level = await queryBuilder.getOne();
-    if (level) return { ...level, commerceId };
+    if (level) return { ...level, commerceUid };
     return null;
   }
 
   @errorHandlerTypeOrm
   async findLevelByTypeId(
-    commerceId: string,
+    commerceUid: string,
     typeId: number
   ): Promise<LevelEntity | null> {
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
     const queryBuilder = levelRepository
       .createQueryBuilder('level')
-      .where('level.commerce.id = :commerceId', { commerceId })
+      .where('level.commerce.id = :commerceUid', { commerceUid })
       .andWhere('level.typeId = :typeId', { typeId });
     const level = await queryBuilder.getOne();
-    if (level) return { ...level, commerceId };
+    if (level) return { ...level, commerceUid };
     return null;
   }
 
@@ -52,11 +52,11 @@ export class TypeOrmLevelRepository implements LevelRepository {
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
     const newLevel = levelRepository.create(data);
     const commerce = await this.commerceUseCase.findComerceByUid(
-      data.commerceId
+      data.commerceUid
     );
     if (commerce != null) {
       await levelRepository.save({ ...newLevel, commerce: commerce });
-      return { ...newLevel, commerceId: commerce.id };
+      return { ...newLevel, commerceUid: commerce.id };
     }
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
@@ -79,24 +79,24 @@ export class TypeOrmLevelRepository implements LevelRepository {
     const level = await levelRepository.findOneBy({ id: uid });
     if (level) {
       const { commerce, ...resto } = level;
-      return { ...resto, commerceId: level.commerce.id };
+      return { ...resto, commerceUid: level.commerce.id };
     }
     throw new NotFoundError(errorMessageLevelNotFound, codeLevelNotFound);
   }
 
   @errorHandlerTypeOrm
-  async findLevelsByCommerce(commerceId: string): Promise<LevelEntity[]> {
+  async findLevelsByCommerce(commerceUid: string): Promise<LevelEntity[]> {
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
 
     const queryBuilder = levelRepository
       .createQueryBuilder('level')
       .leftJoinAndSelect('level.commerce', 'commerce') // Carga la relación commerce
-      .where('level.commerce.id = :commerceId', { commerceId });
+      .where('level.commerce.id = :commerceUid', { commerceUid });
 
     const levels = await queryBuilder.getMany();
     return levels.map((data) => {
       const { commerce, ...resto } = data;
-      return { ...resto, commerceId: data.commerce?.id ?? '' };
+      return { ...resto, commerceUid: data.commerce?.id ?? '' };
     });
   }
 }

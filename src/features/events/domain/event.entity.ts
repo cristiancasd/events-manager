@@ -4,5 +4,5 @@ export interface EventEntity {
   description?: string;
   date: Date;
   url?: string;
-  commerceId: string;
+  commerceUid: string;
 }

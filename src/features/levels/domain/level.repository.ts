@@ -2,15 +2,15 @@ import { LevelEntity } from './level.entity';
 
 export interface LevelRepository {
   findLevelByName(
-    commerceId: string,
+    commerceUid: string,
     name: string
   ): Promise<LevelEntity | null>;
   findLevelByTypeId(
-    commerceId: string,
+    commerceUid: string,
     typeId: number
   ): Promise<LevelEntity | null>;
   createLevel(level: LevelEntity): Promise<LevelEntity>;
   deleteLevel(uid: string): Promise<boolean>;
   findLevelByUid(uid: string): Promise<LevelEntity>;
-  findLevelsByCommerce(commerceId: string): Promise<LevelEntity[]>;
+  findLevelsByCommerce(commerceUid: string): Promise<LevelEntity[]>;
 }

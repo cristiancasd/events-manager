@@ -6,6 +6,11 @@ import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkLevelNameMiddleware } from '../middelwares/db.middelwares';
 import { validateCreateLevelBody } from './level.validations';
+import {
+  checkTokenMiddleware,
+  isAdminMiddleware,
+  validateCommerceUidAndStateMiddleware
+} from '../../../auth/presentation/middelwares/auth.middelwares';
 
 const { levelCtrl } = configureDependencies();
 const levelRoutes = express.Router();
@@ -14,15 +19,27 @@ const levelRoutes = express.Router();
 //TODO: validate not empty name
 levelRoutes.post(
   `/create`,
-  [...validateCreateLevelBody, checkLevelNameMiddleware],
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateCreateLevelBody,
+    checkLevelNameMiddleware
+  ],
   validateRequest,
   levelCtrl.insertCtrl
 );
 
 /// Delete Level
 levelRoutes.delete(
-  '/delete/:levelId',
-  [validateUUIDParam('levelId')],
+  '/delete/:commerceUid/:levelId',
+  [
+    validateUUIDParam('levelId'),
+    validateUUIDParam('commerceUid'),
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware
+  ],
   validateRequest,
   levelCtrl.deleteCtrl
 );
@@ -30,14 +47,20 @@ levelRoutes.delete(
 /// Find commerce by UID
 levelRoutes.get(
   '/find/id/:levelId',
-  [validateUUIDParam('levelId')],
+  [
+    checkTokenMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    validateUUIDParam('levelId')
+  ],
   validateRequest,
   levelCtrl.findCtrl
 );
 
-/// Find level by commerceId and dates
+/// Find level by commerceUid and dates
 levelRoutes.get(
-  '/find/commerce/:commerceId',
+  '/find/commerce/:commerceUid',
+  checkTokenMiddleware,
+  validateCommerceUidAndStateMiddleware,
   validateRequest,
   levelCtrl.findLevelByCommerceCtrl
 );

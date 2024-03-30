@@ -20,16 +20,16 @@ import {
 export class TypeOrmEventRepository implements EventsRepository {
   @errorHandlerTypeOrm
   async findEventByName(
-    commerceId: string,
+    commerceUid: string,
     name: string
   ): Promise<EventEntity | null> {
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
     const queryBuilder = eventRepository
       .createQueryBuilder('event')
-      .where('event.commerce.id = :commerceId', { commerceId })
+      .where('event.commerce.id = :commerceUid', { commerceUid })
       .andWhere('event.name = :name', { name });
     const event = await queryBuilder.getOne();
-    if (event) return { ...event, commerceId };
+    if (event) return { ...event, commerceUid };
     return null;
   }
 
@@ -39,7 +39,7 @@ export class TypeOrmEventRepository implements EventsRepository {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const newEvent = eventRepository.create(data);
     const commerce = await commerceRepository.findOneBy({
-      id: data.commerceId
+      id: data.commerceUid
     });
     if (commerce != null) {
       const algo = new Date(data.date);
@@ -48,7 +48,7 @@ export class TypeOrmEventRepository implements EventsRepository {
       if (isNaN(algo.getTime())) throw new BadRequestError('Invalid date');
 
       await eventRepository.save({ ...newEvent, commerce: commerce });
-      return { ...newEvent, commerceId: commerce.id };
+      return { ...newEvent, commerceUid: commerce.id };
     }
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
@@ -71,7 +71,7 @@ export class TypeOrmEventRepository implements EventsRepository {
     const event = await eventRepository.findOneBy({ id: uid });
     if (event) {
       const { commerce, ...resto } = event;
-      return { ...resto, commerceId: event.commerce.id };
+      return { ...resto, commerceUid: event.commerce.id };
     }
 
     throw new NotFoundError(errorMessageEventNotFound, codeEventNotFound);
@@ -79,7 +79,7 @@ export class TypeOrmEventRepository implements EventsRepository {
 
   @errorHandlerTypeOrm
   async findEventsByCommerce(
-    commerceId: string,
+    commerceUid: string,
     startDate?: Date,
     finishDate?: Date
   ): Promise<EventEntity[]> {
@@ -88,7 +88,7 @@ export class TypeOrmEventRepository implements EventsRepository {
     const queryBuilder = eventRepository
       .createQueryBuilder('event')
       .leftJoinAndSelect('event.commerce', 'commerce') // Carga la relación commerce
-      .where('event.commerce.id = :commerceId', { commerceId });
+      .where('event.commerce.id = :commerceUid', { commerceUid });
     if (startDate && finishDate) {
       // Caso 3: Si viene ambas fechas entonces traer los eventos creados en dicha fecha
       queryBuilder.andWhere('event.date BETWEEN :startDate AND :finishDate', {
@@ -105,7 +105,7 @@ export class TypeOrmEventRepository implements EventsRepository {
     const events = await queryBuilder.getMany();
     const algo: EventEntity[] = events.map((data) => {
       const { commerce, ...resto } = data;
-      return { ...resto, commerceId: data.commerce?.id ?? '' };
+      return { ...resto, commerceUid: data.commerce?.id ?? '' };
     });
     return algo;
   }

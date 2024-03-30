@@ -19,14 +19,14 @@ export const checkEventNameMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, commerceId } = req.body;
+  const { name, commerceUid } = req.body;
 
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-      if (!commerceId) throw new BadRequestError(commerceIdInvalidMessage);
+      if (!commerceUid) throw new BadRequestError(commerceIdInvalidMessage);
       const nameExist = await eventsUseCase.validateDuplicatedData(
-        commerceId?.toString() ?? '',
+        commerceUid?.toString() ?? '',
         name
       );
 

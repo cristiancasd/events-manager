@@ -36,7 +36,7 @@ export class TypeOrmUserRepository implements UserRepository {
 
   @errorHandlerTypeOrm
   async findUserByDocument(
-    commerceId: string,
+    commerceUid: string,
     document: string
   ): Promise<UserEntity | null> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
@@ -45,7 +45,7 @@ export class TypeOrmUserRepository implements UserRepository {
     const queryBuilder = userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.level', 'level')
-      .where('user.commerce.id = :commerceId', { commerceId })
+      .where('user.commerce.id = :commerceUid', { commerceUid })
       .andWhere(
         '(user.commerceUserId = :document OR user.document = :documentNumber)',
         {
@@ -55,7 +55,7 @@ export class TypeOrmUserRepository implements UserRepository {
       );
 
     const user = await queryBuilder.getOne();
-    if (user) return { ...user, commerceId, levelUid: user.level.id };
+    if (user) return { ...user, commerceUid, levelUid: user.level.id };
     return null;
   }
 
@@ -63,14 +63,14 @@ export class TypeOrmUserRepository implements UserRepository {
   async createUser(data: UserEntity): Promise<UserEntity> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
     const commerce = await this.commerceUseCase.findComerceByUid(
-      data.commerceId
+      data.commerceUid
     );
     const level = await this.levelUseCase.findLevelByUid(data.levelUid);
 
     //TODO: hacer validaciones en otra parte
     //if (commerce == null) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
     //if (level == null || (level != null && level.commerce.id != commerce.id)) throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
-    if (level == null || (level != null && level.commerceId != commerce.id))
+    if (level == null || (level != null && level.commerceUid != commerce.id))
       throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
     if (data.password == null) throw new BadRequestError('');
 
@@ -87,7 +87,7 @@ export class TypeOrmUserRepository implements UserRepository {
     const { password, ...resto } = newUser;
     const toSave = {
       ...resto,
-      commerceId: commerce.id,
+      commerceUid: commerce.id,
       levelUid: data.levelUid
     };
     return toSave;
@@ -101,7 +101,7 @@ export class TypeOrmUserRepository implements UserRepository {
       const { commerce, level, ...resto } = user;
       return {
         ...resto,
-        commerceId: user.commerce.id,
+        commerceUid: user.commerce.id,
         levelUid: user.level.id
       };
     }
@@ -110,7 +110,7 @@ export class TypeOrmUserRepository implements UserRepository {
 
   @errorHandlerTypeOrm
   async findUsersByLevelUid(
-    commerceId: string,
+    commerceUid: string,
     levelUid: string
   ): Promise<UserEntity[]> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
@@ -118,7 +118,7 @@ export class TypeOrmUserRepository implements UserRepository {
     const queryBuilder = userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.commerce', 'commerce')
-      .where('user.commerce.id = :commerceId', { commerceId })
+      .where('user.commerce.id = :commerceUid', { commerceUid })
       .andWhere('user.level.id = :levelUid', { levelUid });
 
     const users = await queryBuilder.getMany();
@@ -126,7 +126,7 @@ export class TypeOrmUserRepository implements UserRepository {
       const { commerce, level, password, ...resto } = data;
       return {
         ...resto,
-        commerceId: data.commerce.id,
+        commerceUid: data.commerce.id,
         levelUid: data.level?.id ?? ''
       };
     });

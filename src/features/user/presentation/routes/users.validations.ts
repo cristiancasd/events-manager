@@ -11,7 +11,7 @@ export const validateCreateUserBody: ValidationChain[] = [
   body('commerceUserId')
     .isString()
     .withMessage('commerceUserId must be String'),
-  body('commerceId').isUUID().withMessage('commerceId must be UUID'),
+  body('commerceUid').isUUID().withMessage('commerceUid must be UUID'),
   body('email').isEmail().withMessage('email must be Email'),
   body('password').isString().withMessage('password must be string'),
   body('isActive').isBoolean().withMessage('isActive must be boolean'),

@@ -20,15 +20,15 @@ export const checkUserNameMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { document, commerceUserId, commerceId, levelUid } = req.body;
+  const { document, commerceUserId, commerceUid, levelUid } = req.body;
 
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-      if (!commerceId) throw new BadRequestError(commerceIdInvalidMessage);
+      if (!commerceUid) throw new BadRequestError(commerceIdInvalidMessage);
       if (!levelUid) throw new BadRequestError(LevelUidInvalidMessage);
       const documentExist = await userUseCase.validateDuplicatedData(
-        commerceId?.toString() ?? '',
+        commerceUid?.toString() ?? '',
         document,
         undefined
       );
@@ -39,7 +39,7 @@ export const checkUserNameMiddleware = async (
         );
 
       const commerceUserIdExist = await userUseCase.validateDuplicatedData(
-        commerceId?.toString() ?? '',
+        commerceUid?.toString() ?? '',
         undefined,
         commerceUserId
       );

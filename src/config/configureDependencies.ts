@@ -21,6 +21,13 @@ import {
   UserUseCase
 } from '../features/user';
 
+import {
+  AuthController,
+  AuthRepository,
+  AuthUseCase,
+  AuthRepositoryImpl
+} from '../features/auth';
+
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {
   const commerceRepository: CommerceRepository =
@@ -45,6 +52,10 @@ export const configureDependencies = () => {
   const userUseCase = new UserUseCase(userRepository);
   const userCtrl = new UserController(userUseCase);
 
+  const authRepository: AuthRepository = new AuthRepositoryImpl();
+  const authUseCase = new AuthUseCase(authRepository);
+  const authCtrl = new AuthController(authUseCase);
+
   return {
     commerceRepository,
     commerceUseCase,
@@ -57,6 +68,8 @@ export const configureDependencies = () => {
     levelCtrl,
     userRepository,
     userUseCase,
-    userCtrl
+    userCtrl,
+    authCtrl,
+    authUseCase
   };
 };

@@ -11,7 +11,7 @@ export class UserValue implements UserEntity {
   commerceUserId: string;
   role: CommerceUserRoles;
   levelUid: string;
-  commerceId: string;
+  commerceUid: string;
   isActive: boolean;
   password?: string | undefined;
   freeSpace?: string | undefined;
@@ -21,7 +21,7 @@ export class UserValue implements UserEntity {
     email,
     role,
     levelUid,
-    commerceId,
+    commerceUid,
     document,
     commerceUserId,
     freeSpace,
@@ -35,7 +35,7 @@ export class UserValue implements UserEntity {
     commerceUserId: string;
     role: CommerceUserRoles;
     levelUid: string;
-    commerceId: string;
+    commerceUid: string;
     isActive: boolean;
     freeSpace?: string | undefined;
     password?: string | undefined;
@@ -48,7 +48,7 @@ export class UserValue implements UserEntity {
     this.commerceUserId = commerceUserId;
     this.role = role;
     this.levelUid = levelUid;
-    this.commerceId = commerceId;
+    this.commerceUid = commerceUid;
     this.isActive = isActive;
     this.freeSpace = freeSpace;
     this.password = password;

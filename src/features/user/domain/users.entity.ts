@@ -9,7 +9,7 @@ export interface UserEntity {
   email: string;
   role: CommerceUserRoles;
   levelUid: string;
-  commerceId: string;
+  commerceUid: string;
   isActive: boolean;
   freeSpace?: string;
   password?: string;

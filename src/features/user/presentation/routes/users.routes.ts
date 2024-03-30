@@ -4,6 +4,11 @@ import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkUserNameMiddleware } from '../middelwares/usersdb.middelwares';
 import { validateCreateUserBody } from './users.validations';
+import {
+  checkTokenMiddleware,
+  isAdminMiddleware,
+  validateCommerceUidAndStateMiddleware
+} from '../../../auth/presentation/middelwares/auth.middelwares';
 
 const { userCtrl } = configureDependencies();
 const userRoutes = express.Router();
@@ -12,7 +17,13 @@ const userRoutes = express.Router();
 //TODO: validate not empty name
 userRoutes.post(
   `/create`,
-  [...validateCreateUserBody, checkUserNameMiddleware],
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateCreateUserBody,
+    checkUserNameMiddleware
+  ],
   validateRequest,
   userCtrl.insertCtrl
 );
@@ -20,15 +31,21 @@ userRoutes.post(
 /// Find usser by UID
 userRoutes.get(
   '/find/id/:userId',
-  [validateUUIDParam('userId')],
+  [checkTokenMiddleware, isAdminMiddleware, validateUUIDParam('userId')],
   validateRequest,
   userCtrl.findCtrl
 );
 
-/// Find user by commerceId and levels
+/// Find user by commerceUid and levels
 userRoutes.get(
-  '/find/level/:commerceId/:levelUid',
-  [validateUUIDParam('commerceId'), validateUUIDParam('levelUid')],
+  '/find/level/:commerceUid/:levelUid',
+  [
+    validateUUIDParam('commerceUid'),
+    validateUUIDParam('levelUid'),
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware
+  ],
   validateRequest,
   userCtrl.findUserByLevelCtrl
 );
@@ -36,7 +53,12 @@ userRoutes.get(
 /// Delete User
 userRoutes.delete(
   '/delete/:userId',
-  [validateUUIDParam('userId')],
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    validateUUIDParam('userId')
+  ],
   validateRequest,
   userCtrl.deleteCtrl
 );

@@ -6,6 +6,10 @@ export {
   CriteriaOptionsStatus,
   CriteriaOptionsLocation,
   OptionsValidations,
+  codeInvalidCommerceUid,
+  invalidCommerceUidMessage,
+  codeInvalidRole,
+  invalidRoleMessage,
   codeDbEmailDuplicated,
   codeDbNameDuplicated,
   codeDbPhoneDuplicated,
@@ -25,9 +29,14 @@ export {
   duplicatedTypeIdMessage,
   commerceIdInvalidMessage,
   LevelUidInvalidMessage,
+  codeInvalidToken,
+  invalidTokenMessage,
+  badCredentialsMessage,
+  inactiveProfileMessage
 } from './shared/constants';
 export { NotFoundError } from './domain/errors/not-found-error';
 export { InactiveDataError } from './domain/errors/inactive-data-error';
+export { UnauthorizedError } from './domain/errors/unauthorized-error';
 
 export { BadRequestError } from './domain/errors/bad-request-error';
 
