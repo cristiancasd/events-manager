@@ -4,6 +4,7 @@ import { validateRequest, validateUUIDParam } from '../../../../core';
 import {
   checkCommerceEmailMiddleware,
   checkCommerceNameMiddleware,
+  checkCommerceNickMiddleware,
   checkCommercePhoneMiddleware
 } from '../middelwares/db.middelwares';
 import { configureDependencies } from '../../../../config';
@@ -27,10 +28,11 @@ const commerceRoutes = express.Router();
 commerceRoutes.post(
   `/create`,
   [
-    checkTokenMiddleware,
-    validateRolesMiddleware([CommerceUserRoles.admin]),
+    //checkTokenMiddleware,
+    //validateRolesMiddleware([CommerceUserRoles.admin]),
     ...validateCreateCommerceBody,
     checkCommerceNameMiddleware,
+    checkCommerceNickMiddleware,
     checkCommerceEmailMiddleware,
     checkCommercePhoneMiddleware
   ],

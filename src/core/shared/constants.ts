@@ -9,12 +9,14 @@ export enum CriteriaOptionsStatus {
 }
 
 export enum OptionsValidations {
+  nick = 'nick',
   name = 'name',
   phone = 'phone',
-  email = 'email'
+  email = 'email',
 }
 
 export enum CommerceUserRoles {
+  masterAdmin = 'master-admin',
   superAdmin = 'super-admin',
   admin = 'admin',
   user = 'user',
@@ -43,6 +45,8 @@ export const codeDbEmailDuplicated = 705;
 export const codeDbTypeIdDuplicated = 706;
 export const codeDbDocumentDuplicated = 707;
 export const codeDbCustoUserIdDuplicated = 708;
+export const codeDbNickDuplicated = 709;
+
 
 // not found code errors
 
@@ -69,6 +73,8 @@ export const duplicatedEmailMessage = 'Duplicated email';
 export const duplicatedPhoneMessage = 'Duplicated phone';
 export const duplicatedNameMessage = 'Duplicated name';
 export const duplicatedTypeIdMessage = 'Duplicated typeId';
+export const duplicatedNickMessage = 'Duplicated nick';
+
 
 // Invalid data message
 export const commerceIdInvalidMessage = 'CommerceId invalid';

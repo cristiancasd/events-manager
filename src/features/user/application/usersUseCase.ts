@@ -15,21 +15,25 @@ export class UserUseCase implements UserUseCaseInterface {
   @errorHandlerUseCase
   async validateDuplicatedData(
     commerceUid: string,
-    document?: number,
+    document?: string,
     commerceUserId?: string
   ): Promise<boolean> {
     let documentFinded = false;
     let commerceUserIdFinded = false;
     if (document != null) {
+      console.log('aqui 20')
       const userFinded = await this._userRepository.findUserByDocument(
         commerceUid,
-        document.toString()
+        document,
       );
       documentFinded = userFinded ? true : false;
     }
 
     if (commerceUserId != null) {
-      const userFinded = await this._userRepository.findUserByDocument(
+      console.log('aqui 30')
+
+      
+      const userFinded = await this._userRepository.findUserByCustomCommerceId(
         commerceUid,
         commerceUserId
       );
@@ -41,7 +45,11 @@ export class UserUseCase implements UserUseCaseInterface {
 
   @errorHandlerUseCase
   async createUser(input: UserEntity): Promise<UserEntity> {
+    console.log('******A0 A', input)
+
     const userValue = new UserValue(input);
+    console.log('******A0 B', userValue)
+
     return await this._userRepository.createUser(userValue);
   }
 

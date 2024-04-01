@@ -64,4 +64,10 @@ export class CommerceTypeORMEntity extends BaseEntity {
     this.city = this.city.toUpperCase();
     this.countryCode = this.countryCode.toUpperCase();
   }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  convertToLowerCase() {
+    this.nick = this.nick.toLowerCase();
+  }
 }

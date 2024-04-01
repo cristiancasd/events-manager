@@ -3,6 +3,7 @@ import { CommerceEntity } from './commerce.entity';
 
 export class CommerceValue implements CommerceEntity {
   id: string;
+  nick: string;
   name: string;
   phone: string;
   email: string;
@@ -13,6 +14,7 @@ export class CommerceValue implements CommerceEntity {
   dateFinish: string;
 
   constructor({
+    nick,
     name,
     phone,
     email,
@@ -22,6 +24,7 @@ export class CommerceValue implements CommerceEntity {
     isActive,
     dateFinish
   }: {
+    nick: string;
     name: string;
     phone: string;
     email: string;
@@ -32,6 +35,7 @@ export class CommerceValue implements CommerceEntity {
     dateFinish: string;
   }) {
     this.id = uuid();
+    this.nick = nick;
     this.name = name;
     this.phone = phone;
     this.email = email;

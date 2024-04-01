@@ -4,10 +4,10 @@ import { UserTypeORMEntity } from "../../models/users.dto";
 import { UserEntity } from '../../../domain/users.entity';
 import { connectDB } from "../../../../../database";
 
-export async function buildUserEntityWithEmailUtil(
-  user: UserTypeORMEntity|null,
+export async function buildUserEntityFromUserUtil(
+  user: UserTypeORMEntity | null,
 ): Promise<UserEntity | null> {
-  if(!user) return null;
+  if (!user) return null;
   const userCommerceRepository = connectDB.getRepository(UserCommerceTypeORMEntity);
   const userCommerce = await userCommerceRepository.findOne({
     where: { email: user.email },
@@ -35,10 +35,34 @@ export async function buildUserEntityWithEmailUtil(
   });
 }
 
+
+export async function buildUserEntityFromUserCommerceUtil(
+  userCommerce: UserCommerceTypeORMEntity | null,
+): Promise<UserEntity | null> {
+  if (!userCommerce) return null;
+  const userRepository = connectDB.getRepository(UserTypeORMEntity);
+  const user = await userRepository.findOneBy({ email: userCommerce.email });
+
+  if (!user) return null;
+
+  return new UserValue({
+    name: user.name,
+    document: user.document,
+    email: user.email,
+    phone: user.phone,
+    role: userCommerce.role,
+    isActive: userCommerce.isActive,
+    commerceUserId: userCommerce.commerceUserId,
+    commerceUid: userCommerce.commerce.id,
+    levelUid: userCommerce.level.id,
+  });
+}
+
+
 export async function buildUserEntityUtil(
   user: UserTypeORMEntity, userCommerce: UserCommerceTypeORMEntity,
 ): Promise<UserEntity | null> {
-  
+
 
   if (!user) return null;
   if (!userCommerce) return null;

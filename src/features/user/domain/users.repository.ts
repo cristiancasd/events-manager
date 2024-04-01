@@ -5,6 +5,17 @@ export interface UserRepository {
     commerceUid: string,
     document: string
   ): Promise<UserEntity | null>;
+
+  findUserByCustomCommerceId(
+    commerceUid: string,
+    customCommerceId: string
+  ): Promise<UserEntity | null>;
+
+  findUserByCustomCommerceId(
+    commerceUid: string,
+    customCommerceId: string
+  ): Promise<UserEntity | null>;
+
   createUser(user: UserEntity): Promise<UserEntity>;
   findUserByUid(uid: string): Promise<UserEntity>;
   findUsersByLevelUid(

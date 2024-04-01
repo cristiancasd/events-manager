@@ -3,7 +3,7 @@ import { UserEntity } from './users.entity';
 export interface UserUseCaseInterface {
   validateDuplicatedData(
     commerceUid: string,
-    document?: number,
+    document?: string,
     commerceUserId?: string
   ): Promise<boolean>;
   createUser(

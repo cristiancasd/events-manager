@@ -6,8 +6,8 @@ export const validateCreateUserBody: ValidationChain[] = [
     .withMessage('invalid role'),
   body('levelUid').isUUID().withMessage('levelUid must be UUID'),
   body('name').isString().withMessage('name must be String'),
-  body('phone').isInt().withMessage('phone must be int'),
-  body('document').isInt().withMessage('document must be int'),
+  body('phone').isString().withMessage('phone must be String'),
+  body('document').isString().withMessage('document must be String'),
   body('commerceUserId')
     .isString()
     .withMessage('commerceUserId must be String'),

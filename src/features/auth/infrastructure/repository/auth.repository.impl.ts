@@ -60,7 +60,7 @@ export class AuthRepositoryImpl implements AuthRepository {
       }
     });
 
-    const userFinded=userCommerce.find((user)=>user.commerce.nick==nick)
+    const userFinded = userCommerce.find((user) => user.commerce.nick.toLocaleLowerCase() == nick.toLocaleLowerCase())
 
     if (!userFinded)
       throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
@@ -68,7 +68,7 @@ export class AuthRepositoryImpl implements AuthRepository {
     if (bcrypt.compareSync(password, userFinded.password)) {
 
       const user = await userRepository.findOne({
-        where: { email:userFinded.email },
+        where: { email: userFinded.email },
       });
 
       if (user) {
@@ -83,7 +83,7 @@ export class AuthRepositoryImpl implements AuthRepository {
           commerceUid: userFinded.commerce.id,
           levelUid: userFinded.level.id,
         });
-        
+
         return new UserAuthValue({
           userUid: userEntity.id,
           role: userEntity.role,

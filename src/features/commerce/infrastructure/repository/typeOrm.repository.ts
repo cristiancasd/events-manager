@@ -41,7 +41,11 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
   @errorHandlerTypeOrm
   async createCommerce(data: CommerceEntity): Promise<CommerceEntity> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
+    console.log('to create ****', data)
+
     const newCommerce = commerceRepository.create(data);
+
+    console.log('to newCommerce ****', newCommerce)
 
     await commerceRepository.save(newCommerce);
 
@@ -129,6 +133,19 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     data: string
   ): Promise<CommerceEntity> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
+
+    console.log('algo es ****', option)
+
+
+    if (option == OptionsValidations.nick) {
+      const result = await commerceRepository.find({ where: { nick: data.toLowerCase() } });
+      console.log('algo es ****', result)
+
+      if (result.length > 0) {
+        return result[0];
+      }
+    }
+
 
     if (option == OptionsValidations.name) {
       const result = await commerceRepository.find({ where: { name: data } });

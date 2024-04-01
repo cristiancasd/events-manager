@@ -29,7 +29,7 @@ import { BadRequestError } from '../../../../core/domain/errors/bad-request-erro
 import * as bcrypt from 'bcrypt';
 import { UserCommerceTypeORMEntity } from '../models/userCommerce.dto';
 import { UserValue } from '../../domain/users.value';
-import { buildUserEntityUtil, buildUserEntityWithEmailUtil } from './utils/user.infrastructure.utils';
+import { buildUserEntityUtil, buildUserEntityFromUserUtil, buildUserEntityFromUserCommerceUtil } from './utils/user.infrastructure.utils';
 
 export class TypeOrmUserRepository implements UserRepository {
   constructor(
@@ -42,23 +42,39 @@ export class TypeOrmUserRepository implements UserRepository {
     commerceUid: string,
     document: string
   ): Promise<UserEntity | null> {
+
+    console.log('aqui 40')
+    const commerce = await this.commerceUseCase.findComerceByUid(commerceUid);
+    if (!commerce) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
+
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
 
-    const documentNumber = isNaN(Number(document)) ? 0 : Number(document);
+    //        '(user.commerceUserId = :document OR user.document = :document)',
 
-    const queryBuilder = userRepository
+    /*const queryBuilder = userRepository
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.level', 'level')
-      .where('user.commerce.id = :commerceUid', { commerceUid })
-      .andWhere(
-        '(user.commerceUserId = :document OR user.document = :documentNumber)',
-        {
-          document,
-          documentNumber
-        }
+      //.leftJoinAndSelect('user.level', 'level')
+      //.where('user.commerce.id = :commerceUid', { commerceUid })
+      .andWhere(' user.document = :document)', { document }
       );
-    const user = await queryBuilder.getOne();
-    return await buildUserEntityWithEmailUtil(user);
+    console.log('aqui 41')
+    const user = await queryBuilder.getOne();*/
+
+    const user = await userRepository.findOneBy({ document: document });
+    return await buildUserEntityFromUserUtil(user);
+  }
+
+  @errorHandlerTypeOrm
+  async findUserByCustomCommerceId(
+    commerceUid: string,
+    customCommerceId: string
+  ): Promise<UserEntity | null> {
+
+    const commerce = await this.commerceUseCase.findComerceByUid(commerceUid);
+    if (!commerce) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
+    const userCommerceRepository = connectDB.getRepository(UserCommerceTypeORMEntity);
+    const user = await userCommerceRepository.findOneBy({ commerceUserId: customCommerceId });
+    return await buildUserEntityFromUserCommerceUtil(user);
   }
 
   @errorHandlerTypeOrm
@@ -69,15 +85,14 @@ export class TypeOrmUserRepository implements UserRepository {
     const commerce = await this.commerceUseCase.findComerceByUid(
       data.commerceUid
     );
+
     const level = await this.levelUseCase.findLevelByUid(data.levelUid);
 
-    //TODO: hacer validaciones en otra parte
-    //if (commerce == null) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
-    //if (level == null || (level != null && level.commerce.id != commerce.id)) throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
     if (level == null || (level != null && level.commerceUid != commerce.id))
       throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
     if (data.password == null) throw new BadRequestError('');
 
+    //TODO: refactor this 
     // Create user DB
     const newUser = userRepository.create({
       ...data,
@@ -111,7 +126,7 @@ export class TypeOrmUserRepository implements UserRepository {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
 
     const user = await userRepository.findOneBy({ id: uid });
-    const userCompleteData = await buildUserEntityWithEmailUtil(user);
+    const userCompleteData = await buildUserEntityFromUserUtil(user);
 
     if (userCompleteData) {
       return userCompleteData;
@@ -136,7 +151,7 @@ export class TypeOrmUserRepository implements UserRepository {
     let userArray: UserEntity[] = [];
 
     for (const data of users) {
-      const user = await buildUserEntityWithEmailUtil(data);
+      const user = await buildUserEntityFromUserUtil(data);
       if (user) {
         userArray.push(user);
       }

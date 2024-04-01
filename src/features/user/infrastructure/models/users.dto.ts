@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { UserCommerceTypeORMEntity } from './userCommerce.dto';
 
-@Entity('userCommerce')
+@Entity('user')
 export class UserTypeORMEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
