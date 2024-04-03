@@ -45,11 +45,7 @@ export class UserUseCase implements UserUseCaseInterface {
 
   @errorHandlerUseCase
   async createUser(input: UserEntity): Promise<UserEntity> {
-    console.log('******A0 A', input)
-
     const userValue = new UserValue(input);
-    console.log('******A0 B', userValue)
-
     return await this._userRepository.createUser(userValue);
   }
 

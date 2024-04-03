@@ -61,11 +61,7 @@ export async function buildUserEntityFromUserCommerceUtil(
 
 export async function buildUserEntityUtil(
   user: UserTypeORMEntity, userCommerce: UserCommerceTypeORMEntity,
-): Promise<UserEntity | null> {
-
-
-  if (!user) return null;
-  if (!userCommerce) return null;
+): Promise<UserEntity > {
 
   return new UserValue({
     name: user.name,

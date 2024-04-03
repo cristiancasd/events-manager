@@ -43,25 +43,18 @@ export class TypeOrmUserRepository implements UserRepository {
     document: string
   ): Promise<UserEntity | null> {
 
-    console.log('aqui 40')
     const commerce = await this.commerceUseCase.findComerceByUid(commerceUid);
     if (!commerce) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
 
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
-
-    //        '(user.commerceUserId = :document OR user.document = :document)',
-
-    /*const queryBuilder = userRepository
-      .createQueryBuilder('user')
-      //.leftJoinAndSelect('user.level', 'level')
-      //.where('user.commerce.id = :commerceUid', { commerceUid })
-      .andWhere(' user.document = :document)', { document }
-      );
-    console.log('aqui 41')
-    const user = await queryBuilder.getOne();*/
-
     const user = await userRepository.findOneBy({ document: document });
-    return await buildUserEntityFromUserUtil(user);
+    const userFindedEntity= await buildUserEntityFromUserUtil(user);
+    if(userFindedEntity && userFindedEntity.commerceUid==commerceUid){
+      return userFindedEntity;
+    }else{
+      return null;
+    }
+
   }
 
   @errorHandlerTypeOrm
@@ -74,7 +67,14 @@ export class TypeOrmUserRepository implements UserRepository {
     if (!commerce) throw new BadRequestError(errorMessageCommerceNotFound, codeCommerceNotFound);
     const userCommerceRepository = connectDB.getRepository(UserCommerceTypeORMEntity);
     const user = await userCommerceRepository.findOneBy({ commerceUserId: customCommerceId });
-    return await buildUserEntityFromUserCommerceUtil(user);
+
+    const userFindedEntity= await buildUserEntityFromUserCommerceUtil(user);
+
+    if(userFindedEntity && userFindedEntity.commerceUid==commerceUid){
+      return userFindedEntity;
+    }else{
+      return null;
+    }
   }
 
   @errorHandlerTypeOrm
@@ -92,35 +92,26 @@ export class TypeOrmUserRepository implements UserRepository {
       throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
     if (data.password == null) throw new BadRequestError('');
 
-    //TODO: refactor this 
-    // Create user DB
-    const newUser = userRepository.create({
-      ...data,
-      //password: bcrypt.hashSync(data.password, 10)
-    });
-    const user = await userRepository.save(newUser);
-
-    // Create user commerce DB
+    
+    // Create users DB
+    const newUser= userRepository.create(data);
     const newUserCommerce = userCommerceRepository.create({
       ...data,
       password: bcrypt.hashSync(data.password, 10)
     });
-    const userCommerce = await userRepository.save({
+
+    // Save on DB
+    const user = await userRepository.save(newUser);
+    const userCommerce: UserCommerceTypeORMEntity = await userCommerceRepository.save({
       ...newUserCommerce,
       commerce: commerce,
       level: level
     });
 
-
-    const { password, ...resto } = userCommerce;
-    const toSave = {
-      ...resto,
-      commerceUid: commerce.id,
-      levelUid: data.levelUid
-    };
-    return toSave;
+    return await buildUserEntityUtil(user, userCommerce); 
   }
 
+  //TODO: review whic userUID use
   @errorHandlerTypeOrm
   async findUserByUid(uid: string): Promise<UserEntity> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
@@ -139,19 +130,19 @@ export class TypeOrmUserRepository implements UserRepository {
     commerceUid: string,
     levelUid: string
   ): Promise<UserEntity[]> {
-    const userRepository = connectDB.getRepository(UserTypeORMEntity);
+    const userCommerceRepository = connectDB.getRepository(UserCommerceTypeORMEntity);
 
-    const queryBuilder = userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.commerce', 'commerce')
-      .where('user.commerce.id = :commerceUid', { commerceUid })
-      .andWhere('user.level.id = :levelUid', { levelUid });
+    const queryBuilder = userCommerceRepository
+      .createQueryBuilder('userCommerce')
+      .leftJoinAndSelect('userCommerce.commerce', 'commerce')
+      .where('userCommerce.commerce.id = :commerceUid', { commerceUid })
+      .andWhere('userCommerce.level.id = :levelUid', { levelUid });
 
     const users = await queryBuilder.getMany();
     let userArray: UserEntity[] = [];
 
     for (const data of users) {
-      const user = await buildUserEntityFromUserUtil(data);
+      const user = await buildUserEntityFromUserCommerceUtil(data);
       if (user) {
         userArray.push(user);
       }
