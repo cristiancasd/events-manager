@@ -6,8 +6,13 @@ export const validateCreateUserBody: ValidationChain[] = [
     .withMessage('invalid role'),
   body('levelUid').isUUID().withMessage('levelUid must be UUID'),
   body('name').isString().withMessage('name must be String'),
-  body('phone').isString().withMessage('phone must be String'),
+  body('phone')
+    .isString()
+    .withMessage('phone must be String')
+    .matches(/^[0-9]+$/, 'g')
+    .withMessage('phone must contain only numeric characters'),
   body('document').isString().withMessage('document must be String'),
+
   body('commerceUserId')
     .isString()
     .withMessage('commerceUserId must be String'),

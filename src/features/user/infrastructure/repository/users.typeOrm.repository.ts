@@ -34,7 +34,6 @@ import { UserCommerceTypeORMEntity } from '../models/userCommerce.dto';
 import { UserValue } from '../../domain/users.value';
 import {
   buildUserEntityUtil,
-  buildUserEntityFromUserUtil,
   buildUserEntityFromUserCommerceUtil
 } from './utils/user.infrastructure.utils';
 import { UserCoreEntity } from '../../domain/userCore.entity';
@@ -190,7 +189,9 @@ export class TypeOrmUserRepository implements UserRepository {
     // Create users DB
     const newUserCommerce = userCommerceRepository.create({
       ...data,
-      password: bcrypt.hashSync(data.password, 10)
+      password: bcrypt.hashSync(data.password, 10),
+      commerce,
+      level
     });
 
     // Save on DB

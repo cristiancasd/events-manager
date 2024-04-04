@@ -28,8 +28,8 @@ const commerceRoutes = express.Router();
 commerceRoutes.post(
   `/create`,
   [
-    //checkTokenMiddleware,
-    //validateRolesMiddleware([CommerceUserRoles.admin]),
+    checkTokenMiddleware,
+    validateRolesMiddleware([CommerceUserRoles.masterAdmin]),
     ...validateCreateCommerceBody,
     checkCommerceNameMiddleware,
     checkCommerceNickMiddleware,
@@ -43,7 +43,11 @@ commerceRoutes.post(
 /// Delete Commerce
 commerceRoutes.delete(
   '/delete/:idCommerce',
-  [validateUUIDParam('idCommerce')],
+  [
+    checkTokenMiddleware,
+    validateRolesMiddleware([CommerceUserRoles.masterAdmin]),
+    validateUUIDParam('idCommerce')
+  ],
   validateRequest,
   commerceCtrl.deleteCtrl
 );
@@ -51,7 +55,11 @@ commerceRoutes.delete(
 /// disable Commerce
 commerceRoutes.delete(
   '/disable/:idCommerce',
-  [validateUUIDParam('idCommerce')],
+  [
+    checkTokenMiddleware,
+    validateRolesMiddleware([CommerceUserRoles.masterAdmin]),
+    validateUUIDParam('idCommerce')
+  ],
   validateRequest,
   commerceCtrl.disableCtrl
 );
@@ -59,7 +67,11 @@ commerceRoutes.delete(
 /// Enable commerce
 commerceRoutes.put(
   '/enable/:idCommerce',
-  [validateUUIDParam('idCommerce')],
+  [
+    checkTokenMiddleware,
+    validateRolesMiddleware([CommerceUserRoles.masterAdmin]),
+    validateUUIDParam('idCommerce')
+  ],
   validateRequest,
   commerceCtrl.enableCtrl
 );
@@ -67,7 +79,11 @@ commerceRoutes.put(
 /// Find commerce by UID
 commerceRoutes.get(
   '/find/id/:idCommerce',
-  [validateUUIDParam('idCommerce')],
+  [
+    checkTokenMiddleware,
+    validateRolesMiddleware([CommerceUserRoles.masterAdmin]),
+    validateUUIDParam('idCommerce')
+  ],
   validateRequest,
   commerceCtrl.findCtrl
 );
@@ -75,7 +91,12 @@ commerceRoutes.get(
 /// Find commerce by Criteria
 commerceRoutes.get(
   '/find/all',
-  [...validateFindAllEvents, checkBothLocationTypeAndLocation],
+  [
+    checkTokenMiddleware,
+    validateRolesMiddleware([CommerceUserRoles.masterAdmin]),
+    ...validateFindAllEvents,
+    checkBothLocationTypeAndLocation
+  ],
   validateRequest,
   commerceCtrl.findByCriteriaCtrl
 );
