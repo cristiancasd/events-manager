@@ -91,17 +91,13 @@ export class UserUseCase implements UserUseCaseInterface {
   @errorHandlerUseCase
   async createUserCommerce(input: UserCommerceEntity): Promise<UserEntity> {
     const userCommerceValue = new UserCommerceValue(input);
-    console.log('pepe***1');
     const user = await this._userRepository.findUserByEmail(
       userCommerceValue.email
     );
-    console.log('pepe***2');
 
     const userCommerce = await this._userRepository.createUserCommerce(
       userCommerceValue
     );
-
-    console.log('pepe***3');
 
     return buildUserEntityApplicationUtil(user, userCommerce);
   }

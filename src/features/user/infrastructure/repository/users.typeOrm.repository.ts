@@ -162,9 +162,6 @@ export class TypeOrmUserRepository implements UserRepository {
         level: level
       });
 
-    console.log('PEPEEEEE**** ', user.id);
-    console.log('PEPEEEEE**** ', userCommerce.id);
-
     return await buildUserEntityUtil(user, userCommerce);
   }
 
