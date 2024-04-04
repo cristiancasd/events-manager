@@ -26,7 +26,7 @@ export class AuthRepositoryImpl implements AuthRepository {
     private tokenSecretKey: string = process.env.TOKEN_SECRET_KEY || '',
     private refreshTokenSecretKey: string = process.env
       .REFRESH_TOKEN_SECRET_KEY || ''
-  ) { }
+  ) {}
 
   @errorHandlerTypeOrm
   async getTokenData(token: string): Promise<UserAuthEntity> {
@@ -44,9 +44,11 @@ export class AuthRepositoryImpl implements AuthRepository {
   async validateCredentials(
     email: string,
     password: string,
-    nick: string,
+    nick: string
   ): Promise<UserAuthEntity> {
-    const userCommerceRepository = connectDB.getRepository(UserCommerceTypeORMEntity);
+    const userCommerceRepository = connectDB.getRepository(
+      UserCommerceTypeORMEntity
+    );
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
 
     const userCommerce = await userCommerceRepository.find({
@@ -56,23 +58,26 @@ export class AuthRepositoryImpl implements AuthRepository {
         password: true,
         id: true,
         role: true,
-        isActive: true,
+        isActive: true
       }
     });
 
-    const userFinded = userCommerce.find((user) => user.commerce.nick.toLocaleLowerCase() == nick.toLocaleLowerCase())
+    const userFinded = userCommerce.find(
+      (user) =>
+        user.commerce.nick.toLocaleLowerCase() == nick.toLocaleLowerCase()
+    );
 
     if (!userFinded)
       throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
 
     if (bcrypt.compareSync(password, userFinded.password)) {
-
       const user = await userRepository.findOne({
-        where: { email: userFinded.email },
+        where: { email: userFinded.email }
       });
 
       if (user) {
         const userEntity = new UserValue({
+          id: userFinded.id,
           name: user.name,
           document: user.document,
           email: user.email,
@@ -81,7 +86,7 @@ export class AuthRepositoryImpl implements AuthRepository {
           isActive: userFinded.isActive,
           commerceUserId: userFinded.commerceUserId,
           commerceUid: userFinded.commerce.id,
-          levelUid: userFinded.level.id,
+          levelUid: userFinded.level.id
         });
 
         return new UserAuthValue({
@@ -92,7 +97,6 @@ export class AuthRepositoryImpl implements AuthRepository {
         });
       }
       throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
-
     }
     throw new UnauthorizedError(badCredentialsMessage);
   }
@@ -102,7 +106,7 @@ export class AuthRepositoryImpl implements AuthRepository {
     const userAuthInfoPlainObject = new UserAuthValue(userAuthInfo).toJSON();
 
     const token = jwt.sign(userAuthInfoPlainObject, this.tokenSecretKey, {
-      expiresIn: '1h'
+      expiresIn: '24h'
     });
     const refreshToken = jwt.sign(
       userAuthInfoPlainObject,

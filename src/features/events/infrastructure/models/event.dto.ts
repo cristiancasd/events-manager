@@ -4,11 +4,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  BaseEntity,
-  PrimaryColumn,
-  ManyToOne
+  ManyToOne,
+  BeforeInsert
 } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('event')
 export class EventTypeORMEntity {
@@ -35,8 +35,13 @@ export class EventTypeORMEntity {
   updatedOn?: Date;
 
   @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.events, {
-    eager: true, //cargar automaticamente la relación, que en el fron muestre el
-    onDelete: 'CASCADE'
+    eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   commerce!: CommerceTypeORMEntity;
+  @BeforeInsert()
+  async generateUUID() {
+    this.id = uuidv4();
+  }
 }

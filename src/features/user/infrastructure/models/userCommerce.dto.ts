@@ -1,5 +1,3 @@
-
-
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -15,6 +13,7 @@ import { CommerceTypeORMEntity } from '../../../commerce';
 import { LevelTypeORMEntity } from '../../../levels';
 import { CommerceUserRoles } from '../../../../core/shared/constants';
 import { UserTypeORMEntity } from './users.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('userCommerce')
 export class UserCommerceTypeORMEntity {
@@ -45,22 +44,25 @@ export class UserCommerceTypeORMEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
 
-
   @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.levels, {
-    eager: true, //cargar automaticamente la relación, que en el fron muestre el
-    onDelete: 'CASCADE'
+    eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   commerce!: CommerceTypeORMEntity;
 
   @ManyToOne(() => LevelTypeORMEntity, (level) => level.usersCommerce, {
-    eager: true,
-    onDelete: 'CASCADE'
+    eager: true
   })
   level!: LevelTypeORMEntity;
 
   @ManyToOne(() => UserTypeORMEntity, (user) => user.usersCommerce, {
-    eager: true,
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   user!: UserTypeORMEntity;
+  @BeforeInsert()
+  async generateUUID() {
+    this.id = uuidv4();
+  }
 }

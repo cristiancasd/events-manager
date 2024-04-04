@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
 import { LevelTypeORMEntity } from '../../../levels';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('commerce')
 export class CommerceTypeORMEntity extends BaseEntity {
@@ -69,5 +70,10 @@ export class CommerceTypeORMEntity extends BaseEntity {
   @BeforeUpdate()
   convertToLowerCase() {
     this.nick = this.nick.toLowerCase();
+  }
+
+  @BeforeInsert()
+  async generateUUID() {
+    this.id = uuidv4();
   }
 }

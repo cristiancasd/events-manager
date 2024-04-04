@@ -9,6 +9,7 @@ import {
   OneToMany
 } from 'typeorm';
 import { UserCommerceTypeORMEntity } from './userCommerce.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('user')
 export class UserTypeORMEntity {
@@ -21,7 +22,7 @@ export class UserTypeORMEntity {
   @Column({ length: 15, unique: true })
   phone!: string;
 
-  @Column({ length: 20, unique: true })
+  @Column({ length: 50, unique: true })
   email!: string;
 
   @Column({ length: 15, unique: true })
@@ -43,8 +44,15 @@ export class UserTypeORMEntity {
   @OneToMany(
     () => UserCommerceTypeORMEntity,
     (userCommerce) => userCommerce.user,
-    { cascade: true },
+    {
+      cascade: true,
+      eager: true
+    }
   )
   usersCommerce!: UserCommerceTypeORMEntity[];
-}
 
+  @BeforeInsert()
+  async generateUUID() {
+    this.id = uuidv4();
+  }
+}

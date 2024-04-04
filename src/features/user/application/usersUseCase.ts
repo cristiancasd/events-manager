@@ -1,4 +1,5 @@
 import {
+  CustomError,
   NotFoundError,
   codeUserNotFound,
   errorHandlerUseCase,
@@ -8,6 +9,9 @@ import { UserEntity } from '../domain/users.entity';
 import { UserValue } from '../domain/users.value';
 import { UserRepository } from '../domain/users.repository';
 import { UserUseCaseInterface } from '../domain/users.useCase';
+import { buildUserEntityApplicationUtil } from './utils/user.application.utils';
+import { UserCommerceEntity } from '../domain/userCommerce.entity';
+import { UserCommerceValue } from '../domain/userCommerce.value';
 
 export class UserUseCase implements UserUseCaseInterface {
   constructor(private readonly _userRepository: UserRepository) {}
@@ -21,26 +25,61 @@ export class UserUseCase implements UserUseCaseInterface {
     let documentFinded = false;
     let commerceUserIdFinded = false;
     if (document != null) {
-      console.log('aqui 20')
-      const userFinded = await this._userRepository.findUserByDocument(
-        commerceUid,
-        document,
-      );
-      documentFinded = userFinded ? true : false;
+      try {
+        await this._userRepository.findUserByDocument(document);
+        documentFinded = true;
+      } catch (err) {
+        if (!(err instanceof NotFoundError)) {
+          throw err;
+        }
+      }
     }
 
     if (commerceUserId != null) {
-      console.log('aqui 30')
-
-      
-      const userFinded = await this._userRepository.findUserByCustomCommerceId(
-        commerceUid,
-        commerceUserId
-      );
-      commerceUserIdFinded = userFinded ? true : false;
+      try {
+        await this._userRepository.findUserCommerceByCustomCommerceId(
+          commerceUid,
+          commerceUserId
+        );
+        commerceUserIdFinded = true;
+      } catch (err) {
+        if (!(err instanceof NotFoundError)) {
+          throw err;
+        }
+      }
     }
-
     return documentFinded || commerceUserIdFinded ? true : false;
+  }
+
+  @errorHandlerUseCase
+  async findUserByDocumentOrCustomId(
+    commerceUid: string,
+    input: string
+  ): Promise<UserEntity> {
+    try {
+      const userCommerce =
+        await this._userRepository.findUserCommerceByCustomCommerceId(
+          commerceUid,
+          input
+        );
+      const user = await this._userRepository.findUserByEmail(
+        userCommerce.email
+      );
+      return buildUserEntityApplicationUtil(user, userCommerce);
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        if (err.code == codeUserNotFound) {
+          const user = await this._userRepository.findUserByDocument(input);
+          const userCommerce =
+            await this._userRepository.findUserCommerceByEmail(
+              commerceUid,
+              user.email
+            );
+          return buildUserEntityApplicationUtil(user, userCommerce);
+        }
+      }
+      throw err;
+    }
   }
 
   @errorHandlerUseCase
@@ -50,8 +89,35 @@ export class UserUseCase implements UserUseCaseInterface {
   }
 
   @errorHandlerUseCase
+  async createUserCommerce(input: UserCommerceEntity): Promise<UserEntity> {
+    const userCommerceValue = new UserCommerceValue(input);
+    const user = await this._userRepository.findUserByEmail(
+      userCommerceValue.email
+    );
+    const userCommerce = await this._userRepository.createUserCommerce(
+      userCommerceValue
+    );
+    return buildUserEntityApplicationUtil(user, userCommerce);
+  }
+
+  @errorHandlerUseCase
   async findUserByUid(uid: string): Promise<UserEntity> {
-    return await this._userRepository.findUserByUid(uid);
+    const userCommerce = await this._userRepository.findUserCommerceByUid(uid);
+    const user = await this._userRepository.findUserByEmail(userCommerce.email);
+    return buildUserEntityApplicationUtil(user, userCommerce);
+  }
+
+  @errorHandlerUseCase
+  async findUserCommerceByEmail(
+    commerceUid: string,
+    email: string
+  ): Promise<UserEntity> {
+    const userCommerce = await this._userRepository.findUserCommerceByEmail(
+      commerceUid,
+      email
+    );
+    const user = await this._userRepository.findUserByEmail(userCommerce.email);
+    return buildUserEntityApplicationUtil(user, userCommerce);
   }
 
   @errorHandlerUseCase

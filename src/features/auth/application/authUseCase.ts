@@ -13,11 +13,14 @@ import { UserAuthEntity } from '../domain/userAuth.entity';
 import { UserAuthValue } from '../domain/userAuth.value';
 
 export class AuthUseCase implements AuthUseCaseInterface {
-  constructor(private readonly _authRepository: AuthRepository) { }
+  constructor(private readonly _authRepository: AuthRepository) {}
 
   @errorHandlerUseCase
-  async signIn(email: string, password: string, nick: string): Promise<AuthEntity> {
-
+  async signIn(
+    email: string,
+    password: string,
+    nick: string
+  ): Promise<AuthEntity> {
     const masterUser = process.env.MASTER_USER;
     const masterPassword = process.env.MASTER_PASSWORD;
 
@@ -25,7 +28,7 @@ export class AuthUseCase implements AuthUseCaseInterface {
       const userAuthData = await this._authRepository.validateCredentials(
         email,
         password,
-        nick,
+        nick
       );
       return await this._authRepository.generateToken(userAuthData);
     } else {
@@ -33,8 +36,8 @@ export class AuthUseCase implements AuthUseCaseInterface {
         userUid: 'masterUser',
         role: CommerceUserRoles.masterAdmin,
         commerceUid: 'masterUser',
-        isActive: true,
-      })
+        isActive: true
+      });
       return await this._authRepository.generateToken(masterUser);
     }
   }

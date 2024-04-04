@@ -53,27 +53,27 @@ export const checkTokenMiddleware = async (
 
 export const validateRolesMiddleware =
   (roles: string[]) =>
-    async (req: Request, res: Response, next: NextFunction) => {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        try {
-          const token = req.headers['authorization'];
-          const tokenData = await authUseCase.getTokenData(token ?? '');
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      try {
+        const token = req.headers['authorization'];
+        const tokenData = await authUseCase.getTokenData(token ?? '');
 
-          if (roles.includes(tokenData.role)) {
-            return next();
-          }
-
-          throw new BadRequestError(invalidRoleMessage, codeInvalidRole);
-        } catch (err) {
-          if (err instanceof CustomError) {
-            throw err;
-          }
-          throw new ServerError();
+        if (roles.includes(tokenData.role)) {
+          return next();
         }
+
+        throw new BadRequestError(invalidRoleMessage, codeInvalidRole);
+      } catch (err) {
+        if (err instanceof CustomError) {
+          throw err;
+        }
+        throw new ServerError();
       }
-      next();
-    };
+    }
+    next();
+  };
 
 export const validateCommerceUidAndStateMiddleware = async (
   req: Request,
@@ -86,7 +86,7 @@ export const validateCommerceUidAndStateMiddleware = async (
       const token = req.headers['authorization'];
       const tokenData = await authUseCase.getTokenData(token ?? '');
       if (tokenData.role == CommerceUserRoles.masterAdmin) {
-        return next()
+        return next();
       } else {
         let commerceUid: string | undefined;
 
@@ -110,8 +110,6 @@ export const validateCommerceUidAndStateMiddleware = async (
           );
         }
       }
-
-
     } catch (err) {
       if (err instanceof CustomError) {
         throw err;
@@ -137,7 +135,6 @@ export const isAdminMiddleware = async (
         tokenData.role == CommerceUserRoles.admin ||
         tokenData.role == CommerceUserRoles.superAdmin ||
         tokenData.role == CommerceUserRoles.masterAdmin
-
       ) {
         return next();
       }

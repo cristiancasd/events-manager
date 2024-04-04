@@ -3,12 +3,16 @@ import express, { Request, Response } from 'express';
 import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkUserNameMiddleware } from '../middelwares/usersdb.middelwares';
-import { validateCreateUserBody } from './users.validations';
+import {
+  validateCreateUserBody,
+  validateCreateUserCommerceBody
+} from './users.validations';
 import {
   checkTokenMiddleware,
   isAdminMiddleware,
   validateCommerceUidAndStateMiddleware
 } from '../../../auth/presentation/middelwares/auth.middelwares';
+import { query } from 'express-validator';
 
 const { userCtrl } = configureDependencies();
 const userRoutes = express.Router();
@@ -16,7 +20,7 @@ const userRoutes = express.Router();
 /// Create User
 //TODO: validate not empty name
 userRoutes.post(
-  `/create`,
+  `/create/complete`,
   [
     checkTokenMiddleware,
     isAdminMiddleware,
@@ -28,12 +32,38 @@ userRoutes.post(
   userCtrl.insertCtrl
 );
 
+userRoutes.post(
+  `/create/usercommerce`,
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateCreateUserCommerceBody,
+    checkUserNameMiddleware
+  ],
+  validateRequest,
+  userCtrl.insertUserCommerceCtrl
+);
+
 /// Find usser by UID
 userRoutes.get(
   '/find/id/:userId',
   [checkTokenMiddleware, isAdminMiddleware, validateUUIDParam('userId')],
   validateRequest,
   userCtrl.findCtrl
+);
+
+/// Find user by email
+userRoutes.get(
+  '/find/email/:commerceUid',
+  [
+    validateUUIDParam('commerceUid'),
+    checkTokenMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    query('email').isEmail().withMessage('Invalid email format')
+  ],
+  validateRequest,
+  userCtrl.findUserCommerceByEmailCtrl
 );
 
 /// Find user by commerceUid and levels

@@ -1,3 +1,4 @@
+import { UserCommerceEntity } from './userCommerce.entity';
 import { UserEntity } from './users.entity';
 
 export interface UserUseCaseInterface {
@@ -6,11 +7,20 @@ export interface UserUseCaseInterface {
     document?: string,
     commerceUserId?: string
   ): Promise<boolean>;
+
+  findUserByDocumentOrCustomId(
+    commerceUid: string,
+    document: string
+  ): Promise<UserEntity>;
+
   createUser(
     user: UserEntity
     //commerceUid: string,
     //levelUid: string
   ): Promise<UserEntity>;
+
+  createUserCommerce(user: UserCommerceEntity): Promise<UserEntity>;
+
   findUserByUid(uid: string): Promise<UserEntity>;
 
   findUsersByLevelUid(

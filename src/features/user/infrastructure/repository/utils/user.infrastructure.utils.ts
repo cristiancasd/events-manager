@@ -1,14 +1,16 @@
-import { UserValue } from "../../../domain/users.value";
-import { UserCommerceTypeORMEntity } from "../../models/userCommerce.dto";
-import { UserTypeORMEntity } from "../../models/users.dto";
+import { UserValue } from '../../../domain/users.value';
+import { UserCommerceTypeORMEntity } from '../../models/userCommerce.dto';
+import { UserTypeORMEntity } from '../../models/users.dto';
 import { UserEntity } from '../../../domain/users.entity';
-import { connectDB } from "../../../../../database";
+import { connectDB } from '../../../../../database';
 
 export async function buildUserEntityFromUserUtil(
-  user: UserTypeORMEntity | null,
+  user: UserTypeORMEntity | null
 ): Promise<UserEntity | null> {
   if (!user) return null;
-  const userCommerceRepository = connectDB.getRepository(UserCommerceTypeORMEntity);
+  const userCommerceRepository = connectDB.getRepository(
+    UserCommerceTypeORMEntity
+  );
   const userCommerce = await userCommerceRepository.findOne({
     where: { email: user.email },
     select: {
@@ -16,13 +18,14 @@ export async function buildUserEntityFromUserUtil(
       password: true,
       id: true,
       role: true,
-      isActive: true,
+      isActive: true
     }
   });
 
   if (!userCommerce) return null;
 
   return new UserValue({
+    id: userCommerce.id,
     name: user.name,
     document: user.document,
     email: user.email,
@@ -31,13 +34,12 @@ export async function buildUserEntityFromUserUtil(
     isActive: userCommerce.isActive,
     commerceUserId: userCommerce.commerceUserId,
     commerceUid: userCommerce.commerce.id,
-    levelUid: userCommerce.level.id,
+    levelUid: userCommerce.level.id
   });
 }
 
-
 export async function buildUserEntityFromUserCommerceUtil(
-  userCommerce: UserCommerceTypeORMEntity | null,
+  userCommerce: UserCommerceTypeORMEntity | null
 ): Promise<UserEntity | null> {
   if (!userCommerce) return null;
   const userRepository = connectDB.getRepository(UserTypeORMEntity);
@@ -46,6 +48,7 @@ export async function buildUserEntityFromUserCommerceUtil(
   if (!user) return null;
 
   return new UserValue({
+    id: userCommerce.id,
     name: user.name,
     document: user.document,
     email: user.email,
@@ -54,16 +57,16 @@ export async function buildUserEntityFromUserCommerceUtil(
     isActive: userCommerce.isActive,
     commerceUserId: userCommerce.commerceUserId,
     commerceUid: userCommerce.commerce.id,
-    levelUid: userCommerce.level.id,
+    levelUid: userCommerce.level.id
   });
 }
 
-
 export async function buildUserEntityUtil(
-  user: UserTypeORMEntity, userCommerce: UserCommerceTypeORMEntity,
-): Promise<UserEntity > {
-
+  user: UserTypeORMEntity,
+  userCommerce: UserCommerceTypeORMEntity
+): Promise<UserEntity> {
   return new UserValue({
+    id: userCommerce.id,
     name: user.name,
     document: user.document,
     email: user.email,
@@ -72,6 +75,6 @@ export async function buildUserEntityUtil(
     isActive: userCommerce.isActive,
     commerceUserId: userCommerce.commerceUserId,
     commerceUid: userCommerce.commerce.id,
-    levelUid: userCommerce.level.id,
+    levelUid: userCommerce.level.id
   });
 }
