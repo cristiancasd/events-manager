@@ -5,8 +5,8 @@ export class AuthController {
   constructor(private authUseCase: AuthUseCase) {}
 
   public signInCtrl = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
-    const authData = await this.authUseCase.signIn(email, password);
+    const { email, password, nick } = req.body;
+    const authData = await this.authUseCase.signIn(email, password, nick);
     res.status(200).send(authData);
   };
 

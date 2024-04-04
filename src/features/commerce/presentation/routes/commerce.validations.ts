@@ -3,8 +3,13 @@ import { body, ValidationChain, query } from 'express-validator';
 import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
 
 export const validateCreateCommerceBody: ValidationChain[] = [
+  body('nick').isString().withMessage('nick must be String'),
   body('name').isString().withMessage('name must be String'),
-  body('phone').isNumeric().withMessage('phone must be number'),
+  body('phone')
+    .isString()
+    .withMessage('phone must be string')
+    .matches(/^[0-9]+$/, 'g')
+    .withMessage('phone must contain only numeric characters'),
   body('email').isEmail().withMessage('email must be email'),
   body('countryCode').isString().withMessage('country must be String'),
   body('city').isString().withMessage('city must be String'),

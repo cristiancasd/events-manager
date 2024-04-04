@@ -7,7 +7,9 @@ import {
   codeDbCustoUserIdDuplicated,
   codeDbDocumentDuplicated,
   codeDbError,
-  commerceIdInvalidMessage
+  commerceIdInvalidMessage,
+  duplicatedCustomCommerceIdMessage,
+  duplicatedDocumentMessage
 } from '../../../../core';
 import { validationResult } from 'express-validator';
 import { configureDependencies } from '../../../../config';
@@ -28,13 +30,13 @@ export const checkUserNameMiddleware = async (
       if (!commerceUid) throw new BadRequestError(commerceIdInvalidMessage);
       if (!levelUid) throw new BadRequestError(LevelUidInvalidMessage);
       const documentExist = await userUseCase.validateDuplicatedData(
-        commerceUid?.toString() ?? '',
-        document,
+        commerceUid as string,
+        document as string,
         undefined
       );
       if (documentExist)
         throw new DataBaseError(
-          'Duplicated document',
+          duplicatedDocumentMessage,
           codeDbDocumentDuplicated
         );
 
@@ -46,7 +48,7 @@ export const checkUserNameMiddleware = async (
 
       if (commerceUserIdExist)
         throw new DataBaseError(
-          'Duplicated customCommerceId',
+          duplicatedCustomCommerceIdMessage,
           codeDbCustoUserIdDuplicated
         );
     } catch (err) {

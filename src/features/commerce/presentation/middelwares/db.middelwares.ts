@@ -8,13 +8,45 @@ import {
   codeDbEmailDuplicated,
   codeDbError,
   codeDbNameDuplicated,
+  codeDbNickDuplicated,
   codeDbPhoneDuplicated,
   duplicatedEmailMessage,
+  duplicatedNameMessage,
+  duplicatedNickMessage,
   duplicatedPhoneMessage
 } from '../../../../core';
 import { validationResult } from 'express-validator';
 import { configureDependencies } from '../../../../config';
 const { commerceUseCase } = configureDependencies();
+
+export const checkCommerceNickMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { nick } = req.body;
+  const errors = validationResult(req);
+  if (errors.isEmpty()) {
+    try {
+      const nickExist = await commerceUseCase.validateDuplicatedData(
+        OptionsValidations.nick,
+        nick
+      );
+      if (nickExist)
+        throw new DataBaseError(duplicatedNickMessage, codeDbNickDuplicated);
+    } catch (err) {
+      if (err instanceof CustomError) {
+        if (err instanceof DataBaseError) {
+          if (err.code == codeDbError) return next();
+        }
+        throw err;
+      }
+      throw new ServerError();
+    }
+  }
+
+  next();
+};
 
 export const checkCommerceNameMiddleware = async (
   req: Request,
@@ -30,7 +62,7 @@ export const checkCommerceNameMiddleware = async (
         name
       );
       if (nameExist)
-        throw new DataBaseError(duplicatedEmailMessage, codeDbNameDuplicated);
+        throw new DataBaseError(duplicatedNameMessage, codeDbNameDuplicated);
     } catch (err) {
       if (err instanceof CustomError) {
         if (err instanceof DataBaseError) {

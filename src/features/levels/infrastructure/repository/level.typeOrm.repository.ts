@@ -13,6 +13,7 @@ import { LevelEntity } from '../../domain/level.entity';
 import { LevelTypeORMEntity } from '../models/level.dto';
 import { CommerceTypeORMEntity, CommerceUseCase } from '../../../commerce';
 import { BadRequestError } from '../../../../core/domain/errors/bad-request-error';
+import { LevelValue } from '../../domain/level.value';
 
 export class TypeOrmLevelRepository implements LevelRepository {
   constructor(private commerceUseCase: CommerceUseCase) {}
@@ -55,8 +56,15 @@ export class TypeOrmLevelRepository implements LevelRepository {
       data.commerceUid
     );
     if (commerce != null) {
-      await levelRepository.save({ ...newLevel, commerce: commerce });
-      return { ...newLevel, commerceUid: commerce.id };
+      const levelSaved = await levelRepository.save({
+        ...newLevel,
+
+        commerce: commerce
+      });
+      return new LevelValue({
+        ...levelSaved,
+        commerceUid: commerce.id
+      });
     }
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
@@ -77,9 +85,12 @@ export class TypeOrmLevelRepository implements LevelRepository {
   async findLevelByUid(uid: string): Promise<LevelEntity> {
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
     const level = await levelRepository.findOneBy({ id: uid });
+
     if (level) {
-      const { commerce, ...resto } = level;
-      return { ...resto, commerceUid: level.commerce.id };
+      return new LevelValue({
+        ...level,
+        commerceUid: level.commerce.id
+      });
     }
     throw new NotFoundError(errorMessageLevelNotFound, codeLevelNotFound);
   }

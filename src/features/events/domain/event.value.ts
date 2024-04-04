@@ -10,19 +10,21 @@ export class EventValue implements EventEntity {
   commerceUid: string;
 
   constructor({
+    id,
     name,
     description,
     date,
     url,
     commerceUid
   }: {
+    id: string;
     name: string;
     description?: string;
     date: Date;
     url?: string;
     commerceUid: string;
   }) {
-    this.id = uuid();
+    this.id = id;
     this.name = name;
     this.description = description;
     this.date = date;

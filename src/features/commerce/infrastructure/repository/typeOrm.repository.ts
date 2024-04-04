@@ -12,7 +12,12 @@ import {
   errorMessageCommerceNotFound,
   codeCommerceNotFound
 } from '../../../../core';
-import { CommerceEntity, CommerceRepository, LocationEntity } from '../..';
+import {
+  CommerceEntity,
+  CommerceRepository,
+  CommerceValue,
+  LocationEntity
+} from '../..';
 import { CommerceTypeORMEntity } from '..';
 import { connectDB } from '../../../../database';
 
@@ -42,10 +47,8 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
   async createCommerce(data: CommerceEntity): Promise<CommerceEntity> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
     const newCommerce = commerceRepository.create(data);
-
-    await commerceRepository.save(newCommerce);
-
-    return newCommerce;
+    const commerce = await commerceRepository.save(newCommerce);
+    return new CommerceValue(commerce);
   }
 
   @errorHandlerTypeOrm
@@ -130,6 +133,16 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
   ): Promise<CommerceEntity> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
 
+    if (option == OptionsValidations.nick) {
+      const result = await commerceRepository.find({
+        where: { nick: data.toLowerCase() }
+      });
+
+      if (result.length > 0) {
+        return result[0];
+      }
+    }
+
     if (option == OptionsValidations.name) {
       const result = await commerceRepository.find({ where: { name: data } });
 
@@ -139,7 +152,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
     }
 
     if (option == OptionsValidations.phone) {
-      const result = await commerceRepository.find({ where: { phone: +data } });
+      const result = await commerceRepository.find({ where: { phone: data } });
       if (result.length > 0) {
         return result[0];
       }

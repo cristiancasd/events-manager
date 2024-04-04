@@ -1,13 +1,10 @@
 import { v4 as uuid } from 'uuid';
-import { UserEntity } from './users.entity';
 import { CommerceUserRoles } from '../../../core/shared/constants';
+import { UserCommerceEntity } from './userCommerce.entity';
 
-export class UserValue implements UserEntity {
+export class UserCommerceValue implements UserCommerceEntity {
   id: string;
-  phone: string;
-  name: string;
   email: string;
-  document: string;
   commerceUserId: string;
   role: CommerceUserRoles;
   levelUid: string;
@@ -17,23 +14,17 @@ export class UserValue implements UserEntity {
   freeSpace?: string | undefined;
   constructor({
     id,
-    phone,
-    name,
     email,
     role,
     levelUid,
     commerceUid,
-    document,
     commerceUserId,
     freeSpace,
     password,
     isActive
   }: {
     id: string;
-    phone: string;
-    name: string;
     email: string;
-    document: string;
     commerceUserId: string;
     role: CommerceUserRoles;
     levelUid: string;
@@ -43,10 +34,7 @@ export class UserValue implements UserEntity {
     password?: string | undefined;
   }) {
     this.id = id;
-    this.name = name;
     this.email = email;
-    this.phone = phone;
-    this.document = document;
     this.commerceUserId = commerceUserId;
     this.role = role;
     this.levelUid = levelUid;

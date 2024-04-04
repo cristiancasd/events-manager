@@ -1,7 +1,8 @@
 export interface CommerceEntity {
   id: string;
+  nick: string;
   name: string;
-  phone: number;
+  phone: string;
   email: string;
   countryCode: string;
   city: string;

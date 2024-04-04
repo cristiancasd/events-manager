@@ -9,12 +9,14 @@ export enum CriteriaOptionsStatus {
 }
 
 export enum OptionsValidations {
+  nick = 'nick',
   name = 'name',
   phone = 'phone',
   email = 'email'
 }
 
 export enum CommerceUserRoles {
+  masterAdmin = 'master-admin',
   superAdmin = 'super-admin',
   admin = 'admin',
   user = 'user',
@@ -43,6 +45,7 @@ export const codeDbEmailDuplicated = 705;
 export const codeDbTypeIdDuplicated = 706;
 export const codeDbDocumentDuplicated = 707;
 export const codeDbCustoUserIdDuplicated = 708;
+export const codeDbNickDuplicated = 709;
 
 // not found code errors
 
@@ -50,6 +53,7 @@ export const codeCommerceNotFound = 801;
 export const codeLevelNotFound = 802;
 export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
+export const codeUserCoreNotFound = 805;
 
 // invalid code errors
 export const codeInvalidToken = 901;
@@ -57,11 +61,12 @@ export const codeInvalidRole = 902;
 export const codeInvalidCommerceUid = 903;
 
 //Not found messages
-export const errorRouteNotFound = 'Commerce not found';
+export const errorRouteNotFound = 'Route not found';
 export const errorMessageCommerceNotFound = 'Commerce not found';
 export const errorMessageLevelNotFound = 'Level not found';
 export const errorMessageEventNotFound = 'Event not found';
 export const errorMessageUserNotFound = 'User not found';
+export const errorMessageUserCoreNotFound = 'User Core not found';
 
 // Duplicated messages
 export const duplicatedDataMessage = 'Duplicated data';
@@ -69,6 +74,10 @@ export const duplicatedEmailMessage = 'Duplicated email';
 export const duplicatedPhoneMessage = 'Duplicated phone';
 export const duplicatedNameMessage = 'Duplicated name';
 export const duplicatedTypeIdMessage = 'Duplicated typeId';
+export const duplicatedNickMessage = 'Duplicated nick';
+
+export const duplicatedDocumentMessage = 'Duplicated document';
+export const duplicatedCustomCommerceIdMessage = 'Duplicated customCommerceId';
 
 // Invalid data message
 export const commerceIdInvalidMessage = 'CommerceId invalid';

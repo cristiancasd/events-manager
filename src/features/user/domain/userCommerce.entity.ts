@@ -1,12 +1,9 @@
 import { CommerceUserRoles } from '../../../core/shared/constants';
 
-export interface UserEntity {
+export interface UserCommerceEntity {
   id: string;
-  phone: string;
-  document: string;
-  commerceUserId: string;
-  name: string;
   email: string;
+  commerceUserId: string;
   role: CommerceUserRoles;
   levelUid: string;
   commerceUid: string;

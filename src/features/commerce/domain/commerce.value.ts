@@ -3,8 +3,9 @@ import { CommerceEntity } from './commerce.entity';
 
 export class CommerceValue implements CommerceEntity {
   id: string;
+  nick: string;
   name: string;
-  phone: number;
+  phone: string;
   email: string;
   countryCode: string;
   city: string;
@@ -13,6 +14,8 @@ export class CommerceValue implements CommerceEntity {
   dateFinish: string;
 
   constructor({
+    id,
+    nick,
     name,
     phone,
     email,
@@ -22,8 +25,10 @@ export class CommerceValue implements CommerceEntity {
     isActive,
     dateFinish
   }: {
+    id: string;
+    nick: string;
     name: string;
-    phone: number;
+    phone: string;
     email: string;
     countryCode: string;
     city: string;
@@ -31,7 +36,8 @@ export class CommerceValue implements CommerceEntity {
     isActive: boolean;
     dateFinish: string;
   }) {
-    this.id = uuid();
+    this.id = id;
+    this.nick = nick;
     this.name = name;
     this.phone = phone;
     this.email = email;

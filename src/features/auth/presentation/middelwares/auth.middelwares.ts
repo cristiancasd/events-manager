@@ -85,27 +85,30 @@ export const validateCommerceUidAndStateMiddleware = async (
     try {
       const token = req.headers['authorization'];
       const tokenData = await authUseCase.getTokenData(token ?? '');
-
-      let commerceUid: string | undefined;
-
-      if (req.body && req.body.commerceUid) {
-        commerceUid = req.body.commerceUid;
-      }
-
-      if (!commerceUid && req.params && req.params.commerceUid) {
-        commerceUid = req.params.commerceUid;
-      }
-
-      if (!tokenData.isActive)
-        throw new UnauthorizedError(inactiveProfileMessage);
-
-      if (commerceUid == tokenData.commerceUid) {
+      if (tokenData.role == CommerceUserRoles.masterAdmin) {
         return next();
       } else {
-        throw new BadRequestError(
-          invalidCommerceUidMessage,
-          codeInvalidCommerceUid
-        );
+        let commerceUid: string | undefined;
+
+        if (req.body && req.body.commerceUid) {
+          commerceUid = req.body.commerceUid;
+        }
+
+        if (!commerceUid && req.params && req.params.commerceUid) {
+          commerceUid = req.params.commerceUid;
+        }
+
+        if (!tokenData.isActive)
+          throw new UnauthorizedError(inactiveProfileMessage);
+
+        if (commerceUid == tokenData.commerceUid) {
+          return next();
+        } else {
+          throw new BadRequestError(
+            invalidCommerceUidMessage,
+            codeInvalidCommerceUid
+          );
+        }
       }
     } catch (err) {
       if (err instanceof CustomError) {
@@ -130,7 +133,8 @@ export const isAdminMiddleware = async (
 
       if (
         tokenData.role == CommerceUserRoles.admin ||
-        tokenData.role == CommerceUserRoles.superAdmin
+        tokenData.role == CommerceUserRoles.superAdmin ||
+        tokenData.role == CommerceUserRoles.masterAdmin
       ) {
         return next();
       }

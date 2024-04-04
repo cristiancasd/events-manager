@@ -8,15 +8,17 @@ export class LevelValue implements LevelEntity {
   commerceUid: string;
 
   constructor({
+    id,
     typeId,
     name,
     commerceUid
   }: {
+    id: string;
     typeId: number;
     name: string;
     commerceUid: string;
   }) {
-    this.id = uuid();
+    this.id = id;
     this.name = name;
     this.typeId = typeId;
     this.commerceUid = commerceUid;

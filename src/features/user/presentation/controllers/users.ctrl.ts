@@ -10,9 +10,27 @@ export class UserController {
     res.status(201).send(user);
   };
 
+  public insertUserCommerceCtrl = async (req: Request, res: Response) => {
+    const body = req.body;
+    const user = await this.userUseCase.createUserCommerce(body);
+    res.status(201).send(user);
+  };
+
   public findCtrl = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const result = await this.userUseCase.findUserByUid(userId);
+    res.status(200).send(result);
+  };
+
+  public findUserCommerceByEmailCtrl = async (req: Request, res: Response) => {
+    const { commerceUid } = req.params;
+    const { email } = req.query;
+    const emailToFind = (email as string) || '';
+
+    const result = await this.userUseCase.findUserCommerceByEmail(
+      commerceUid,
+      emailToFind
+    );
     res.status(200).send(result);
   };
 
