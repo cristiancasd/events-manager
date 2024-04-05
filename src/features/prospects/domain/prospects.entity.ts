@@ -1,4 +1,4 @@
-import { ProspectType } from "../../../core/shared/constants";
+import { ProspectType } from '../../../core/shared/constants';
 
 export interface ProspectEntity {
   id: string;

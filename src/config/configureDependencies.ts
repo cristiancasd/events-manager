@@ -27,7 +27,12 @@ import {
   AuthUseCase,
   AuthRepositoryImpl
 } from '../features/auth';
-import { ProspectRepository, ProspectsController, ProspectsTypeORMRepository, ProspectsUseCase } from '../features/prospects';
+import {
+  ProspectRepository,
+  ProspectsController,
+  ProspectsTypeORMRepository,
+  ProspectsUseCase
+} from '../features/prospects';
 
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {
@@ -57,10 +62,10 @@ export const configureDependencies = () => {
   const authUseCase = new AuthUseCase(authRepository);
   const authCtrl = new AuthController(authUseCase);
 
-  const prospectsRepository: ProspectRepository = new ProspectsTypeORMRepository(userUseCase);
+  const prospectsRepository: ProspectRepository =
+    new ProspectsTypeORMRepository(userUseCase);
   const prospectsUseCase = new ProspectsUseCase(prospectsRepository);
   const prospectsCtrl = new ProspectsController(prospectsUseCase);
-
 
   return {
     commerceRepository,
@@ -78,6 +83,6 @@ export const configureDependencies = () => {
     authCtrl,
     authUseCase,
     prospectsCtrl,
-    prospectsUseCase,
+    prospectsUseCase
   };
 };

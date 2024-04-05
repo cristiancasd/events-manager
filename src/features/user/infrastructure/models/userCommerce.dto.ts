@@ -62,17 +62,12 @@ export class UserCommerceTypeORMEntity {
   })
   user!: UserTypeORMEntity;
 
-
-  @OneToMany(
-    () => ProspectTypeORMEntity,
-    (prospect) => prospect.userCommerce,
-    {
-      cascade: true,
-      eager: true
-    }
-  )
+  @OneToMany(() => ProspectTypeORMEntity, (prospect) => prospect.userCommerce, {
+    cascade: true,
+    eager: true
+  })
   prospects!: ProspectTypeORMEntity[];
-  
+
   @BeforeInsert()
   async generateUUID() {
     this.id = uuidv4();

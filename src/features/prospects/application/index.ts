@@ -1,1 +1,1 @@
-export { ProspectsUseCase } from "./prospects.useCase";
+export { ProspectsUseCase } from './prospects.useCase';

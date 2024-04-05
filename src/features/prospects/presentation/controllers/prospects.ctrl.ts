@@ -10,19 +10,25 @@ export class ProspectsController {
     res.status(201).send(result);
   };
 
- 
   public findProspectCtrl = async (req: Request, res: Response) => {
     const { commerceUid } = req.params;
     const { phone } = req.query;
     const phoneToFind = (phone as string) || '';
-    const result = await this.prospectsUseCase.findProspectByPhone(commerceUid, phoneToFind);
+    const result = await this.prospectsUseCase.findProspectByPhone(
+      commerceUid,
+      phoneToFind
+    );
     res.status(200).send(result);
   };
 
-
-  public findProspectsByUserCommerceCtrl = async (req: Request, res: Response) => {
+  public findProspectsByUserCommerceCtrl = async (
+    req: Request,
+    res: Response
+  ) => {
     const { userCommerceUid } = req.params;
-    const result = await this.prospectsUseCase.findProspectsByUserCommerce(userCommerceUid);
+    const result = await this.prospectsUseCase.findProspectsByUserCommerce(
+      userCommerceUid
+    );
     res.status(200).send(result);
   };
 
@@ -37,5 +43,4 @@ export class ProspectsController {
     const result = await this.prospectsUseCase.deleteProspectByUid(prospectUid);
     res.status(200).send(result);
   };
-
- }
+}

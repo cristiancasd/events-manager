@@ -1,2 +1,1 @@
-export { ProspectsController } from "./controllers/prospects.ctrl";
-
+export { ProspectsController } from './controllers/prospects.ctrl';

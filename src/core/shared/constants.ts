@@ -25,7 +25,7 @@ export enum CommerceUserRoles {
 
 export enum ProspectType {
   prospect = 'prospect',
-  prospectVip = 'prospect-vip',
+  prospectVip = 'prospect-vip'
 }
 
 /// En resumen, esta expresión regular establece condiciones para garantizar que una contraseña
@@ -52,7 +52,7 @@ export const codeDbDocumentDuplicated = 707;
 export const codeDbCustoUserIdDuplicated = 708;
 export const codeDbNickDuplicated = 709;
 
-export const errorMsgDb='Error saving edited data';
+export const errorMsgDb = 'Error saving edited data';
 
 // not found code errors
 
@@ -62,7 +62,6 @@ export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
 export const codeUserCoreNotFound = 805;
 export const codeProspectNotFound = 806;
-
 
 // invalid code errors
 export const codeInvalidToken = 901;
@@ -77,7 +76,6 @@ export const errorMessageEventNotFound = 'Event not found';
 export const errorMessageUserNotFound = 'User not found';
 export const errorMessageUserCoreNotFound = 'User Core not found';
 export const errorMessageProspectNotFound = 'Prospect not found';
-
 
 // Duplicated messages
 export const duplicatedDataMessage = 'Duplicated data';
@@ -107,5 +105,3 @@ export const invalidCommerceUidMessage =
 export const badCredentialsMessage = 'Bad credentials';
 export const inactiveProfileMessage =
   'Your profile has been inactivated, talk with the admin';
-
-

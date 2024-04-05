@@ -3,7 +3,6 @@ import { ProspectType } from '../../../core/shared/constants';
 import { ProspectEntity } from './prospects.entity';
 
 export class ProspectValue implements ProspectEntity {
-  
   id: string;
   name: string;
   phone: string;
@@ -17,16 +16,16 @@ export class ProspectValue implements ProspectEntity {
     phone,
     type,
     userCommerceUid,
-    commerceUid,
+    commerceUid
   }: {
     id?: string | undefined;
-  name: string;
-  phone: string;
-  type: ProspectType;
-  userCommerceUid: string;
-  commerceUid: string;
+    name: string;
+    phone: string;
+    type: ProspectType;
+    userCommerceUid: string;
+    commerceUid: string;
   }) {
-    this.id = id?? uuid();
+    this.id = id ?? uuid();
     this.name = name;
     this.phone = phone;
     this.type = type;

@@ -8,7 +8,7 @@ import {
   BeforeInsert,
   BeforeUpdate
 } from 'typeorm';
-import {  ProspectType } from '../../../../core/shared/constants';
+import { ProspectType } from '../../../../core/shared/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 
@@ -20,7 +20,7 @@ export class ProspectTypeORMEntity {
   @Column({ length: 50 })
   name!: string;
 
-  @Column({ length: 50})
+  @Column({ length: 50 })
   phone!: string;
 
   @Column()
@@ -32,11 +32,15 @@ export class ProspectTypeORMEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
 
-  @ManyToOne(() => UserCommerceTypeORMEntity, (userCommerce) => userCommerce.prospects, {
-    eager: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-  })
+  @ManyToOne(
+    () => UserCommerceTypeORMEntity,
+    (userCommerce) => userCommerce.prospects,
+    {
+      eager: true,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    }
+  )
   userCommerce!: UserCommerceTypeORMEntity;
 
   @BeforeInsert()
