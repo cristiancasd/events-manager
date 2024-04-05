@@ -6,14 +6,14 @@ import {
   UpdateDateColumn,
   ManyToOne,
   BeforeInsert,
-  BeforeUpdate
+  OneToMany
 } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
-//import { CommerceUserRoles } from '../../../../core';
 import { LevelTypeORMEntity } from '../../../levels';
 import { CommerceUserRoles } from '../../../../core/shared/constants';
 import { UserTypeORMEntity } from './users.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { ProspectTypeORMEntity } from '../../../prospects';
 
 @Entity('userCommerce')
 export class UserCommerceTypeORMEntity {
@@ -61,6 +61,18 @@ export class UserCommerceTypeORMEntity {
     onUpdate: 'CASCADE'
   })
   user!: UserTypeORMEntity;
+
+
+  @OneToMany(
+    () => ProspectTypeORMEntity,
+    (prospect) => prospect.userCommerce,
+    {
+      cascade: true,
+      eager: true
+    }
+  )
+  prospects!: ProspectTypeORMEntity[];
+  
   @BeforeInsert()
   async generateUUID() {
     this.id = uuidv4();
