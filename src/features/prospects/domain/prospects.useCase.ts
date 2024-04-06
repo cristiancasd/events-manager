@@ -1,7 +1,7 @@
 import { ProspectEntity } from './prospects.entity';
 
 export interface ProspectUseCaseInterface {
-  validateDuplicatedData(commerceUid: string, phone: string): Promise<boolean>;
+  validateDuplicatedData(prospectId: string|undefined, commerceUid: string, phone: string): Promise<boolean>;
   createProspect(data: ProspectEntity): Promise<ProspectEntity>;
   findProspectByPhone(
     commerceUid: string,

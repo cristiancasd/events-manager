@@ -17,15 +17,20 @@ export const checkPhoneExistMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { commerceUid, phone } = req.body;
+  const { commerceUid, phone, userCommerceUid,id:prospectId } = req.body;
 
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
+      let isEditRequest=false;
+      if (req.method === 'PUT') {
+        isEditRequest=true;
+      } 
       const phonetExist = await prospectsUseCase.validateDuplicatedData(
-        phone as string,
-        commerceUid as string
-      );
+          prospectId as string | undefined,
+          phone as string,
+          commerceUid as string
+      )
       if (phonetExist)
         throw new DataBaseError(duplicatedPhoneMessage, codeDbPhoneDuplicated);
     } catch (err) {
