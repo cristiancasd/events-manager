@@ -15,7 +15,6 @@ export class ProspectsUseCase implements ProspectUseCaseInterface {
     commerceUserId: string
   ): Promise<boolean> {
     let phoneFound = false;
-    if (phone != null) {
       try {
         await this._prospectRepository.findProspectByPhone(
           commerceUserId,
@@ -27,7 +26,6 @@ export class ProspectsUseCase implements ProspectUseCaseInterface {
           throw err;
         }
       }
-    }
     return phoneFound;
   }
 

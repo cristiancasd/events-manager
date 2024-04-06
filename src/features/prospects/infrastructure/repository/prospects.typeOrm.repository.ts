@@ -3,9 +3,11 @@ import {
   BadRequestError,
   DataBaseError,
   NotFoundError,
+  codeCommerceNotFound,
   codeProspectNotFound,
   commerceIdInvalidMessage,
   errorHandlerTypeOrm,
+  errorMessageCommerceNotFound,
   errorMessageProspectNotFound,
   errorMsgDb,
   userCommerceInvalidMessage
@@ -31,26 +33,27 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
 
     if (userCommerce.commerceUid != data.commerceUid)
       throw new BadRequestError(
-        errorMessageProspectNotFound,
-        codeProspectNotFound
+        errorMessageCommerceNotFound,
+        codeCommerceNotFound
       );
+
 
     // Create users DB
     const prospect = prospectRepository.create({
       ...data,
-      userCommerce
+      userCommerce,
     });
+
 
     // Save on DB
     const prospectSaved: ProspectTypeORMEntity = await prospectRepository.save({
       ...prospect,
-      userCommerce
+      userCommerce,
     });
 
     return new ProspectValue({
       ...prospectSaved,
       userCommerceUid: prospectSaved.userCommerce.id,
-      commerceUid: prospectSaved.userCommerce.commerce.id
     });
   }
 
@@ -61,10 +64,12 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
   ): Promise<ProspectEntity> {
     const prospectRepository = connectDB.getRepository(ProspectTypeORMEntity);
 
+    
     const queryBuilder = prospectRepository
       .createQueryBuilder('prospect')
-      .where('prospect.commerce.id = :commerceUid', { commerceUid })
-      .andWhere('phone = :phone', { phone });
+      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce') 
+      .where('prospect.phone = :phone', { phone })
+      .andWhere('prospect.commerceUid = :commerceUid', { commerceUid });
 
     const prospect = await queryBuilder.getOne();
 
@@ -75,7 +80,6 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
       );
     return new ProspectValue({
       ...prospect,
-      commerceUid: prospect.userCommerce.commerce.id,
       userCommerceUid: prospect.userCommerce.id
     });
   }

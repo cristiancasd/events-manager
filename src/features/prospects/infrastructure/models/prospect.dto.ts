@@ -26,6 +26,9 @@ export class ProspectTypeORMEntity {
   @Column()
   type!: ProspectType;
 
+  @Column()
+  commerceUid!: string;
+
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   creationDate?: Date;
 

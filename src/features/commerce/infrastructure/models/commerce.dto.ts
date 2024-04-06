@@ -13,11 +13,12 @@ import {
 import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
 import { LevelTypeORMEntity } from '../../../levels';
 import { v4 as uuidv4 } from 'uuid';
+import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 
 @Entity('commerce')
 export class CommerceTypeORMEntity extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  //@PrimaryColumn('string')
+ // @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id!: string;
 
   @Column({ length: 50, unique: true })
@@ -52,6 +53,9 @@ export class CommerceTypeORMEntity extends BaseEntity {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn!: Date;
+
+  @OneToMany(() => UserCommerceTypeORMEntity, (userCommerce) => userCommerce.commerce)
+  usersCommerce!: UserCommerceTypeORMEntity[];
 
   @OneToMany(() => EventTypeORMEntity, (event) => event.commerce)
   events!: EventTypeORMEntity[];

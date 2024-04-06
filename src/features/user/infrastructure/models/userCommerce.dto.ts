@@ -44,7 +44,7 @@ export class UserCommerceTypeORMEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
 
-  @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.levels, {
+  @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.usersCommerce, {
     eager: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
@@ -64,7 +64,6 @@ export class UserCommerceTypeORMEntity {
 
   @OneToMany(() => ProspectTypeORMEntity, (prospect) => prospect.userCommerce, {
     cascade: true,
-    eager: true
   })
   prospects!: ProspectTypeORMEntity[];
 

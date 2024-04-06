@@ -46,7 +46,6 @@ export class UserTypeORMEntity {
     (userCommerce) => userCommerce.user,
     {
       cascade: true,
-      eager: true
     }
   )
   usersCommerce!: UserCommerceTypeORMEntity[];

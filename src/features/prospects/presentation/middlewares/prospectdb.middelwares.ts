@@ -30,7 +30,7 @@ export const checkPhoneExistMiddleware = async (
         throw new DataBaseError(duplicatedPhoneMessage, codeDbPhoneDuplicated);
     } catch (err) {
       if (err instanceof CustomError) {
-        if (err instanceof DataBaseError) {
+        if (err instanceof DataBaseError ) {
           if (err.code == codeDbError) return next();
         }
         throw err;
