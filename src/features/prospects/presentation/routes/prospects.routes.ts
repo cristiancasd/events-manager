@@ -46,7 +46,7 @@ prospectRoutes.put(
 
 /// Find prospect by phone
 prospectRoutes.get(
-  '/find/:commerceUid',
+  '/find/phone/:commerceUid',
   [
     checkTokenMiddleware,
     validateUUIDParam('commerceUid'),
@@ -58,6 +58,17 @@ prospectRoutes.get(
   ],
   validateRequest,
   prospectsCtrl.findProspectCtrl
+);
+
+/// Find prospect by phone
+prospectRoutes.get(
+  '/find/allbyuser/:userCommerceUid',
+  [
+    checkTokenMiddleware,
+    validateUUIDParam('userCommerceUid'),
+  ],
+  validateRequest,
+  prospectsCtrl.findProspectsByUserCommerceCtrl
 );
 
 /// Delete prospect

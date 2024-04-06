@@ -26,6 +26,7 @@ export class ProspectsController {
     res: Response
   ) => {
     const { userCommerceUid } = req.params;
+    
     const result = await this.prospectsUseCase.findProspectsByUserCommerce(
       userCommerceUid
     );

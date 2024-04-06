@@ -90,13 +90,18 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
   ): Promise<ProspectEntity[]> {
     const prospectRepository = connectDB.getRepository(ProspectTypeORMEntity);
 
+    console.log('aquinea**',userCommerceUid )
     const queryBuilder = prospectRepository
       .createQueryBuilder('prospect')
+      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce') 
       .where('prospect.userCommerce.id = :userCommerceUid', {
         userCommerceUid
       });
 
     const prospects = await queryBuilder.getMany();
+
+    console.log('aquinea**',prospects )
+
 
     if (!prospects)
       throw new NotFoundError(
@@ -109,7 +114,6 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
       const prospectEntity = new ProspectValue({
         ...prospect,
         userCommerceUid: prospect.userCommerce.id,
-        commerceUid: prospect.userCommerce.commerce.id
       });
       prospectsArray.push(prospectEntity);
     });
