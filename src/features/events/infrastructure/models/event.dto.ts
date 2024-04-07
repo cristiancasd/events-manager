@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Entity('event')
 export class EventTypeORMEntity {
- // @PrimaryGeneratedColumn('uuid')
+  // @PrimaryGeneratedColumn('uuid')
   @PrimaryColumn('uuid')
   id!: string;
 

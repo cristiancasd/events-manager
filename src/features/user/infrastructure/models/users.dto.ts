@@ -45,7 +45,7 @@ export class UserTypeORMEntity {
     () => UserCommerceTypeORMEntity,
     (userCommerce) => userCommerce.user,
     {
-      cascade: true,
+      cascade: true
     }
   )
   usersCommerce!: UserCommerceTypeORMEntity[];

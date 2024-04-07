@@ -17,7 +17,7 @@ import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/u
 
 @Entity('commerce')
 export class CommerceTypeORMEntity extends BaseEntity {
- // @PrimaryGeneratedColumn('uuid')
+  // @PrimaryGeneratedColumn('uuid')
   @PrimaryColumn('uuid')
   id!: string;
 
@@ -54,7 +54,10 @@ export class CommerceTypeORMEntity extends BaseEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn!: Date;
 
-  @OneToMany(() => UserCommerceTypeORMEntity, (userCommerce) => userCommerce.commerce)
+  @OneToMany(
+    () => UserCommerceTypeORMEntity,
+    (userCommerce) => userCommerce.commerce
+  )
   usersCommerce!: UserCommerceTypeORMEntity[];
 
   @OneToMany(() => EventTypeORMEntity, (event) => event.commerce)

@@ -37,23 +37,21 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
         codeCommerceNotFound
       );
 
-
     // Create users DB
     const prospect = prospectRepository.create({
       ...data,
-      userCommerce,
+      userCommerce
     });
-
 
     // Save on DB
     const prospectSaved: ProspectTypeORMEntity = await prospectRepository.save({
       ...prospect,
-      userCommerce,
+      userCommerce
     });
 
     return new ProspectValue({
       ...prospectSaved,
-      userCommerceUid: prospectSaved.userCommerce.id,
+      userCommerceUid: prospectSaved.userCommerce.id
     });
   }
 
@@ -64,10 +62,9 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
   ): Promise<ProspectEntity> {
     const prospectRepository = connectDB.getRepository(ProspectTypeORMEntity);
 
-    
     const queryBuilder = prospectRepository
       .createQueryBuilder('prospect')
-      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce') 
+      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
       .where('prospect.phone = :phone', { phone })
       .andWhere('prospect.commerceUid = :commerceUid', { commerceUid });
 
@@ -89,19 +86,14 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
     userCommerceUid: string
   ): Promise<ProspectEntity[]> {
     const prospectRepository = connectDB.getRepository(ProspectTypeORMEntity);
-
-    console.log('aquinea**',userCommerceUid )
     const queryBuilder = prospectRepository
       .createQueryBuilder('prospect')
-      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce') 
+      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
       .where('prospect.userCommerce.id = :userCommerceUid', {
         userCommerceUid
       });
 
     const prospects = await queryBuilder.getMany();
-
-    console.log('aquinea**',prospects )
-
 
     if (!prospects)
       throw new NotFoundError(
@@ -113,7 +105,7 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
     prospects.forEach((prospect) => {
       const prospectEntity = new ProspectValue({
         ...prospect,
-        userCommerceUid: prospect.userCommerce.id,
+        userCommerceUid: prospect.userCommerce.id
       });
       prospectsArray.push(prospectEntity);
     });
@@ -154,9 +146,16 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
 
   @errorHandlerTypeOrm
   async deleteProspect(uid: string): Promise<void> {
-    const ProspectRepository = connectDB.getRepository(ProspectTypeORMEntity);
-    const prospectToDelete = await ProspectRepository.findOneBy({ id: uid });
-    if (prospectToDelete) return;
+    const prospectRepository = connectDB.getRepository(ProspectTypeORMEntity);
+    const prospectToDelete = await prospectRepository.findOneBy({ id: uid });
+
+    if (!prospectToDelete)
+      throw new NotFoundError(
+        errorMessageProspectNotFound,
+        codeProspectNotFound
+      );
+    const result = await prospectRepository.remove(prospectToDelete);
+    if (result) return;
     throw new NotFoundError(errorMessageProspectNotFound, codeProspectNotFound);
   }
 }

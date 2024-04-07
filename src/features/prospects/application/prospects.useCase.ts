@@ -11,28 +11,28 @@ export class ProspectsUseCase implements ProspectUseCaseInterface {
 
   @errorHandlerUseCase
   async validateDuplicatedData(
-    prospectId: string| undefined,
+    prospectId: string | undefined,
     phone: string,
     commerceUserId: string
   ): Promise<boolean> {
     let phoneFound = false;
-      try {
-        let prospectFound= await this._prospectRepository.findProspectByPhone(
-          commerceUserId,
-          phone
-        );
-        if(!prospectId){
+    try {
+      let prospectFound = await this._prospectRepository.findProspectByPhone(
+        commerceUserId,
+        phone
+      );
+      if (!prospectId) {
+        phoneFound = true;
+      } else {
+        if (prospectFound.id != prospectId) {
           phoneFound = true;
-        }else{
-          if(prospectFound.id!=prospectId){
-            phoneFound = true;
-          }
-        }
-      } catch (err) {
-        if (!(err instanceof NotFoundError)) {
-          throw err;
         }
       }
+    } catch (err) {
+      if (!(err instanceof NotFoundError)) {
+        throw err;
+      }
+    }
     return phoneFound;
   }
 

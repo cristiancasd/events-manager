@@ -13,7 +13,7 @@ export const validateProspectBody: ValidationChain[] = [
     .isString()
     .withMessage('phone must be String')
     .matches(/^[0-9]+$/, 'g')
-    .withMessage('phone must contain only numeric characters'),
+    .withMessage('phone must contain only numeric characters')
 ];
 
 export const validateEditProspectBody: ValidationChain[] = [
