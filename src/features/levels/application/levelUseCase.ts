@@ -20,24 +20,24 @@ export class LevelUseCase implements LevelUseCaseInterface {
     name?: string,
     typeId?: number
   ): Promise<boolean> {
-    let nameFinded = false;
-    let typeIdFinded = false;
+    let nameFound = false;
+    let typeIdFound = false;
     if (name != null) {
-      const levelFinded = await this._levelRepository.findLevelByName(
+      const levelFound = await this._levelRepository.findLevelByName(
         commerceUid,
         name
       );
-      nameFinded = levelFinded ? true : false;
+      nameFound = levelFound ? true : false;
     }
 
     if (typeId != null) {
-      const levelFinded = await this._levelRepository.findLevelByTypeId(
+      const levelFound = await this._levelRepository.findLevelByTypeId(
         commerceUid,
         typeId
       );
-      typeIdFinded = levelFinded ? true : false;
+      typeIdFound = levelFound ? true : false;
     }
-    return nameFinded || typeIdFinded ? true : false;
+    return nameFound || typeIdFound ? true : false;
   }
 
   @errorHandlerUseCase

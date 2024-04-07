@@ -6,14 +6,14 @@ import {
   UpdateDateColumn,
   ManyToOne,
   BeforeInsert,
-  BeforeUpdate
+  OneToMany
 } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
-//import { CommerceUserRoles } from '../../../../core';
 import { LevelTypeORMEntity } from '../../../levels';
 import { CommerceUserRoles } from '../../../../core/shared/constants';
 import { UserTypeORMEntity } from './users.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { ProspectTypeORMEntity } from '../../../prospects';
 
 @Entity('userCommerce')
 export class UserCommerceTypeORMEntity {
@@ -44,11 +44,15 @@ export class UserCommerceTypeORMEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
 
-  @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.levels, {
-    eager: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-  })
+  @ManyToOne(
+    () => CommerceTypeORMEntity,
+    (commerce) => commerce.usersCommerce,
+    {
+      eager: true,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    }
+  )
   commerce!: CommerceTypeORMEntity;
 
   @ManyToOne(() => LevelTypeORMEntity, (level) => level.usersCommerce, {
@@ -61,6 +65,12 @@ export class UserCommerceTypeORMEntity {
     onUpdate: 'CASCADE'
   })
   user!: UserTypeORMEntity;
+
+  @OneToMany(() => ProspectTypeORMEntity, (prospect) => prospect.userCommerce, {
+    cascade: true
+  })
+  prospects!: ProspectTypeORMEntity[];
+
   @BeforeInsert()
   async generateUUID() {
     this.id = uuidv4();

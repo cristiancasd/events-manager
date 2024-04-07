@@ -22,12 +22,12 @@ export class UserUseCase implements UserUseCaseInterface {
     document?: string,
     commerceUserId?: string
   ): Promise<boolean> {
-    let documentFinded = false;
-    let commerceUserIdFinded = false;
+    let documentFound = false;
+    let commerceUserIdFound = false;
     if (document != null) {
       try {
         await this._userRepository.findUserByDocument(document);
-        documentFinded = true;
+        documentFound = true;
       } catch (err) {
         if (!(err instanceof NotFoundError)) {
           throw err;
@@ -41,14 +41,14 @@ export class UserUseCase implements UserUseCaseInterface {
           commerceUid,
           commerceUserId
         );
-        commerceUserIdFinded = true;
+        commerceUserIdFound = true;
       } catch (err) {
         if (!(err instanceof NotFoundError)) {
           throw err;
         }
       }
     }
-    return documentFinded || commerceUserIdFinded ? true : false;
+    return documentFound || commerceUserIdFound ? true : false;
   }
 
   @errorHandlerUseCase

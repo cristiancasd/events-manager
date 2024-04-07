@@ -4,29 +4,30 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
   BeforeInsert,
-  BeforeUpdate,
-  OneToMany
+  BeforeUpdate
 } from 'typeorm';
-import { UserCommerceTypeORMEntity } from './userCommerce.dto';
+import { ProspectType } from '../../../../core/shared/constants';
 import { v4 as uuidv4 } from 'uuid';
+import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 
-@Entity('user')
-export class UserTypeORMEntity {
+@Entity('prospect')
+export class ProspectTypeORMEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({ length: 50 })
   name!: string;
 
-  @Column({ length: 15, unique: true })
+  @Column({ length: 50 })
   phone!: string;
 
-  @Column({ length: 50, unique: true })
-  email!: string;
+  @Column()
+  type!: ProspectType;
 
-  @Column({ length: 15, unique: true })
-  document!: string;
+  @Column()
+  commerceUid!: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   creationDate?: Date;
@@ -34,24 +35,24 @@ export class UserTypeORMEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  convertToUppercase() {
-    this.email = this.email.toLocaleLowerCase();
-    this.name = this.name.toLocaleLowerCase();
-  }
-
-  @OneToMany(
+  @ManyToOne(
     () => UserCommerceTypeORMEntity,
-    (userCommerce) => userCommerce.user,
+    (userCommerce) => userCommerce.prospects,
     {
-      cascade: true
+      eager: true,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
     }
   )
-  usersCommerce!: UserCommerceTypeORMEntity[];
+  userCommerce!: UserCommerceTypeORMEntity;
 
   @BeforeInsert()
   async generateUUID() {
     this.id = uuidv4();
+  }
+
+  @BeforeUpdate()
+  async updateData() {
+    this.name = this.name.toLowerCase();
   }
 }

@@ -62,31 +62,31 @@ export class AuthRepositoryImpl implements AuthRepository {
       }
     });
 
-    const userFinded = userCommerce.find(
+    const userFound = userCommerce.find(
       (user) =>
         user.commerce.nick.toLocaleLowerCase() == nick.toLocaleLowerCase()
     );
 
-    if (!userFinded)
+    if (!userFound)
       throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
 
-    if (bcrypt.compareSync(password, userFinded.password)) {
+    if (bcrypt.compareSync(password, userFound.password)) {
       const user = await userRepository.findOne({
-        where: { email: userFinded.email }
+        where: { email: userFound.email }
       });
 
       if (user) {
         const userEntity = new UserValue({
-          id: userFinded.id,
+          id: userFound.id,
           name: user.name,
           document: user.document,
           email: user.email,
           phone: user.phone,
-          role: userFinded.role,
-          isActive: userFinded.isActive,
-          commerceUserId: userFinded.commerceUserId,
-          commerceUid: userFinded.commerce.id,
-          levelUid: userFinded.level.id
+          role: userFound.role,
+          isActive: userFound.isActive,
+          commerceUserId: userFound.commerceUserId,
+          commerceUid: userFound.commerce.id,
+          levelUid: userFound.level.id
         });
 
         return new UserAuthValue({

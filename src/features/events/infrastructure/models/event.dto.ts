@@ -5,15 +5,16 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  BeforeInsert
+  BeforeInsert,
+  PrimaryColumn
 } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity('event')
 export class EventTypeORMEntity {
-  @PrimaryGeneratedColumn('uuid')
-  //@PrimaryColumn('string')
+  // @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id!: string;
 
   @Column({ length: 50 })

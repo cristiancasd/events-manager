@@ -23,6 +23,11 @@ export enum CommerceUserRoles {
   other = 'other'
 }
 
+export enum ProspectType {
+  prospect = 'prospect',
+  prospectVip = 'prospect-vip'
+}
+
 /// En resumen, esta expresión regular establece condiciones para garantizar que una contraseña
 /// cumpla con ciertos criterios de seguridad, como la inclusión de al menos una letra mayúscula,
 /// una letra minúscula, un dígito y un carácter no alfanumérico. También se asegura de que no haya
@@ -47,6 +52,8 @@ export const codeDbDocumentDuplicated = 707;
 export const codeDbCustoUserIdDuplicated = 708;
 export const codeDbNickDuplicated = 709;
 
+export const errorMsgDb = 'Error saving edited data';
+
 // not found code errors
 
 export const codeCommerceNotFound = 801;
@@ -54,6 +61,7 @@ export const codeLevelNotFound = 802;
 export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
 export const codeUserCoreNotFound = 805;
+export const codeProspectNotFound = 806;
 
 // invalid code errors
 export const codeInvalidToken = 901;
@@ -67,6 +75,7 @@ export const errorMessageLevelNotFound = 'Level not found';
 export const errorMessageEventNotFound = 'Event not found';
 export const errorMessageUserNotFound = 'User not found';
 export const errorMessageUserCoreNotFound = 'User Core not found';
+export const errorMessageProspectNotFound = 'Prospect not found';
 
 // Duplicated messages
 export const duplicatedDataMessage = 'Duplicated data';
@@ -81,6 +90,8 @@ export const duplicatedCustomCommerceIdMessage = 'Duplicated customCommerceId';
 
 // Invalid data message
 export const commerceIdInvalidMessage = 'CommerceId invalid';
+export const userCommerceInvalidMessage = 'Invalid userCommerceUid';
+
 export const LevelUidInvalidMessage = 'levelUid invalid';
 export const invalidTokenMessage = 'Token invalido';
 
