@@ -1,18 +1,14 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  BeforeInsert,
-  BeforeUpdate
+  BeforeInsert
 } from 'typeorm';
-import { ProspectType } from '../../../../core/shared/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
-import { CommerceTypeORMEntity } from '../../../commerce';
 
 @Entity('attendeeUser')
 export class AttendeeUserTypeORMEntity {
@@ -36,21 +32,12 @@ export class AttendeeUserTypeORMEntity {
   )
   userCommerce!: UserCommerceTypeORMEntity;
 
-
-  @ManyToOne(
-    () => EventTypeORMEntity,
-    (event) => event.attendeesUser,
-    {
-      eager: true,
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE'
-    }
-  )
+  @ManyToOne(() => EventTypeORMEntity, (event) => event.attendeesUser, {
+    eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   event!: EventTypeORMEntity;
-
- 
-
-
 
   @BeforeInsert()
   async generateUUID() {

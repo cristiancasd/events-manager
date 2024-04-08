@@ -10,8 +10,7 @@ export class AttendeeUserValue implements AttendeeUserEntity {
   constructor({
     id,
     eventUid,
-    userData,
- 
+    userData
   }: {
     id?: string | undefined;
     eventUid: string;

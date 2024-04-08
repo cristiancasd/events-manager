@@ -1,8 +1,7 @@
-import { AttendeeUserBasicDataEntity } from "./attendeeUserBasicData.entity";
+import { AttendeeUserBasicDataEntity } from './attendeeUserBasicData.entity';
 
 export interface AttendeeUserEntity {
-    id: string;
-    eventUid: string;
-    userData: AttendeeUserBasicDataEntity;
-  }
-  
+  id: string;
+  eventUid: string;
+  userData: AttendeeUserBasicDataEntity;
+}

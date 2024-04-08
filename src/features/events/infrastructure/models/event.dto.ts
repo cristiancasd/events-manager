@@ -44,10 +44,9 @@ export class EventTypeORMEntity {
   })
   commerce!: CommerceTypeORMEntity;
 
-  @OneToMany(() => AttendeeUserTypeORMEntity, (attendee) => attendee.commerce)
+  @OneToMany(() => AttendeeUserTypeORMEntity, (attendee) => attendee.event)
   attendeesUser!: AttendeeUserTypeORMEntity[];
 
-  
   @BeforeInsert()
   async generateUUID() {
     this.id = uuidv4();

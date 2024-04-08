@@ -66,7 +66,6 @@ export class CommerceTypeORMEntity extends BaseEntity {
   @OneToMany(() => LevelTypeORMEntity, (level) => level.commerce)
   levels!: LevelTypeORMEntity[];
 
- 
   @BeforeInsert()
   @BeforeUpdate()
   convertToUppercase() {

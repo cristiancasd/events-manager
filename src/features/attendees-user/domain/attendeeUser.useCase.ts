@@ -1,7 +1,13 @@
-import { AttendeeUserEntity } from "./attendeeUser.entity";
+import { AttendeeUserEntity } from './attendeeUser.entity';
 
 export interface AttendeesUserUseCaseInterface {
-  registerAttendee(data: AttendeeUserEntity): Promise<AttendeeUserEntity>;
-  getAttendeeByEvent(eventUid: string): Promise<AttendeeUserEntity[]>;
-  getAttendeeByEventAndLevelUid(eventUid: string, levelUid: string): Promise<AttendeeUserEntity[]>;
+  registerAttendeeUser(
+    eventUid: string,
+    userCommerceUid: string
+  ): Promise<AttendeeUserEntity>;
+  getAttendeesUserByEvent(eventUid: string): Promise<AttendeeUserEntity[]>;
+  getAttendeesUserByEventAndLevelUid(
+    eventUid: string,
+    levelUid: string
+  ): Promise<AttendeeUserEntity[]>;
 }

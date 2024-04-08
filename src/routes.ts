@@ -5,6 +5,7 @@ import { eventsRoutes } from './features/events/presentation/routes/events.route
 import { userRoutes } from './features/user/presentation/routes/users.routes';
 import { authRoutes } from './features/auth/presentation/routes/auth.routes';
 import { prospectRoutes } from './features/prospects/presentation/routes/prospects.routes';
+import { attendeesUserRoutes } from './features/attendees-user/presentation/routes/attendeesUser.routes';
 
 const router = Router();
 
@@ -15,5 +16,6 @@ router.use('/level', levelRoutes);
 router.use('/user', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/prospect', prospectRoutes);
+router.use('/attendee/user', attendeesUserRoutes);
 
 export default router;

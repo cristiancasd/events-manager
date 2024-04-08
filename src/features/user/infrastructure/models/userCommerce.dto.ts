@@ -73,9 +73,11 @@ export class UserCommerceTypeORMEntity {
   })
   prospects!: ProspectTypeORMEntity[];
 
-  @OneToMany(() => AttendeeUserTypeORMEntity, (attendee) => attendee.userCommerce)
+  @OneToMany(
+    () => AttendeeUserTypeORMEntity,
+    (attendee) => attendee.userCommerce
+  )
   attendeesUser!: AttendeeUserTypeORMEntity[];
-
 
   @BeforeInsert()
   async generateUUID() {
