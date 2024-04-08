@@ -15,10 +15,10 @@ import {
 } from '../../domain';
 import { AttendeeUserTypeORMEntity } from '../models/attendeeUser.dto';
 
-export class AttendeeUsersTypeORMRepository implements AttendeeUserRepository {
+export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
   constructor(
-    private eventUseCase: EventsUseCase,
-    private userCommerceUseCase: UserUseCase
+    private readonly eventUseCase: EventsUseCase,
+    private readonly userCommerceUseCase: UserUseCase
   ) {}
 
   @errorHandlerTypeOrm

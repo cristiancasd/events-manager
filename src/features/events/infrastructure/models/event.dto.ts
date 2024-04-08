@@ -15,8 +15,8 @@ import { AttendeeUserTypeORMEntity } from '../../../attendees-user';
 
 @Entity('event')
 export class EventTypeORMEntity {
-  // @PrimaryGeneratedColumn('uuid')
-  @PrimaryColumn('uuid')
+   @PrimaryGeneratedColumn('uuid')
+  //@PrimaryColumn('uuid')
   id!: string;
 
   @Column({ length: 50 })
