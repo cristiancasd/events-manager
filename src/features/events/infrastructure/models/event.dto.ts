@@ -6,10 +6,12 @@ import {
   UpdateDateColumn,
   ManyToOne,
   BeforeInsert,
-  PrimaryColumn
+  PrimaryColumn,
+  OneToMany
 } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
 import { v4 as uuidv4 } from 'uuid';
+import { AttendeeUserTypeORMEntity } from '../../../attendees-user';
 
 @Entity('event')
 export class EventTypeORMEntity {
@@ -41,6 +43,11 @@ export class EventTypeORMEntity {
     onUpdate: 'CASCADE'
   })
   commerce!: CommerceTypeORMEntity;
+
+  @OneToMany(() => AttendeeUserTypeORMEntity, (attendee) => attendee.commerce)
+  attendeesUser!: AttendeeUserTypeORMEntity[];
+
+  
   @BeforeInsert()
   async generateUUID() {
     this.id = uuidv4();
