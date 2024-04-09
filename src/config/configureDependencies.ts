@@ -34,6 +34,11 @@ import {
   ProspectsUseCase
 } from '../features/prospects';
 
+import { AttendeeUserRepository } from '../features/attendees-user';
+import { AttendeeUserRepositoryImpl } from '../features/attendees-user/infrastructure/repository/attendeesUser.typeOrm.repository';
+import { AttendeesUserUseCase } from '../features/attendees-user/application/attendeesUser.useCase';
+import { AttendeesUserController } from '../features/attendees-user/presentation/controllers/attendeesUser.ctrl';
+
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {
   const commerceRepository: CommerceRepository =
@@ -62,10 +67,15 @@ export const configureDependencies = () => {
   const authUseCase = new AuthUseCase(authRepository);
   const authCtrl = new AuthController(authUseCase);
 
-  const prospectsRepository: ProspectRepository =
-    new ProspectsTypeORMRepository(userUseCase);
+  const prospectsRepository = new ProspectsTypeORMRepository(userUseCase);
   const prospectsUseCase = new ProspectsUseCase(prospectsRepository);
   const prospectsCtrl = new ProspectsController(prospectsUseCase);
+
+  const attendeeUserRepository: AttendeeUserRepository =
+    new AttendeeUserRepositoryImpl(eventsUseCase, userUseCase);
+  //const attendeeUserRepository: AttendeeUserRepository = new AttendeeUserTypeORMRepository(eventsUseCase, userUseCase);
+  const attendeeUserUseCase = new AttendeesUserUseCase(attendeeUserRepository);
+  const attendeeUserCtrl = new AttendeesUserController(attendeeUserUseCase);
 
   return {
     commerceRepository,
@@ -83,6 +93,8 @@ export const configureDependencies = () => {
     authCtrl,
     authUseCase,
     prospectsCtrl,
-    prospectsUseCase
+    prospectsUseCase,
+    attendeeUserCtrl,
+    attendeeUserUseCase
   };
 };

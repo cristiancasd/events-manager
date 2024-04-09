@@ -16,6 +16,7 @@ import {
   codeEventNotFound,
   errorMessageEventNotFound
 } from '../../../../core';
+import { EventValue } from '../../domain/event.value';
 
 export class TypeOrmEventRepository implements EventsRepository {
   @errorHandlerTypeOrm
@@ -47,8 +48,15 @@ export class TypeOrmEventRepository implements EventsRepository {
       //TODO: add a validation to Date type
       if (isNaN(algo.getTime())) throw new BadRequestError('Invalid date');
 
-      await eventRepository.save({ ...newEvent, commerce: commerce });
-      return { ...newEvent, commerceUid: commerce.id };
+      const saved = await eventRepository.save({
+        ...newEvent,
+        commerce: commerce
+      });
+
+      return new EventValue({
+        ...saved,
+        commerceUid: saved.commerce.id
+      });
     }
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }

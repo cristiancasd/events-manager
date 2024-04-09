@@ -14,6 +14,7 @@ import { CommerceUserRoles } from '../../../../core/shared/constants';
 import { UserTypeORMEntity } from './users.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { ProspectTypeORMEntity } from '../../../prospects';
+import { AttendeeUserTypeORMEntity } from '../../../attendees-user';
 
 @Entity('userCommerce')
 export class UserCommerceTypeORMEntity {
@@ -61,6 +62,7 @@ export class UserCommerceTypeORMEntity {
   level!: LevelTypeORMEntity;
 
   @ManyToOne(() => UserTypeORMEntity, (user) => user.usersCommerce, {
+    eager: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
@@ -70,6 +72,12 @@ export class UserCommerceTypeORMEntity {
     cascade: true
   })
   prospects!: ProspectTypeORMEntity[];
+
+  @OneToMany(
+    () => AttendeeUserTypeORMEntity,
+    (attendee) => attendee.userCommerce
+  )
+  attendeesUser!: AttendeeUserTypeORMEntity[];
 
   @BeforeInsert()
   async generateUUID() {
