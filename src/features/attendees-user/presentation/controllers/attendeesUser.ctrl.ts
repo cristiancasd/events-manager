@@ -18,9 +18,9 @@ export class AttendeesUserController {
 
     const levelUidToFind = (levelUid as string) || '';
 
-    const result = levelUidToFind == '';
-    await this.attendeesUserUseCase.getAttendeesUserByEvent(eventUid);
-    await this.attendeesUserUseCase.getAttendeesUserByEventAndLevelUid(
+    const result = levelUidToFind == ''
+    ? await this.attendeesUserUseCase.getAttendeesUserByEvent(eventUid)
+    : await this.attendeesUserUseCase.getAttendeesUserByEventAndLevelUid(
       eventUid,
       levelUidToFind
     );

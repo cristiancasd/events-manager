@@ -128,13 +128,22 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
       .createQueryBuilder('attendeeUser')
       .leftJoinAndSelect('attendeeUser.event', 'event')
       .leftJoinAndSelect('attendeeUser.userCommerce', 'userCommerce')
-      .where('attendeeUser.event.id = :eventUid', {
+      .leftJoinAndSelect('userCommerce.user', 'user')
+      .leftJoinAndSelect('userCommerce.level', 'level')
+
+      .where('event.id = :eventUid', {
         eventUid
       });
     const attendeesUser = await queryBuilder.getMany();
 
+    
+    
     const attendeeUserArray: AttendeeUserEntity[] = [];
+
     attendeesUser.forEach((attendeesUser) => {
+
+    
+
       const attendeesUserEntity = new AttendeeUserValue({
         id: attendeesUser.id,
         eventUid: attendeesUser.event.id,
@@ -143,10 +152,12 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
           name: attendeesUser.userCommerce.user.name,
           phone: attendeesUser.userCommerce.user.phone,
           commerceUserId: attendeesUser.userCommerce.id,
-          levelUid: attendeesUser.event.id
+          levelUid: attendeesUser.userCommerce.level.id
         })
       });
       attendeeUserArray.push(attendeesUserEntity);
+
+     
     });
     return attendeeUserArray;
   }
@@ -164,8 +175,13 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
       .createQueryBuilder('attendeeUser')
       .leftJoinAndSelect('attendeeUser.event', 'event')
       .leftJoinAndSelect('attendeeUser.userCommerce', 'userCommerce')
-      .where('attendeeUser.event.id = :eventUid', { eventUid })
-      .andWhere('userCommerce.level.id = :levelUid', { levelUid });
+      .leftJoinAndSelect('userCommerce.user', 'user')
+      .leftJoinAndSelect('userCommerce.level', 'level')
+
+      .where('event.id = :eventUid', { eventUid })
+      .andWhere('level.id = :levelUid', { levelUid });
+
+    
 
     const attendeesUser = await queryBuilder.getMany();
 
@@ -180,7 +196,7 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
             name: attendeeUser.userCommerce.user.name,
             phone: attendeeUser.userCommerce.user.phone,
             commerceUserId: attendeeUser.userCommerce.id,
-            levelUid: attendeeUser.event.id
+            levelUid: attendeeUser.userCommerce.level.id
           })
         });
         attendeeUserArray.push(attendeesUserEntity);
