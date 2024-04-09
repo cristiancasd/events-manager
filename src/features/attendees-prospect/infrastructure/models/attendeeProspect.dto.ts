@@ -7,11 +7,11 @@ import {
   BeforeInsert
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
+import { ProspectTypeORMEntity } from '../../../prospects';
 
 @Entity('attendeeUser')
-export class AttendeeUserTypeORMEntity {
+export class AttendeeProspectTypeORMEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -22,17 +22,17 @@ export class AttendeeUserTypeORMEntity {
   updatedOn?: Date;
 
   @ManyToOne(
-    () => UserCommerceTypeORMEntity,
-    (userCommerce) => userCommerce.attendeesUser,
+    () => ProspectTypeORMEntity,
+    (prospect) => prospect.attendeesProspect,
     {
       eager: true,
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     }
   )
-  userCommerce!: UserCommerceTypeORMEntity;
+  prospect!: ProspectTypeORMEntity;
 
-  @ManyToOne(() => EventTypeORMEntity, (event) => event.attendeesUser, {
+  @ManyToOne(() => EventTypeORMEntity, (event) => event.attendeesProspect, {
     eager: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'

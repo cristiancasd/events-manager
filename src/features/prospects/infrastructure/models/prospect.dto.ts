@@ -6,11 +6,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
   BeforeInsert,
-  BeforeUpdate
+  BeforeUpdate,
+  OneToMany
 } from 'typeorm';
 import { ProspectType } from '../../../../core/shared/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
+import { AttendeeProspectTypeORMEntity } from '../../../attendees-prospect/infrastructure/models/attendeeProspect.dto';
 
 @Entity('prospect')
 export class ProspectTypeORMEntity {
@@ -45,6 +47,9 @@ export class ProspectTypeORMEntity {
     }
   )
   userCommerce!: UserCommerceTypeORMEntity;
+
+  @OneToMany(() => AttendeeProspectTypeORMEntity, (attendee) => attendee.prospect)
+  attendeesProspect!: AttendeeProspectTypeORMEntity[];
 
   @BeforeInsert()
   async generateUUID() {
