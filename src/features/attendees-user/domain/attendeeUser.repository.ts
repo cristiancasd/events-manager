@@ -5,6 +5,10 @@ export interface AttendeeUserRepository {
     eventUid: string,
     userCommerceUid: string
   ): Promise<AttendeeUserEntity>;
+  findAttendeeByUserCommerceUid(
+    eventUid: string,
+    userCommerceUid: string
+  ): Promise<AttendeeUserEntity>;
   getAttendeesUserByEvent(eventUid: string): Promise<AttendeeUserEntity[]>;
   getAttendeesUserByEventAndLevelUid(
     eventUid: string,

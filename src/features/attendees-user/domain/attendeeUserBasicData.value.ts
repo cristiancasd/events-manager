@@ -4,8 +4,8 @@ import { AttendeeUserBasicDataEntity } from './attendeeUserBasicData.entity';
 export class AttendeeUserBasicDataValue implements AttendeeUserBasicDataEntity {
   id: string;
   name: string;
-  levelUid: string;
   phone: string;
+  levelUid: string;
   commerceUserId: string;
 
   constructor({
@@ -23,8 +23,8 @@ export class AttendeeUserBasicDataValue implements AttendeeUserBasicDataEntity {
   }) {
     this.id = id ?? uuid();
     this.name = name;
-    this.levelUid = levelUid;
     this.phone = phone;
+    this.levelUid = levelUid;
     this.commerceUserId = commerceUserId;
   }
 }

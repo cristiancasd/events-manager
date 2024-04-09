@@ -1,4 +1,10 @@
-import { NotFoundError, errorHandlerUseCase } from '../../../core';
+import {
+  BadRequestError,
+  NotFoundError,
+  attendeeAlreadyRegisteredMessage,
+  codeDbAttendeeAlreadyExist,
+  errorHandlerUseCase
+} from '../../../core';
 import {
   AttendeeUserEntity,
   AttendeeUserRepository,
@@ -15,9 +21,21 @@ export class AttendeesUserUseCase implements AttendeesUserUseCaseInterface {
     eventUid: string,
     userCommerceUid: string
   ): Promise<AttendeeUserEntity> {
-    return await this._attendeesUserRepository.registerAttendeeUser(
-      eventUid,
-      userCommerceUid
+    try {
+
+      const algo= await this._attendeesUserRepository.findAttendeeByUserCommerceUid(
+        eventUid,
+        userCommerceUid
+      );
+    } catch (err) {
+      return await this._attendeesUserRepository.registerAttendeeUser(
+        eventUid,
+        userCommerceUid
+      );
+    }
+    throw new BadRequestError(
+      attendeeAlreadyRegisteredMessage,
+      codeDbAttendeeAlreadyExist
     );
   }
 

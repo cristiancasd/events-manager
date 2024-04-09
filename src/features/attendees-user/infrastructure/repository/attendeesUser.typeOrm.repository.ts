@@ -1,7 +1,10 @@
 import {
   BadRequestError,
+  NotFoundError,
+  codeAttendeeNotFound,
   codeCommerceNotFound,
   errorHandlerTypeOrm,
+  errorMessageAttendeeNotFound,
   errorMessageCommerceNotFound
 } from '../../../../core';
 import { connectDB } from '../../../../database';
@@ -51,9 +54,7 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
     // Save on DB
     const attendeeUserSaved: AttendeeUserTypeORMEntity =
       await attendeeUserRepository.save({
-        ...attendeeUser,
-        userCommerce,
-        event
+        ...attendeeUser
       });
 
     return new AttendeeUserValue({
@@ -61,10 +62,56 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
       eventUid: attendeeUser.event.id,
       userData: new AttendeeUserBasicDataValue({
         id: attendeeUserSaved.userCommerce.id,
-        name: attendeeUserSaved.userCommerce.user.name,
-        phone: attendeeUserSaved.userCommerce.user.phone,
+        name: userCommerce.name,
+        phone: userCommerce.phone,
         commerceUserId: attendeeUserSaved.userCommerce.id,
         levelUid: attendeeUserSaved.event.id
+      })
+    });
+  }
+
+  @errorHandlerTypeOrm
+  async findAttendeeByUserCommerceUid(
+    eventUid: string,
+    userCommerceUid: string
+  ): Promise<AttendeeUserEntity> {
+    const attendeeUserRepository = connectDB.getRepository(
+      AttendeeUserTypeORMEntity
+    );
+
+    const queryBuilder = attendeeUserRepository
+      .createQueryBuilder('attendeeUser')
+      .leftJoinAndSelect('attendeeUser.event', 'event')
+      .leftJoinAndSelect('attendeeUser.userCommerce', 'userCommerce')
+      .where('userCommerce.id = :userCommerceUid', {
+        userCommerceUid
+      })
+      .andWhere('event.id = :eventUid', {
+        eventUid
+      });
+      const algo = await queryBuilder.getMany();
+    console.log('algo***+',algo.length);
+    const attendeeUser = await queryBuilder.getOne();
+
+    if (!attendeeUser)
+      throw new NotFoundError(
+        errorMessageAttendeeNotFound,
+        codeAttendeeNotFound
+      );
+
+      const userCommerce = await this.userCommerceUseCase.findUserByUid(
+        userCommerceUid
+      );
+
+    return new AttendeeUserValue({
+      id: attendeeUser.id,
+      eventUid: attendeeUser.event.id,
+      userData: new AttendeeUserBasicDataValue({
+        id: attendeeUser.userCommerce.id,
+        name: userCommerce.name,
+        phone: userCommerce.phone,
+        commerceUserId: attendeeUser.userCommerce.id,
+        levelUid: attendeeUser.event.id
       })
     });
   }

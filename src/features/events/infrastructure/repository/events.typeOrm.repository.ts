@@ -48,14 +48,15 @@ export class TypeOrmEventRepository implements EventsRepository {
       //TODO: add a validation to Date type
       if (isNaN(algo.getTime())) throw new BadRequestError('Invalid date');
 
-
-      const saved= await eventRepository.save({ ...newEvent, commerce: commerce });
+      const saved = await eventRepository.save({
+        ...newEvent,
+        commerce: commerce
+      });
 
       return new EventValue({
         ...saved,
-        commerceUid: saved.commerce.id,
+        commerceUid: saved.commerce.id
       });
-
     }
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }

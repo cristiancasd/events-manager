@@ -51,6 +51,7 @@ export const codeDbTypeIdDuplicated = 706;
 export const codeDbDocumentDuplicated = 707;
 export const codeDbCustoUserIdDuplicated = 708;
 export const codeDbNickDuplicated = 709;
+export const codeDbAttendeeAlreadyExist = 710;
 
 export const errorMsgDb = 'Error saving edited data';
 
@@ -62,6 +63,7 @@ export const codeEventNotFound = 803;
 export const codeUserNotFound = 804;
 export const codeUserCoreNotFound = 805;
 export const codeProspectNotFound = 806;
+export const codeAttendeeNotFound = 807;
 
 // invalid code errors
 export const codeInvalidToken = 901;
@@ -76,6 +78,7 @@ export const errorMessageEventNotFound = 'Event not found';
 export const errorMessageUserNotFound = 'User not found';
 export const errorMessageUserCoreNotFound = 'User Core not found';
 export const errorMessageProspectNotFound = 'Prospect not found';
+export const errorMessageAttendeeNotFound = 'Attendee not found';
 
 // Duplicated messages
 export const duplicatedDataMessage = 'Duplicated data';
@@ -87,6 +90,8 @@ export const duplicatedNickMessage = 'Duplicated nick';
 
 export const duplicatedDocumentMessage = 'Duplicated document';
 export const duplicatedCustomCommerceIdMessage = 'Duplicated customCommerceId';
+
+export const attendeeAlreadyRegisteredMessage = 'Attendee already registered';
 
 // Invalid data message
 export const commerceIdInvalidMessage = 'CommerceId invalid';
