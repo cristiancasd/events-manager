@@ -22,7 +22,7 @@ export class AttendeesUserUseCase implements AttendeesUserUseCaseInterface {
     userCommerceUid: string
   ): Promise<AttendeeUserEntity> {
     try {
-      const algo =
+     
         await this._attendeesUserRepository.findAttendeeByUserCommerceUid(
           eventUid,
           userCommerceUid

@@ -43,10 +43,10 @@ export class TypeOrmEventRepository implements EventsRepository {
       id: data.commerceUid
     });
     if (commerce != null) {
-      const algo = new Date(data.date);
+      const validDate = new Date(data.date);
 
       //TODO: add a validation to Date type
-      if (isNaN(algo.getTime())) throw new BadRequestError('Invalid date');
+      if (isNaN(validDate.getTime())) throw new BadRequestError('Invalid date');
 
       const saved = await eventRepository.save({
         ...newEvent,
@@ -111,10 +111,10 @@ export class TypeOrmEventRepository implements EventsRepository {
       queryBuilder.andWhere('event.date <= :finishDate', { finishDate });
     }
     const events = await queryBuilder.getMany();
-    const algo: EventEntity[] = events.map((data) => {
+    const eventsEntityArray: EventEntity[] = events.map((data) => {
       const { commerce, ...resto } = data;
       return { ...resto, commerceUid: data.commerce?.id ?? '' };
     });
-    return algo;
+    return eventsEntityArray;
   }
 }
