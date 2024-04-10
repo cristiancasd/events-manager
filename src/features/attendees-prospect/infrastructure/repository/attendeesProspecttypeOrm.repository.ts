@@ -35,8 +35,7 @@ export class AttendeeProspectRepositoryImpl
       AttendeeProspectTypeORMEntity
     );
 
-    const prospect: ProspectEntity =
-      await this.prospectUseCase.findProspectByUid(prospectUid);
+    const prospect = await this.prospectUseCase.findProspectByUid(prospectUid);
 
     const event = await this.eventUseCase.findEventByUid(eventUid);
 
@@ -121,6 +120,7 @@ export class AttendeeProspectRepositoryImpl
       .createQueryBuilder('attendeeProspect')
       .leftJoinAndSelect('attendeeProspect.event', 'event')
       .leftJoinAndSelect('attendeeProspect.prospect', 'prospect')
+      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
       .where('event.id = :eventUid', {
         eventUid
       });
@@ -159,7 +159,7 @@ export class AttendeeProspectRepositoryImpl
       .leftJoinAndSelect('attendeeProspect.prospect', 'prospect')
       .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
       .where('event.id = :eventUid', { eventUid })
-      .andWhere('userCommerceUid.id = :userCommerceUid', { userCommerceUid });
+      .andWhere('userCommerce.id = :userCommerceUid', { userCommerceUid });
 
     const attendeesProspect = await queryBuilder.getMany();
 

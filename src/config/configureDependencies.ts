@@ -43,7 +43,7 @@ import {
   AttendeesProspectUseCase
 } from '../features/attendees-prospect';
 import { AttendeesProspectController } from '../features/attendees-prospect/presentation/controllers/attendeesProspect.ctrl';
-import { AttendeeProspectRepositoryImpl } from '../features/attendees-prospect/infrastructure/repository/attendeesUser.typeOrm.repository';
+import { AttendeeProspectRepositoryImpl } from '../features/attendees-prospect/infrastructure/repository/attendeesProspecttypeOrm.repository';
 
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {

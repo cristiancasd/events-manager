@@ -64,7 +64,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
         id: attendeeUserSaved.userCommerce.id,
         name: userCommerce.name,
         phone: userCommerce.phone,
-        commerceUserId: attendeeUserSaved.userCommerce.id,
         levelUid: attendeeUserSaved.event.id
       })
     });
@@ -89,8 +88,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
       .andWhere('event.id = :eventUid', {
         eventUid
       });
-    const algo = await queryBuilder.getMany();
-    console.log('algo***+', algo.length);
     const attendeeUser = await queryBuilder.getOne();
 
     if (!attendeeUser)
@@ -110,7 +107,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
         id: attendeeUser.userCommerce.id,
         name: userCommerce.name,
         phone: userCommerce.phone,
-        commerceUserId: attendeeUser.userCommerce.id,
         levelUid: attendeeUser.event.id
       })
     });
@@ -146,7 +142,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
           id: attendeesUser.userCommerce.id,
           name: attendeesUser.userCommerce.user.name,
           phone: attendeesUser.userCommerce.user.phone,
-          commerceUserId: attendeesUser.userCommerce.id,
           levelUid: attendeesUser.userCommerce.level.id
         })
       });
@@ -186,7 +181,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
             id: attendeeUser.userCommerce.id,
             name: attendeeUser.userCommerce.user.name,
             phone: attendeeUser.userCommerce.user.phone,
-            commerceUserId: attendeeUser.userCommerce.id,
             levelUid: attendeeUser.userCommerce.level.id
           })
         });

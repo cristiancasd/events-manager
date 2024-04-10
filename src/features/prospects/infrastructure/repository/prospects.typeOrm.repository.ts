@@ -88,7 +88,7 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
     const queryBuilder = prospectRepository
       .createQueryBuilder('prospect')
       .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
-      .where('prospect.id = :id', { prospectUid });
+      .where('prospect.id = :prospectUid', { prospectUid });
 
     const prospect = await queryBuilder.getOne();
 
@@ -97,6 +97,7 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
         errorMessageProspectNotFound,
         codeProspectNotFound
       );
+
     return new ProspectValue({
       ...prospect,
       userCommerceUid: prospect.userCommerce.id
@@ -111,7 +112,7 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
     const queryBuilder = prospectRepository
       .createQueryBuilder('prospect')
       .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
-      .where('prospect.userCommerce.id = :userCommerceUid', {
+      .where('userCommerce.id = :userCommerceUid', {
         userCommerceUid
       });
 

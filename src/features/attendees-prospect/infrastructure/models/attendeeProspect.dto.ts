@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.dto';
 import { ProspectTypeORMEntity } from '../../../prospects';
 
-@Entity('attendeeUser')
+@Entity('attendeeProspect')
 export class AttendeeProspectTypeORMEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
