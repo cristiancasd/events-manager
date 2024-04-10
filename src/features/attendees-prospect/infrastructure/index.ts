@@ -1,1 +1,2 @@
-export { AttendeeUserTypeORMEntity } from './models/attendeeProspect.dto';
+export { AttendeeProspectTypeORMEntity } from './models/attendeeProspect.dto';
+export { AttendeesProspectUseCase } from '../application/attendeesUser.useCase';

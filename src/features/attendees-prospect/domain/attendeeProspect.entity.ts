@@ -1,4 +1,4 @@
-import { AttendeeProspectBasicDataEntity } from "./attendeeProspectBasicData.entity";
+import { AttendeeProspectBasicDataEntity } from './attendeeProspectBasicData.entity';
 
 export interface AttendeeProspectEntity {
   id: string;

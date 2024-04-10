@@ -48,7 +48,10 @@ export class ProspectTypeORMEntity {
   )
   userCommerce!: UserCommerceTypeORMEntity;
 
-  @OneToMany(() => AttendeeProspectTypeORMEntity, (attendee) => attendee.prospect)
+  @OneToMany(
+    () => AttendeeProspectTypeORMEntity,
+    (attendee) => attendee.prospect
+  )
   attendeesProspect!: AttendeeProspectTypeORMEntity[];
 
   @BeforeInsert()

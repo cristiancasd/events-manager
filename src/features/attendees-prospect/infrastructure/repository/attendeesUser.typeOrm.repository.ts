@@ -10,11 +10,17 @@ import {
 import { connectDB } from '../../../../database';
 import { EventsUseCase } from '../../../events';
 import { ProspectEntity, ProspectsUseCase } from '../../../prospects';
-import { AttendeeProspectBasicDataValue, AttendeeProspectEntity, AttendeeProspectRepository, AttendeeProspectValue } from '../../domain';
+import {
+  AttendeeProspectBasicDataValue,
+  AttendeeProspectEntity,
+  AttendeeProspectRepository,
+  AttendeeProspectValue
+} from '../../domain';
 import { AttendeeProspectTypeORMEntity } from '../models/attendeeProspect.dto';
 
-
-export class AttendeeProspectRepositoryImpl implements AttendeeProspectRepository {
+export class AttendeeProspectRepositoryImpl
+  implements AttendeeProspectRepository
+{
   constructor(
     private readonly eventUseCase: EventsUseCase,
     private readonly prospectUseCase: ProspectsUseCase
@@ -23,16 +29,14 @@ export class AttendeeProspectRepositoryImpl implements AttendeeProspectRepositor
   @errorHandlerTypeOrm
   async registerAttendeeProspect(
     eventUid: string,
-    prospectUid: string,
-    userCommerceUid: string,
+    prospectUid: string
   ): Promise<AttendeeProspectEntity> {
     const attendeeProspectRepository = connectDB.getRepository(
       AttendeeProspectTypeORMEntity
     );
 
-    const prospect: ProspectEntity = await this.prospectUseCase.findProspectByUid(
-      prospectUid
-    );
+    const prospect: ProspectEntity =
+      await this.prospectUseCase.findProspectByUid(prospectUid);
 
     const event = await this.eventUseCase.findEventByUid(eventUid);
 
@@ -44,8 +48,8 @@ export class AttendeeProspectRepositoryImpl implements AttendeeProspectRepositor
 
     // Create attendee DB
     const attendeeProspect = attendeeProspectRepository.create({
-      prospect,
-      event
+      prospect: { id: prospectUid },
+      event: { id: eventUid }
     });
 
     // Save on DB
@@ -61,8 +65,7 @@ export class AttendeeProspectRepositoryImpl implements AttendeeProspectRepositor
         id: attendeeProspectSaved.prospect.id,
         name: prospect.name,
         phone: prospect.phone,
-        prospectUid: attendeeProspectSaved.prospect.id,
-        userCommerceUid: attendeeProspectSaved.prospect.userCommerce.id,
+        userCommerceUid: attendeeProspectSaved.prospect.userCommerce.id
       })
     });
   }
@@ -94,25 +97,20 @@ export class AttendeeProspectRepositoryImpl implements AttendeeProspectRepositor
         codeAttendeeNotFound
       );
 
-      const prospect: ProspectEntity = await this.prospectUseCase.findProspectByUid(
-        prospectUid
-      );
-
     return new AttendeeProspectValue({
       id: attendeeProspect.id,
       eventUid: attendeeProspect.event.id,
       prospectData: new AttendeeProspectBasicDataValue({
         id: attendeeProspect.prospect.id,
-        name: prospect.name,
-        phone: prospect.phone,
-        prospectUid: attendeeProspect.prospect.id,
+        name: attendeeProspect.prospect.name,
+        phone: attendeeProspect.prospect.phone,
         userCommerceUid: attendeeProspect.prospect.id
       })
     });
   }
 
   @errorHandlerTypeOrm
-  async getAttendeesUserByEvent(
+  async getAttendeesProspectByEvent(
     eventUid: string
   ): Promise<AttendeeProspectEntity[]> {
     const attendeeProspectRepository = connectDB.getRepository(
@@ -122,45 +120,34 @@ export class AttendeeProspectRepositoryImpl implements AttendeeProspectRepositor
     const queryBuilder = attendeeProspectRepository
       .createQueryBuilder('attendeeProspect')
       .leftJoinAndSelect('attendeeProspect.event', 'event')
-      .leftJoinAndSelect('attendeeProspect.userCommerce', 'userCommerce')
-      .leftJoinAndSelect('userCommerce.user', 'user')
-      .leftJoinAndSelect('userCommerce.level', 'level')
-
+      .leftJoinAndSelect('attendeeProspect.prospect', 'prospect')
       .where('event.id = :eventUid', {
         eventUid
       });
-    const attendeesUser = await queryBuilder.getMany();
+    const attendeesProspect = await queryBuilder.getMany();
 
-    
-    
     const attendeeProspectArray: AttendeeProspectEntity[] = [];
 
-    attendeesUser.forEach((attendeesUser) => {
-
-    
-
-      const attendeesUserEntity = new AttendeeProspectValue({
-        id: attendeesUser.id,
-        eventUid: attendeesUser.event.id,
-        userData: new AttendeeProspectBasicDataValue({
-          id: attendeesUser.userCommerce.id,
-          name: attendeesUser.userCommerce.user.name,
-          phone: attendeesUser.userCommerce.user.phone,
-          commerceUserId: attendeesUser.userCommerce.id,
-          levelUid: attendeesUser.userCommerce.level.id
+    attendeesProspect.forEach((attendeeProspect) => {
+      const attendeesProspectEntity = new AttendeeProspectValue({
+        id: attendeeProspect.id,
+        eventUid: attendeeProspect.event.id,
+        prospectData: new AttendeeProspectBasicDataValue({
+          id: attendeeProspect.prospect.id,
+          name: attendeeProspect.prospect.name,
+          phone: attendeeProspect.prospect.phone,
+          userCommerceUid: attendeeProspect.prospect.userCommerce.id
         })
       });
-      attendeeProspectArray.push(attendeesUserEntity);
-
-     
+      attendeeProspectArray.push(attendeesProspectEntity);
     });
     return attendeeProspectArray;
   }
 
   @errorHandlerTypeOrm
-  async getAttendeesUserByEventAndLevelUid(
+  async getAttendeesProspectByEventAndUserCommerceUid(
     eventUid: string,
-    levelUid: string
+    userCommerceUid: string
   ): Promise<AttendeeProspectEntity[]> {
     const attendeeProspectRepository = connectDB.getRepository(
       AttendeeProspectTypeORMEntity
@@ -169,34 +156,29 @@ export class AttendeeProspectRepositoryImpl implements AttendeeProspectRepositor
     const queryBuilder = attendeeProspectRepository
       .createQueryBuilder('attendeeProspect')
       .leftJoinAndSelect('attendeeProspect.event', 'event')
-      .leftJoinAndSelect('attendeeProspect.userCommerce', 'userCommerce')
-      .leftJoinAndSelect('userCommerce.user', 'user')
-      .leftJoinAndSelect('userCommerce.level', 'level')
-
+      .leftJoinAndSelect('attendeeProspect.prospect', 'prospect')
+      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
       .where('event.id = :eventUid', { eventUid })
-      .andWhere('level.id = :levelUid', { levelUid });
+      .andWhere('userCommerceUid.id = :userCommerceUid', { userCommerceUid });
 
-    
-
-    const attendeesUser = await queryBuilder.getMany();
+    const attendeesProspect = await queryBuilder.getMany();
 
     const attendeeProspectArray: AttendeeProspectEntity[] = [];
-    attendeesUser.forEach((attendeeProspect) => {
-      if (attendeeProspect.userCommerce.level.id == levelUid) {
-        const attendeesUserEntity = new AttendeeProspectValue({
-          id: attendeeProspect.id,
-          eventUid: attendeeProspect.event.id,
-          userData: new AttendeeProspectBasicDataValue({
-            id: attendeeProspect.userCommerce.id,
-            name: attendeeProspect.userCommerce.user.name,
-            phone: attendeeProspect.userCommerce.user.phone,
-            commerceUserId: attendeeProspect.userCommerce.id,
-            levelUid: attendeeProspect.userCommerce.level.id
-          })
-        });
-        attendeeProspectArray.push(attendeesUserEntity);
-      }
+
+    attendeesProspect.forEach((attendeeProspect) => {
+      const attendeesProspectEntity = new AttendeeProspectValue({
+        id: attendeeProspect.id,
+        eventUid: attendeeProspect.event.id,
+        prospectData: new AttendeeProspectBasicDataValue({
+          id: attendeeProspect.prospect.id,
+          name: attendeeProspect.prospect.name,
+          phone: attendeeProspect.prospect.phone,
+          userCommerceUid: attendeeProspect.prospect.userCommerce.id
+        })
+      });
+      attendeeProspectArray.push(attendeesProspectEntity);
     });
+
     return attendeeProspectArray;
   }
 }

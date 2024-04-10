@@ -6,31 +6,32 @@ import {
   errorHandlerUseCase
 } from '../../../core';
 import {
-  AttendeeUserEntity,
-  AttendeeUserRepository,
-  AttendeesUserUseCaseInterface
+  AttendeeProspectEntity,
+  AttendeeProspectRepository,
+  AttendeesProspectUseCaseInterface
 } from '../domain';
 
-export class AttendeesUserUseCase implements AttendeesUserUseCaseInterface {
+export class AttendeesProspectUseCase
+  implements AttendeesProspectUseCaseInterface
+{
   constructor(
-    private readonly _attendeesUserRepository: AttendeeUserRepository
+    private readonly _attendeesProspectRepository: AttendeeProspectRepository
   ) {}
 
   @errorHandlerUseCase
-  async registerAttendeeUser(
+  async registerAttendeeProspect(
     eventUid: string,
-    userCommerceUid: string
-  ): Promise<AttendeeUserEntity> {
+    prospectUid: string
+  ): Promise<AttendeeProspectEntity> {
     try {
-
-      const algo= await this._attendeesUserRepository.findAttendeeByUserCommerceUid(
+      await this._attendeesProspectRepository.findAttendeeByProspectUid(
         eventUid,
-        userCommerceUid
+        prospectUid
       );
     } catch (err) {
-      return await this._attendeesUserRepository.registerAttendeeUser(
+      return await this._attendeesProspectRepository.registerAttendeeProspect(
         eventUid,
-        userCommerceUid
+        prospectUid
       );
     }
     throw new BadRequestError(
@@ -40,22 +41,22 @@ export class AttendeesUserUseCase implements AttendeesUserUseCaseInterface {
   }
 
   @errorHandlerUseCase
-  async getAttendeesUserByEvent(
+  async getAttendeesProspectByEvent(
     eventUid: string
-  ): Promise<AttendeeUserEntity[]> {
-    return await this._attendeesUserRepository.getAttendeesUserByEvent(
+  ): Promise<AttendeeProspectEntity[]> {
+    return await this._attendeesProspectRepository.getAttendeesProspectByEvent(
       eventUid
     );
   }
 
   @errorHandlerUseCase
-  async getAttendeesUserByEventAndLevelUid(
+  async getAttendeesProspectByEventAndUserCommerceUid(
     eventUid: string,
-    levelUid: string
-  ): Promise<AttendeeUserEntity[]> {
-    return await this._attendeesUserRepository.getAttendeesUserByEventAndLevelUid(
+    userCommerceUid: string
+  ): Promise<AttendeeProspectEntity[]> {
+    return await this._attendeesProspectRepository.getAttendeesProspectByEventAndUserCommerceUid(
       eventUid,
-      levelUid
+      userCommerceUid
     );
   }
 }

@@ -11,6 +11,7 @@ export interface ProspectUseCaseInterface {
     commerceUid: string,
     phone: string
   ): Promise<ProspectEntity>;
+  findProspectByUid(prospectUid: string): Promise<ProspectEntity>;
   findProspectsByUserCommerce(
     userCommerceUid: string
   ): Promise<ProspectEntity[]>;

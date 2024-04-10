@@ -2,7 +2,6 @@ import { v4 as uuid } from 'uuid';
 import { AttendeeProspectEntity } from './attendeeProspect.entity';
 import { AttendeeProspectBasicDataEntity } from './attendeeProspectBasicData.entity';
 
-
 export class AttendeeProspectValue implements AttendeeProspectEntity {
   id: string;
   eventUid: string;
