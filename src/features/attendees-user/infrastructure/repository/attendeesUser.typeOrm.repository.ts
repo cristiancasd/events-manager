@@ -64,7 +64,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
         id: attendeeUserSaved.userCommerce.id,
         name: userCommerce.name,
         phone: userCommerce.phone,
-        commerceUserId: attendeeUserSaved.userCommerce.id,
         levelUid: attendeeUserSaved.event.id
       })
     });
@@ -89,8 +88,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
       .andWhere('event.id = :eventUid', {
         eventUid
       });
-      const algo = await queryBuilder.getMany();
-    console.log('algo***+',algo.length);
     const attendeeUser = await queryBuilder.getOne();
 
     if (!attendeeUser)
@@ -99,9 +96,9 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
         codeAttendeeNotFound
       );
 
-      const userCommerce = await this.userCommerceUseCase.findUserByUid(
-        userCommerceUid
-      );
+    const userCommerce = await this.userCommerceUseCase.findUserByUid(
+      userCommerceUid
+    );
 
     return new AttendeeUserValue({
       id: attendeeUser.id,
@@ -110,7 +107,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
         id: attendeeUser.userCommerce.id,
         name: userCommerce.name,
         phone: userCommerce.phone,
-        commerceUserId: attendeeUser.userCommerce.id,
         levelUid: attendeeUser.event.id
       })
     });
@@ -136,14 +132,9 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
       });
     const attendeesUser = await queryBuilder.getMany();
 
-    
-    
     const attendeeUserArray: AttendeeUserEntity[] = [];
 
     attendeesUser.forEach((attendeesUser) => {
-
-    
-
       const attendeesUserEntity = new AttendeeUserValue({
         id: attendeesUser.id,
         eventUid: attendeesUser.event.id,
@@ -151,13 +142,10 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
           id: attendeesUser.userCommerce.id,
           name: attendeesUser.userCommerce.user.name,
           phone: attendeesUser.userCommerce.user.phone,
-          commerceUserId: attendeesUser.userCommerce.id,
           levelUid: attendeesUser.userCommerce.level.id
         })
       });
       attendeeUserArray.push(attendeesUserEntity);
-
-     
     });
     return attendeeUserArray;
   }
@@ -181,8 +169,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
       .where('event.id = :eventUid', { eventUid })
       .andWhere('level.id = :levelUid', { levelUid });
 
-    
-
     const attendeesUser = await queryBuilder.getMany();
 
     const attendeeUserArray: AttendeeUserEntity[] = [];
@@ -195,7 +181,6 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
             id: attendeeUser.userCommerce.id,
             name: attendeeUser.userCommerce.user.name,
             phone: attendeeUser.userCommerce.user.phone,
-            commerceUserId: attendeeUser.userCommerce.id,
             levelUid: attendeeUser.userCommerce.level.id
           })
         });

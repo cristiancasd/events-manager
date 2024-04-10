@@ -53,6 +53,11 @@ export class ProspectsUseCase implements ProspectUseCaseInterface {
   }
 
   @errorHandlerUseCase
+  async findProspectByUid(prospectUid: string): Promise<ProspectEntity> {
+    return await this._prospectRepository.findProspectByUid(prospectUid);
+  }
+
+  @errorHandlerUseCase
   async findProspectsByUserCommerce(
     userCommerceUid: string
   ): Promise<ProspectEntity[]> {

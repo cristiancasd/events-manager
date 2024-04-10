@@ -6,6 +6,7 @@ import { userRoutes } from './features/user/presentation/routes/users.routes';
 import { authRoutes } from './features/auth/presentation/routes/auth.routes';
 import { prospectRoutes } from './features/prospects/presentation/routes/prospects.routes';
 import { attendeesUserRoutes } from './features/attendees-user/presentation/routes/attendeesUser.routes';
+import { attendeesProspectRoutes } from './features/attendees-prospect/presentation/routes/attendeesProspect.routes';
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router.use('/user', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/prospect', prospectRoutes);
 router.use('/attendee/user', attendeesUserRoutes);
+router.use('/attendee/prospect', attendeesProspectRoutes);
 
 export default router;

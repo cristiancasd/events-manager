@@ -82,6 +82,29 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
   }
 
   @errorHandlerTypeOrm
+  async findProspectByUid(prospectUid: string): Promise<ProspectEntity> {
+    const prospectRepository = connectDB.getRepository(ProspectTypeORMEntity);
+
+    const queryBuilder = prospectRepository
+      .createQueryBuilder('prospect')
+      .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
+      .where('prospect.id = :prospectUid', { prospectUid });
+
+    const prospect = await queryBuilder.getOne();
+
+    if (!prospect)
+      throw new NotFoundError(
+        errorMessageProspectNotFound,
+        codeProspectNotFound
+      );
+
+    return new ProspectValue({
+      ...prospect,
+      userCommerceUid: prospect.userCommerce.id
+    });
+  }
+
+  @errorHandlerTypeOrm
   async findProspectsByUserCommerce(
     userCommerceUid: string
   ): Promise<ProspectEntity[]> {
@@ -89,7 +112,7 @@ export class ProspectsTypeORMRepository implements ProspectRepository {
     const queryBuilder = prospectRepository
       .createQueryBuilder('prospect')
       .leftJoinAndSelect('prospect.userCommerce', 'userCommerce')
-      .where('prospect.userCommerce.id = :userCommerceUid', {
+      .where('userCommerce.id = :userCommerceUid', {
         userCommerceUid
       });
 
