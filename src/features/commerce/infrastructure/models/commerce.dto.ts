@@ -14,6 +14,7 @@ import { EventTypeORMEntity } from '../../../events/infrastructure/models/event.
 import { LevelTypeORMEntity } from '../../../levels';
 import { v4 as uuidv4 } from 'uuid';
 import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
+import { TicketTypeORMEntity } from '../../../tickets';
 
 @Entity('commerce')
 export class CommerceTypeORMEntity extends BaseEntity {
@@ -59,6 +60,9 @@ export class CommerceTypeORMEntity extends BaseEntity {
     (userCommerce) => userCommerce.commerce
   )
   usersCommerce!: UserCommerceTypeORMEntity[];
+
+  @OneToMany(() => TicketTypeORMEntity, (ticket) => ticket.commerce)
+  tickets!: TicketTypeORMEntity[];
 
   @OneToMany(() => EventTypeORMEntity, (event) => event.commerce)
   events!: EventTypeORMEntity[];

@@ -6,6 +6,8 @@ export {
   CriteriaOptionsStatus,
   CriteriaOptionsLocation,
   OptionsValidations,
+  errorMessageTicketNotFound,
+  codeTicketNotFound,
   attendeeAlreadyRegisteredMessage,
   codeDbAttendeeAlreadyExist,
   codeAttendeeNotFound,

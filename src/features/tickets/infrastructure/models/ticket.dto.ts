@@ -4,20 +4,15 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  BaseEntity,
-  PrimaryColumn,
   ManyToOne,
-  OneToMany,
   BeforeInsert
 } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
-import { UserTypeORMEntity } from '../../../user/infrastructure/models/users.dto';
-import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { TicketTypeORMEntity } from '../../../tickets';
+import { LevelTypeORMEntity } from '../../../levels';
 
-@Entity('level')
-export class LevelTypeORMEntity {
+@Entity('ticket')
+export class TicketTypeORMEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -25,7 +20,10 @@ export class LevelTypeORMEntity {
   name!: string;
 
   @Column()
-  typeId!: number;
+  presaleFee!: number;
+
+  @Column()
+  saleFee!: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   creationDate?: Date;
@@ -33,21 +31,19 @@ export class LevelTypeORMEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
 
-  @OneToMany(
-    () => UserCommerceTypeORMEntity,
-    (userCommerce) => userCommerce.level
-  )
-  usersCommerce!: UserCommerceTypeORMEntity[];
-
-  @OneToMany(() => TicketTypeORMEntity, (ticket) => ticket.level)
-  tickets!: TicketTypeORMEntity[];
-
-  @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.levels, {
+  @ManyToOne(() => CommerceTypeORMEntity, (commerce) => commerce.tickets, {
     eager: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
   commerce!: CommerceTypeORMEntity;
+
+  @ManyToOne(() => LevelTypeORMEntity, (level) => level.tickets, {
+    eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  level!: LevelTypeORMEntity;
 
   @BeforeInsert()
   async generateUUID() {

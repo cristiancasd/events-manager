@@ -58,7 +58,6 @@ export class TypeOrmLevelRepository implements LevelRepository {
     if (commerce != null) {
       const levelSaved = await levelRepository.save({
         ...newLevel,
-
         commerce: commerce
       });
       return new LevelValue({
