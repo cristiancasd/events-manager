@@ -12,5 +12,4 @@ export interface TicketUseCaseInterface {
   getTicketsByCommerce(commerceUid: string): Promise<TicketEntity[]>;
 
   deleteTicket(ticketUid: string): Promise<void>;
-
 }
