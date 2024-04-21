@@ -64,6 +64,7 @@ export const codeUserNotFound = 804;
 export const codeUserCoreNotFound = 805;
 export const codeProspectNotFound = 806;
 export const codeAttendeeNotFound = 807;
+export const codeTicketNotFound = 808;
 
 // invalid code errors
 export const codeInvalidToken = 901;
@@ -79,6 +80,7 @@ export const errorMessageUserNotFound = 'User not found';
 export const errorMessageUserCoreNotFound = 'User Core not found';
 export const errorMessageProspectNotFound = 'Prospect not found';
 export const errorMessageAttendeeNotFound = 'Attendee not found';
+export const errorMessageTicketNotFound = 'Ticket not found';
 
 // Duplicated messages
 export const duplicatedDataMessage = 'Duplicated data';
@@ -87,26 +89,20 @@ export const duplicatedPhoneMessage = 'Duplicated phone';
 export const duplicatedNameMessage = 'Duplicated name';
 export const duplicatedTypeIdMessage = 'Duplicated typeId';
 export const duplicatedNickMessage = 'Duplicated nick';
-
 export const duplicatedDocumentMessage = 'Duplicated document';
 export const duplicatedCustomCommerceIdMessage = 'Duplicated customCommerceId';
-
 export const attendeeAlreadyRegisteredMessage = 'Attendee already registered';
 
 // Invalid data message
 export const commerceIdInvalidMessage = 'CommerceId invalid';
 export const userCommerceInvalidMessage = 'Invalid userCommerceUid';
-
 export const LevelUidInvalidMessage = 'levelUid invalid';
-export const invalidTokenMessage = 'Token invalido';
-
+export const invalidTokenMessage = 'Invalid Token';
 export const somethingWrongMessage = 'Something went wrong';
 export const mustBeUidMessage = 'must be UID';
-
 export const invalidRoleMessage = 'You role is invalid';
 export const invalidCommerceUidMessage =
   'Invalid commerce UID, you are not authorized';
-
 export const badCredentialsMessage = 'Bad credentials';
 export const inactiveProfileMessage =
   'Your profile has been inactivated, talk with the admin';

@@ -44,6 +44,12 @@ import {
 } from '../features/attendees-prospect';
 import { AttendeesProspectController } from '../features/attendees-prospect/presentation/controllers/attendeesProspect.ctrl';
 import { AttendeeProspectRepositoryImpl } from '../features/attendees-prospect/infrastructure/repository/attendeesProspecttypeOrm.repository';
+import {
+  TicketController,
+  TicketRepository,
+  TicketRepositoryImpl,
+  TicketUseCase
+} from '../features/tickets';
 
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {
@@ -91,6 +97,13 @@ export const configureDependencies = () => {
     attendeeProspectUseCase
   );
 
+  const ticketRepository: TicketRepository = new TicketRepositoryImpl(
+    commerceUseCase,
+    levelUseCase
+  );
+  const ticketUseCase = new TicketUseCase(ticketRepository);
+  const ticketCtrl = new TicketController(ticketUseCase);
+
   return {
     commerceRepository,
     commerceUseCase,
@@ -111,6 +124,8 @@ export const configureDependencies = () => {
     attendeeUserCtrl,
     attendeeUserUseCase,
     attendeeProspectCtrl,
-    attendeeProspectUseCase
+    attendeeProspectUseCase,
+    ticketCtrl,
+    ticketUseCase
   };
 };

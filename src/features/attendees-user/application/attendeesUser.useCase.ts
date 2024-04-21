@@ -22,11 +22,10 @@ export class AttendeesUserUseCase implements AttendeesUserUseCaseInterface {
     userCommerceUid: string
   ): Promise<AttendeeUserEntity> {
     try {
-     
-        await this._attendeesUserRepository.findAttendeeByUserCommerceUid(
-          eventUid,
-          userCommerceUid
-        );
+      await this._attendeesUserRepository.findAttendeeByUserCommerceUid(
+        eventUid,
+        userCommerceUid
+      );
     } catch (err) {
       return await this._attendeesUserRepository.registerAttendeeUser(
         eventUid,
