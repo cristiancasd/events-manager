@@ -41,7 +41,7 @@ export class CommerceTypeORMEntity extends BaseEntity {
   city!: string;
 
   @Column({ type: 'integer' })
-  totalFreePrevent!: number;
+  totalFreePresale!: number;
 
   @Column({ type: 'boolean', nullable: true, default: true })
   isActive!: boolean;

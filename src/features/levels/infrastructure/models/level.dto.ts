@@ -15,6 +15,7 @@ import { UserTypeORMEntity } from '../../../user/infrastructure/models/users.dto
 import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { TicketTypeORMEntity } from '../../../tickets';
+import { UserTicketTypeORMEntity } from '../../../user-ticket';
 
 @Entity('level')
 export class LevelTypeORMEntity {
