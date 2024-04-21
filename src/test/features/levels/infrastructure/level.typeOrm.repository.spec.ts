@@ -6,7 +6,6 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { LevelEntity } from '../../../../features/levels/domain/level.entity';
 
-
 /*const mockCommerceRepository = {
     findByUniqueColumn: jest.fn(),
     createCommerce: jest.fn(),
@@ -19,7 +18,6 @@ import { LevelEntity } from '../../../../features/levels/domain/level.entity';
 
   let mockCommerceUseCase: CommerceUseCase = new CommerceUseCase(mockCommerceRepository);
 */
-  
 
 const mockCommerceUseCase: CommerceUseCase =
   jest.genMockFromModule<CommerceUseCase>('../../../../features');
@@ -95,7 +93,7 @@ describe('createLevel', () => {
     // Mock de la función findComerceByUid del caso de uso de comercio
     jest
       .spyOn(mockCommerceUseCase, 'findComerceByUid')
-      .mockResolvedValueOnce(mockCommerce); 
+      .mockResolvedValueOnce(mockCommerce);
 
     // Mock del nuevo nivel a crear
     const mockLevelData: LevelEntity = {

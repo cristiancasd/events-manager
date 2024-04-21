@@ -43,7 +43,7 @@ export const errorHandlerTypeOrm = (
         throw error;
       }
 
-      console.log('error es ----',error)
+      console.log('error es ----', error);
 
       throw new ServerError();
     }

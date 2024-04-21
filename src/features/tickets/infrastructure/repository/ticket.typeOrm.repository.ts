@@ -32,7 +32,7 @@ export class TicketRepositoryImpl implements TicketRepository {
       data.commerceUid
     );
 
-    const level = await this.levelUseCase.findLevelByUid(data.commerceUid);
+    const level = await this.levelUseCase.findLevelByUid(data.levelUid);
 
     if (commerce.id != level.commerceUid)
       throw new NotFoundError(
@@ -100,6 +100,7 @@ export class TicketRepositoryImpl implements TicketRepository {
     const queryBuilder = ticketRepository
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.commerce', 'commerce')
+      .leftJoinAndSelect('ticket.level', 'level')
       .where('LOWER(ticket.name) = LOWER(:name)', { name })
       .andWhere('commerce.id = :commerceUid', { commerceUid });
 
@@ -121,6 +122,7 @@ export class TicketRepositoryImpl implements TicketRepository {
     const queryBuilder = ticketRepository
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.commerce', 'commerce')
+      .leftJoinAndSelect('ticket.level', 'level')
       .where('commerce.id = :commerceUid', { commerceUid });
 
     const tickets = await queryBuilder.getMany();

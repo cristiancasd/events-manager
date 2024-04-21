@@ -4,15 +4,11 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug TS with ts-node-dev",
+      "name": "events-manager",
       "skipFiles": ["<node_internals>/**"],
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node-dev",
-      "args": ["index.ts"], 
+      "args": ["index.ts"],
       "console": "integratedTerminal"
-      
-   
     }
   ]
 }
-
-
