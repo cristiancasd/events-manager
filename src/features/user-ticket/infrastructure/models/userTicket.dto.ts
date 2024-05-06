@@ -16,7 +16,7 @@ export class UserTicketTypeORMEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ length: 50 })
+  @Column()
   hasPresale!: boolean;
 
   @Column()

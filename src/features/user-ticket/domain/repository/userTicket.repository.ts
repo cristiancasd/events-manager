@@ -7,6 +7,11 @@ export interface UserTicketRepository {
 
   findUserTicketByUid(userTicketUid: string): Promise<UserTicketEntity>;
 
+  findUserTicketByUserAndEvent(
+    userCommerceUid: string,
+    eventUid: string
+  ): Promise<UserTicketEntity>;
+
   getUsersTicketByCommerceAndLevel(
     commerceUid: string,
     levelUid: string

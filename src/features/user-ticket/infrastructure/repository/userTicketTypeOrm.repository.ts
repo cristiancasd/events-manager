@@ -48,11 +48,6 @@ export class UserTicketRepositoryImpl implements UserTicketRepository {
         codeCommerceNotFound
       );
 
-    /*{
-        prospect: { id: prospectUid },
-        event: { id: eventUid }
-      }*/
-
     const newUserTicket = userticketRepository.create({
       ...data,
       userCommerce: { id: data.userCommerceUid },
@@ -61,12 +56,10 @@ export class UserTicketRepositoryImpl implements UserTicketRepository {
 
     const userTicketSaved = await userticketRepository.save(newUserTicket);
 
+    const userTicket = await this.findUserTicketByUid(userTicketSaved.id);
+
     return new UserTicketValue({
-      ...userTicketSaved,
-      userName: userTicketSaved.userCommerce.user.name,
-      levelName: userTicketSaved.userCommerce.level.name,
-      eventUid: userTicketSaved.event.id,
-      userCommerceUid: userTicketSaved.userCommerce.id
+      ...userTicket
     });
   }
 
@@ -90,6 +83,39 @@ export class UserTicketRepositoryImpl implements UserTicketRepository {
 
     return new UserTicketValue({
       ...ticketSaved,
+      userName: userTicketFound.userCommerce.user.name,
+      levelName: userTicketFound.userCommerce.level.name,
+      eventUid: userTicketFound.event.id,
+      userCommerceUid: userTicketFound.userCommerce.id
+    });
+  }
+
+  @errorHandlerTypeOrm
+  async findUserTicketByUserAndEvent(
+    userCommerceUid: string,
+    eventUid: string
+  ): Promise<UserTicketEntity> {
+    const userticketRepository = connectDB.getRepository(
+      UserTicketTypeORMEntity
+    );
+
+    const queryBuilder = userticketRepository
+      .createQueryBuilder('userTicket')
+      .leftJoinAndSelect('userTicket.event', 'event')
+      .leftJoinAndSelect('userTicket.userCommerce', 'userCommerce')
+      .leftJoinAndSelect('userCommerce.commerce', 'commerce')
+      .leftJoinAndSelect('userCommerce.level', 'level')
+      .leftJoinAndSelect('userCommerce.user', 'user')
+      .andWhere('userCommerce.id = :userCommerceUid', { userCommerceUid })
+      .andWhere('event.id = :eventUid', { eventUid });
+
+    const userTicketFound = await queryBuilder.getOne();
+
+    if (!userTicketFound)
+      throw new NotFoundError(errorMessageTicketNotFound, codeTicketNotFound);
+
+    return new UserTicketValue({
+      ...userTicketFound,
       userName: userTicketFound.userCommerce.user.name,
       levelName: userTicketFound.userCommerce.level.name,
       eventUid: userTicketFound.event.id,
@@ -128,14 +154,15 @@ export class UserTicketRepositoryImpl implements UserTicketRepository {
     );
     const queryBuilder = userticketRepository
       .createQueryBuilder('userTicket')
+      .leftJoinAndSelect('userTicket.event', 'event')
       .leftJoinAndSelect('userTicket.userCommerce', 'userCommerce')
       .leftJoinAndSelect('userCommerce.commerce', 'commerce')
       .leftJoinAndSelect('userCommerce.level', 'level')
+      .leftJoinAndSelect('userCommerce.user', 'user')
       .andWhere('level.id = :levelUid', { levelUid })
       .andWhere('commerce.id = :commerceUid', { commerceUid });
 
     const usersTicketFound = await queryBuilder.getMany();
-
     return usersTicketFound.map(
       (data) =>
         new UserTicketValue({
@@ -162,6 +189,6 @@ export class UserTicketRepositoryImpl implements UserTicketRepository {
       );
       return;
     }
-    throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
+    throw new NotFoundError(errorMessageTicketNotFound, codeTicketNotFound);
   }
 }
