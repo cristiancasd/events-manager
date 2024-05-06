@@ -1,10 +1,10 @@
 // start.ts
 import 'dotenv/config';
 import { app } from './src/app';
-import { connectDB } from './src/database';
+import { initializeDb } from './src/database';
 
 const start = async () => {
-  await connectDB.initialize();
+  await initializeDb();
   const port = process.env.PORT || 8070;
 
   app.listen(port, () => {

@@ -29,13 +29,15 @@ const connectDB = new DataSource({
   entities: [path.join(__dirname, modelsFilesRoutes)]
 });
 
-connectDB
-  .initialize()
-  .then(() => {
-    console.log(initializedDbMessage);
-  })
-  .catch((err) => {
-    console.error(initializedDbErrorMessage, err);
-  });
+const initializeDb = async () => {
+  connectDB
+    .initialize()
+    .then(() => {
+      console.log(initializedDbMessage);
+    })
+    .catch((err) => {
+      console.error(initializedDbErrorMessage, err);
+    });
+};
 
-export { connectDB };
+export { connectDB, initializeDb };

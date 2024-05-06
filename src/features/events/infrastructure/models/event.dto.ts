@@ -13,6 +13,7 @@ import { CommerceTypeORMEntity } from '../../../commerce';
 import { v4 as uuidv4 } from 'uuid';
 import { AttendeeUserTypeORMEntity } from '../../../attendees-user';
 import { AttendeeProspectTypeORMEntity } from '../../../attendees-prospect/infrastructure/models/attendeeProspect.dto';
+import { UserTicketTypeORMEntity } from '../../../user-ticket';
 
 @Entity('event')
 export class EventTypeORMEntity {
@@ -50,6 +51,9 @@ export class EventTypeORMEntity {
 
   @OneToMany(() => AttendeeProspectTypeORMEntity, (attendee) => attendee.event)
   attendeesProspect!: AttendeeProspectTypeORMEntity[];
+
+  @OneToMany(() => UserTicketTypeORMEntity, (userTicket) => userTicket.event)
+  usersTicket!: UserTicketTypeORMEntity[];
 
   @BeforeInsert()
   async generateUUID() {

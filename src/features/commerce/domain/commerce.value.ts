@@ -9,7 +9,7 @@ export class CommerceValue implements CommerceEntity {
   email: string;
   countryCode: string;
   city: string;
-  totalFreePrevent: number;
+  totalFreePresale: number;
   isActive: boolean;
   dateFinish: string;
 
@@ -21,7 +21,7 @@ export class CommerceValue implements CommerceEntity {
     email,
     countryCode,
     city,
-    totalFreePrevent,
+    totalFreePresale,
     isActive,
     dateFinish
   }: {
@@ -32,7 +32,7 @@ export class CommerceValue implements CommerceEntity {
     email: string;
     countryCode: string;
     city: string;
-    totalFreePrevent: number;
+    totalFreePresale: number;
     isActive: boolean;
     dateFinish: string;
   }) {
@@ -43,7 +43,7 @@ export class CommerceValue implements CommerceEntity {
     this.email = email;
     this.countryCode = countryCode;
     this.city = city;
-    this.totalFreePrevent = totalFreePrevent;
+    this.totalFreePresale = totalFreePresale;
     this.isActive = isActive;
     this.dateFinish = dateFinish;
   }

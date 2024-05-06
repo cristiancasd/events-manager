@@ -34,7 +34,7 @@ const mockCommerce: CommerceEntity = {
   name: '',
   nick: '',
   phone: '',
-  totalFreePrevent: 1
+  totalFreePresale: 1
 };
 
 describe('TypeOrmLevelRepository - findLevelByName', () => {

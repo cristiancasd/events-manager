@@ -131,6 +131,7 @@ export class TypeOrmUserRepository implements UserRepository {
     const userCommerceRepository = connectDB.getRepository(
       UserCommerceTypeORMEntity
     );
+
     const commerce = await this.commerceUseCase.findComerceByUid(
       data.commerceUid
     );
@@ -173,6 +174,8 @@ export class TypeOrmUserRepository implements UserRepository {
       UserCommerceTypeORMEntity
     );
 
+    const user = await this.findUserByEmail(data.email);
+
     const commerce = await this.commerceUseCase.findComerceByUid(
       data.commerceUid
     );
@@ -188,7 +191,8 @@ export class TypeOrmUserRepository implements UserRepository {
       ...data,
       password: bcrypt.hashSync(data.password, 10),
       commerce,
-      level
+      level,
+      user
     });
 
     // Save on DB
@@ -196,7 +200,8 @@ export class TypeOrmUserRepository implements UserRepository {
       await userCommerceRepository.save({
         ...newUserCommerce,
         commerce: commerce,
-        level: level
+        level: level,
+        user: user
       });
 
     return new UserCommerceValue({

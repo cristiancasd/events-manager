@@ -50,6 +50,12 @@ import {
   TicketRepositoryImpl,
   TicketUseCase
 } from '../features/tickets';
+import {
+  UserTicketController,
+  UserTicketRepository,
+  UserTicketRepositoryImpl,
+  UserTicketUseCase
+} from '../features/user-ticket';
 
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {
@@ -104,6 +110,11 @@ export const configureDependencies = () => {
   const ticketUseCase = new TicketUseCase(ticketRepository);
   const ticketCtrl = new TicketController(ticketUseCase);
 
+  const userTicketRepository: UserTicketRepository =
+    new UserTicketRepositoryImpl(userUseCase, eventsUseCase);
+  const userTicketUseCase = new UserTicketUseCase(userTicketRepository);
+  const userTicketCtrl = new UserTicketController(userTicketUseCase);
+
   return {
     commerceRepository,
     commerceUseCase,
@@ -126,6 +137,8 @@ export const configureDependencies = () => {
     attendeeProspectCtrl,
     attendeeProspectUseCase,
     ticketCtrl,
-    ticketUseCase
+    ticketUseCase,
+    userTicketCtrl,
+    userTicketUseCase
   };
 };

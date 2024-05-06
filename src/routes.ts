@@ -7,6 +7,7 @@ import { prospectRoutes } from './features/prospects/presentation/routes/prospec
 import { attendeesUserRoutes } from './features/attendees-user/presentation/routes/attendeesUser.routes';
 import { attendeesProspectRoutes } from './features/attendees-prospect/presentation/routes/attendeesProspect.routes';
 import { ticketRoutes } from './features/tickets/presentation/routes/ticket.routes';
+import { userTicketRoutes } from './features/user-ticket/presentation/routes/userTicket.routes';
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use('/prospect', prospectRoutes);
 router.use('/attendee/user', attendeesUserRoutes);
 router.use('/attendee/prospect', attendeesProspectRoutes);
 router.use('/ticket', ticketRoutes);
+router.use('/ticket/user', userTicketRoutes);
 
 export default router;

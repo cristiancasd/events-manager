@@ -7,6 +7,7 @@
     "start": "cross-env NODE_ENV=production ts-node-dev index.ts",
     "start:dev": "cross-env NODE_ENV=development ts-node-dev index.ts",
     "test": " cross-env NODE_ENV=test jest --watchAll --no-cache --detectOpenHandles",
+    "customtest": "cross-env NODE_ENV=test jest  --no-cache --detectOpenHandles",
     "testcriss": "  cross-env NODE_ENV=test  jest --verbose --silent -no-cache --detectOpenHandles",
     "test:ci": "  cross-env NODE_ENV=test jest --maxWorkers=2 --no-cache --detectOpenHandles",
     "format": "npx prettier --write ."

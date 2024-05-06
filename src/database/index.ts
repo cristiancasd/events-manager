@@ -1,1 +1,1 @@
-export { connectDB } from './typeorm.connection';
+export { connectDB, initializeDb } from './typeorm.connection';

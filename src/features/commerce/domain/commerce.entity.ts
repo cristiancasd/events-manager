@@ -6,7 +6,7 @@ export interface CommerceEntity {
   email: string;
   countryCode: string;
   city: string;
-  totalFreePrevent: number;
+  totalFreePresale: number;
   isActive: boolean;
   dateFinish: string;
 }
