@@ -16,20 +16,39 @@ export class EventsUseCase implements EventsUseCaseInterface {
   @errorHandlerUseCase
   async validateDuplicatedData(
     commerceUid: string,
-    data: string
-  ): Promise<boolean> {
-    const result = await this._eventsRepository.findEventByName(
-      commerceUid,
-      data
-    );
+    data: string,
+    id: string | undefined,
+    isEditRequest: boolean
 
-    return result ? true : false;
+  ): Promise<boolean> {
+
+    try{
+      const result = await this._eventsRepository.findEventByName(
+        commerceUid,
+        data
+      );
+  
+      return !isEditRequest ? true : result.id==id ? false: true;
+      
+    }catch(err){
+      if (!(err instanceof NotFoundError)) {
+        throw err;
+      }
+      return false;
+    }
+   
   }
 
   @errorHandlerUseCase
   async createEvent(input: EventEntity): Promise<EventEntity> {
     const eventValue = new EventValue(input);
     return await this._eventsRepository.createEvent(eventValue);
+  }
+
+  @errorHandlerUseCase
+  async editEvent(input: EventEntity): Promise<EventEntity> {
+    const eventValue = new EventValue(input);
+    return await this._eventsRepository.editEvent(eventValue);
   }
 
   @errorHandlerUseCase

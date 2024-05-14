@@ -10,6 +10,12 @@ export class EventsController {
     res.status(201).send(event);
   };
 
+  public editCtrl = async (req: Request, res: Response) => {
+    const body = req.body;
+    const event = await this.eventsUseCase.editEvent(body);
+    res.status(200).send(event);
+  };
+
   public deleteCtrl = async (req: Request, res: Response) => {
     const { eventId } = req.params;
     const result = await this.eventsUseCase.deleteEventByUid(eventId);

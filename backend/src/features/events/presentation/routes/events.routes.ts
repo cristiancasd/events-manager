@@ -5,6 +5,7 @@ import { configureDependencies } from '../../../../config';
 import { checkEventNameMiddleware } from '../middelwares/db.middelwares';
 import {
   validateCreateEventBody,
+  validateEditEventBody,
   validateFindEvents
 } from './events.validations';
 import {
@@ -29,6 +30,19 @@ eventsRoutes.post(
   ],
   validateRequest,
   eventsCtrl.insertCtrl
+);
+
+eventsRoutes.put(
+  `/edit`,
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateEditEventBody,
+    checkEventNameMiddleware
+  ],
+  validateRequest,
+  eventsCtrl.editCtrl
 );
 
 /// Delete Event

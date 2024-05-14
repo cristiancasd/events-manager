@@ -3,7 +3,9 @@ import {
   errorHandlerTypeOrm,
   ServerError,
   codeCommerceNotFound,
-  errorMessageCommerceNotFound
+  errorMessageCommerceNotFound,
+  DataBaseError,
+  errorMsgDb
 } from '../../../../core';
 
 import { connectDB } from '../../../../database';
@@ -23,15 +25,17 @@ export class TypeOrmEventRepository implements EventsRepository {
   async findEventByName(
     commerceUid: string,
     name: string
-  ): Promise<EventEntity | null> {
+  ): Promise<EventEntity > {
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
     const queryBuilder = eventRepository
       .createQueryBuilder('event')
       .where('event.commerce.id = :commerceUid', { commerceUid })
       .andWhere('event.name = :name', { name });
     const event = await queryBuilder.getOne();
-    if (event) return { ...event, commerceUid };
-    return null;
+    if (!event)
+      throw new NotFoundError(errorMessageEventNotFound, codeEventNotFound);
+
+    return { ...event, commerceUid };
   }
 
   @errorHandlerTypeOrm
@@ -59,6 +63,33 @@ export class TypeOrmEventRepository implements EventsRepository {
       });
     }
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
+  }
+
+
+  @errorHandlerTypeOrm
+  async editEvent(data: EventEntity): Promise<EventEntity> {
+
+    const eventRepository = connectDB.getRepository(EventTypeORMEntity);
+    const eventFound = await eventRepository.findOneBy({ id: data.id });
+    if (!eventFound)
+      throw new NotFoundError(errorMessageEventNotFound, codeEventNotFound);
+
+    console.log('*****eventFound', eventFound)
+    console.log('*****dataInput', data)
+
+    const eventSaved = await eventRepository.save({
+      ...eventFound,
+      ...data
+    });
+
+    console.log('*****eventSaved', eventSaved)
+
+    if (!eventSaved) throw new DataBaseError(errorMsgDb);
+    return new EventValue({
+      ...eventSaved,
+      commerceUid: eventSaved.commerce.id
+    });
+
   }
 
   @errorHandlerTypeOrm
@@ -111,7 +142,6 @@ export class TypeOrmEventRepository implements EventsRepository {
       queryBuilder.andWhere('event.date <= :finishDate', { finishDate });
     }
     const events = await queryBuilder.getMany();
-    console.log('**************events---', events)
     const eventsEntityArray: EventEntity[] = events.map((data) => {
       const { commerce, ...resto } = data;
       return { ...resto, commerceUid: data.commerce?.id ?? '' };

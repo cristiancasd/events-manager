@@ -50,7 +50,7 @@ export const LoginPage = () => {
 
         <Grid item xs={12} md={6} backgroundColor="blac">
           <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
-            {<LoginForm onSubmit={onSubmit} title="Sales Counter" />}
+            {<LoginForm onSubmit={onSubmit} title="Login" />}
           </Grid>
         </Grid>
       </Grid>

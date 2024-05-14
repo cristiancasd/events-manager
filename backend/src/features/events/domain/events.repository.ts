@@ -5,8 +5,9 @@ export interface EventsRepository {
   findEventByName(
     commerceUid: string,
     name: string
-  ): Promise<EventEntity | null>;
+  ): Promise<EventEntity>;
   createEvent(event: EventEntity): Promise<EventEntity>;
+  editEvent(event: EventEntity): Promise<EventEntity>;
   deleteEvent(uid: string): Promise<boolean>;
   findEventById(uid: string): Promise<EventEntity>;
   findEventsByCommerce(

@@ -1,20 +1,69 @@
 import { backendApi } from '../../api';
-import { setEventViewSelected, setNextEvent, setEvents  } from './eventsSlice';
-import { getEventPath } from './constants';
-import { setErrorMessage, setIsFetching } from '../common';
+import { setEventViewSelected, setNextEvent, setEvents, addEvent, editEventById  } from './eventsSlice';
+import { createEventPath, getEventPath, editEventPath } from './constants';
+import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { findNextEvent } from './utils/findNextEvent';
+import { normalizeEventsArray } from './utils/normalizeEventsArray';
 
 export const getEventsList = ({ commerceUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
     try {
-      const { data: eventsList } = await backendApi.get(getEventPath(commerceUid));
+      const { data } = await backendApi.get(getEventPath(commerceUid));
 
-
+      const eventsList= normalizeEventsArray(data)
       const nextEvent=findNextEvent(eventsList);
-      
+
       dispatch(setEvents(eventsList));
       dispatch(setNextEvent(nextEvent));
+
+    } catch (error) {
+      console.log(error);
+      const message = existError(error);
+      dispatch(setErrorMessage(message));
+      setTimeout(() => {
+        dispatch(setErrorMessage(undefined));
+      }, 10);
+    }
+    dispatch(setIsFetching(false));
+
+  };
+};
+
+
+export const createEvent = (eventData) => {
+  return async (dispatch) => {
+    dispatch(setIsFetching(true));
+    try {
+      const { data } = await backendApi.post(createEventPath,eventData);
+
+      const eventsList= normalizeEventsArray([data])
+      dispatch(addEvent(eventsList))
+
+    } catch (error) {
+      console.log(error);
+      const message = existError(error);
+      dispatch(setErrorMessage(message));
+      setTimeout(() => {
+        dispatch(setErrorMessage(undefined));
+      }, 10);
+    }
+    dispatch(setIsFetching(false));
+
+  };
+};
+
+export const editEvent = (eventData) => {
+  return async (dispatch) => {
+    dispatch(setIsFetching(true));
+    try {
+      const { data } = await backendApi.put(editEventPath, eventData);
+      const eventsList= normalizeEventsArray([data])
+      dispatch(editEventById(eventsList))
+      dispatch(setSuccessMessage('Evento editado'));
+      setTimeout(() => {
+        dispatch(setSuccessMessage(undefined));
+      }, 10);
 
     } catch (error) {
       console.log(error);

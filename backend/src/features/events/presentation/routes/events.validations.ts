@@ -11,6 +11,11 @@ export const validateCreateEventBody: ValidationChain[] = [
   body('commerceUid').isUUID().withMessage('commerceUid must be UUID')
 ];
 
+export const validateEditEventBody: ValidationChain[] = [
+  ...validateCreateEventBody,
+  body('id').isUUID().withMessage('id must be UUID')
+];
+
 export const validateFindEvents: ValidationChain[] = [
   query('finishDate')
     .optional()
