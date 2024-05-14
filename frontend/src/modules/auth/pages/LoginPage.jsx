@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { startLogin } from '../../../store';
 
 export const LoginPage = () => {
+  console.log('estoy en Login Page');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

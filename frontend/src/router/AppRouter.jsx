@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { CheckingAuth } from '../shared/index';
 import { checkToken } from '../store';
-import { AuthRoutes, HomeRoutes, SplashPage } from '../modules';
+import { AuthRoutes, EventsRoutes, HomeRoutes, SplashPage } from '../modules';
 
 export const AppRouter = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
   const { status, user } = useSelector((state) => state.auth);
   useEffect(() => {
     console.log('estoy en AppRouter');
@@ -16,23 +19,31 @@ export const AppRouter = () => {
     }
   }, []);
 
+
+
   useEffect(() => {
-    console.log('************status',status)
+    if (status=='not-authenticated') navigate('/auth');
+  }, [status]);
+
+
+
+  useEffect(() => {
+    console.log('************status', status);
   }, [status]);
 
   if (status === 'checking') {
     return <CheckingAuth />;
   }
+  console.log('checking ok')
 
   return (
-    <Routes>
+  
 
-      {status === 'not-authenticated'
-        ? <Route path="/*" element={<AuthRoutes />} />
-        : status === 'authenticated'
-          ? <Route path="/*" element={<HomeRoutes />} />
-          : <Route path="/*" element={<SplashPage />} />
-      }
-    </Routes>
+    < Routes >
+      <Route path="/auth/*" element={<AuthRoutes />} />
+      <Route path="/home/*" element={<HomeRoutes />} />
+      <Route path="/events/*" element={<EventsRoutes />} />
+      <Route path="/*" element={<SplashPage />} />
+    </Routes >
   );
 };

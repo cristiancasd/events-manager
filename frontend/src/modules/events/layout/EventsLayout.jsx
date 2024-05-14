@@ -1,7 +1,7 @@
 import { Grid, IconButton, Toolbar, Typography, Box } from '@mui/material';
-import { Navbar } from '../components/Navbar';
+import { EventsNavbar } from '../components/EventsNavbar';
 
-export const CommonLayout = ({ children, title = '' }) => {
+export const EventsLayout = ({ children, title = '' }) => {
   return (
     <Box
       sx={{
@@ -11,7 +11,7 @@ export const CommonLayout = ({ children, title = '' }) => {
         backgroundColor: 'yello',
       }}
     >
-      <Navbar />
+      <EventsNavbar />
       <Toolbar />
 
       <Grid

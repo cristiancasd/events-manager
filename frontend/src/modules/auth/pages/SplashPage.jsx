@@ -1,8 +1,26 @@
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+
+
 import { CircularProgress, Grid } from '@mui/material';
 import React from 'react';
 
 export const SplashPage = ({ message = '' }) => {
-  console.log('estoy en splash page')
+  console.log('estoy en splash page');
+
+  const { status } = useSelector((state) => state.auth);
+
+
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    if (status=='authenticated') navigate('/home');
+    if (status=='not-authenticated') navigate('/auth');
+  }, [status]);
+
+
   return (
     <>
       <Grid

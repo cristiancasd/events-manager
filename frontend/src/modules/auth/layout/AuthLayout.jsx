@@ -28,7 +28,7 @@ export const AuthLayout = ({ children, title = '' }) => {
         >
           <Grid container backgroundColor="yello" justifyContent="center" alignItems="center">
             {
-            //width: { xs: 330, sm: 600, md: 700, lg: 700 },
+              //width: { xs: 330, sm: 600, md: 700, lg: 700 },
 
               <Grid container maxWidth="1000px" backgroundColor="gree">
                 <Typography variant="h5" sx={{ mb: 1 }}>

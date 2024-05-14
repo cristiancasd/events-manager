@@ -111,6 +111,7 @@ export class TypeOrmEventRepository implements EventsRepository {
       queryBuilder.andWhere('event.date <= :finishDate', { finishDate });
     }
     const events = await queryBuilder.getMany();
+    console.log('**************events---', events)
     const eventsEntityArray: EventEntity[] = events.map((data) => {
       const { commerce, ...resto } = data;
       return { ...resto, commerceUid: data.commerce?.id ?? '' };

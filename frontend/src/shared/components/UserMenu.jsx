@@ -51,16 +51,18 @@ export const UserMenu = () => {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          <Typography textAlign='right' paddingRight={2}>
+          <Typography textAlign="right" paddingRight={2}>
             {user.commerceName}
           </Typography>
-          <Typography textAlign='right' paddingRight={2}  gutterBottom sx={{ p: 1 }}>
+          <Typography textAlign="right" paddingRight={2} gutterBottom sx={{ p: 1 }}>
             {user.userName}
           </Typography>
           <Divider />
-          
+
           <MenuItem key="logout" onClick={logout}>
-            <Typography width={'100%'} textAlign="center" gutterBottom sx={{ width:200}}>Logout</Typography>
+            <Typography width={'100%'} textAlign="center" gutterBottom sx={{ width: 200 }}>
+              Logout
+            </Typography>
           </MenuItem>
         </Menu>
       )}

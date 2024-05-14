@@ -1,20 +1,12 @@
 import { Grid, Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 
-export const CardComponent = ({ imagePath, title, description }) => {
+export const CardComponent = ({ imagePath, title, description, onClick }) => {
   return (
-
     <Grid container justifyContent="center" alignItems="center">
-
       <Grid item alignSelf="center">
-
-        <Card sx={{ maxWidth: {xs:300, sm:345} }}>
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height={110}
-              image={imagePath}
-              alt="iamge"
-            />
+        <Card sx={{ maxWidth: { xs: 300, sm: 345 } }}>
+          <CardActionArea onClick={onClick}>
+            <CardMedia component="img" height={110} image={imagePath} alt="iamge" />
             <CardContent>
               <Typography gutterBottom variant="h6" component="div">
                 {title}
@@ -27,7 +19,5 @@ export const CardComponent = ({ imagePath, title, description }) => {
         </Card>
       </Grid>
     </Grid>
-
-
-  )
-}
+  );
+};

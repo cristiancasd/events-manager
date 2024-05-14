@@ -1,35 +1,35 @@
 import { backendApi } from '../../api';
-import { checkingCredentials, onLogin, onLogout, setErrorMessageAuth } from './authSlice';
-import { loginPath } from './constants';
+import { setEventViewSelected, setNextEvent, setEvents  } from './eventsSlice';
+import { getEventPath } from './constants';
+import { setErrorMessage, setIsFetching } from '../common';
+import { findNextEvent } from './utils/findNextEvent';
 
-export const startLogin = ({ email, password, nickCommerce }) => {
+export const getEventsList = ({ commerceUid }) => {
   return async (dispatch) => {
-    dispatch(checkingCredentials());
+    dispatch(setIsFetching(true));
     try {
-      const credentials = {
-        nick: nickCommerce,
-        email,
-        password,
-      };
+      const { data: eventsList } = await backendApi.get(getEventPath(commerceUid));
 
-      const { data: dataLogin } = await backendApi.post(loginPath, credentials);
-      localStorage.setItem('token', dataLogin.token);
-      localStorage.setItem('refreshToken', dataLogin.refreshToken);
-      const { data: dataUser } = await backendApi.get(`user/me`);
-      dispatch(onLogin(dataUser));
+
+      const nextEvent=findNextEvent(eventsList);
+      
+      dispatch(setEvents(eventsList));
+      dispatch(setNextEvent(nextEvent));
+
     } catch (error) {
       console.log(error);
-      dispatch(onLogout());
       const message = existError(error);
-      dispatch(setErrorMessageAuth(message));
+      dispatch(setErrorMessage(message));
       setTimeout(() => {
-        dispatch(setErrorMessageAuth(undefined));
+        dispatch(setErrorMessage(undefined));
       }, 10);
     }
+    dispatch(setIsFetching(false));
+
   };
 };
 
-export const checkToken = () => {
+/*export const checkToken = () => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('token');
@@ -59,7 +59,7 @@ export const startLogout = () => {
     localStorage.clear();
     dispatch(onLogout());
   };
-};
+};*/
 
 const existError = (error, email = '') => {
   //console.log('el error users es ', error)
