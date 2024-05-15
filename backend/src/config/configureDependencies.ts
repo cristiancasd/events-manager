@@ -56,6 +56,7 @@ import {
   UserTicketRepositoryImpl,
   UserTicketUseCase
 } from '../features/user-ticket';
+import { SeedController, SeedUseCase } from '../features/seed';
 
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {
@@ -122,6 +123,23 @@ export const configureDependencies = () => {
   const userTicketUseCase = new UserTicketUseCase(userTicketRepository);
   const userTicketCtrl = new UserTicketController(userTicketUseCase);
 
+  const seedUseCase = new SeedUseCase(
+    authUseCase,
+    commerceUseCase,
+    eventsUseCase,
+    levelUseCase,
+    userUseCase,
+    prospectsUseCase,
+    attendeeUserUseCase,
+    attendeeProspectUseCase,
+    ticketUseCase,
+    userTicketUseCase,
+  );
+
+  const seedCtrl = new SeedController(seedUseCase);
+
+
+
   return {
     commerceRepository,
     commerceUseCase,
@@ -146,6 +164,8 @@ export const configureDependencies = () => {
     ticketCtrl,
     ticketUseCase,
     userTicketCtrl,
-    userTicketUseCase
+    userTicketUseCase,
+    seedCtrl,
+    seedUseCase,
   };
 };

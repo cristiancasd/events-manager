@@ -8,10 +8,12 @@ import { attendeesUserRoutes } from './features/attendees-user/presentation/rout
 import { attendeesProspectRoutes } from './features/attendees-prospect/presentation/routes/attendeesProspect.routes';
 import { ticketRoutes } from './features/tickets/presentation/routes/ticket.routes';
 import { userTicketRoutes } from './features/user-ticket/presentation/routes/userTicket.routes';
+import { seedRoutes } from './features/seed/presentation/routes/seed.routes';
 
 const router = Router();
 
 // Feature routes
+router.use('/seed', seedRoutes);
 router.use('/commerce', commerceRoutes);
 router.use('/event', eventsRoutes);
 router.use('/level', levelRoutes);

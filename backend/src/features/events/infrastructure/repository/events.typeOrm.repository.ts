@@ -42,7 +42,8 @@ export class TypeOrmEventRepository implements EventsRepository {
   async createEvent(data: EventEntity): Promise<EventEntity> {
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
-    const newEvent = eventRepository.create(data);
+    const {id, ...resto}=data;
+    const newEvent = eventRepository.create(resto);
     const commerce = await commerceRepository.findOneBy({
       id: data.commerceUid
     });

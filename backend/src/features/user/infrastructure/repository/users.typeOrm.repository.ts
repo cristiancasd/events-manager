@@ -143,12 +143,16 @@ export class TypeOrmUserRepository implements UserRepository {
       throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
     if (data.password == null) throw new BadRequestError('');
 
+    const {id,...resto}= data;
+
     // Create users DB
-    const newUser = userRepository.create(data);
+    const newUser = userRepository.create(resto);
     const user = await userRepository.save(newUser);
 
+
     const newUserCommerce = userCommerceRepository.create({
-      ...data,
+      ...resto,
+      //...data,
       password: bcrypt.hashSync(data.password, 10),
       level,
       commerce,

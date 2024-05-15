@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { EventsAttendeesPage, EventsHomePage, EventsRegisterPage, EventsStatsPage } from '../pages';
+import { EventsAttendeesPage, EventsHomePage, EventsStatsPage } from '../pages';
 
 export const EventsRoutes = () => {
   useEffect(() => {
@@ -11,7 +11,6 @@ export const EventsRoutes = () => {
     <Routes>
       <Route path="/" element={<EventsHomePage />} />
       <Route path="/attendees" element={<EventsAttendeesPage />} />
-      <Route path="/register" element={<EventsRegisterPage />} />
       <Route path="/stats" element={<EventsStatsPage />} />
       <Route path="/*" element={<Navigate to={'/'} />} />
     </Routes>
