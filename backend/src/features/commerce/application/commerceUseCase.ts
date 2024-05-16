@@ -20,8 +20,7 @@ export class CommerceUseCase implements CommerceUseCaseInterface {
   constructor(
     //private readonly _authUseCase: AuthUseCase,
     private readonly _commerceRepository: CommerceRepository
-
-  ) { }
+  ) {}
 
   @errorHandlerUseCase
   async validateDuplicatedData(
@@ -62,8 +61,6 @@ export class CommerceUseCase implements CommerceUseCaseInterface {
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 
-
-
   /*@errorHandlerUseCase
   async meDataByUid(token: string): Promise<CommerceEntity> {
     const { commerceUid, role } = await this._authUseCase.getTokenData(token);
@@ -90,16 +87,16 @@ export class CommerceUseCase implements CommerceUseCaseInterface {
     console.log('is normal user')
     return await this._commerceRepository.findCommerceById(commerceUid);
   }*/
-@errorHandlerUseCase
-async findComerceByUid(uid: string): Promise < CommerceEntity > {
-  return await this._commerceRepository.findCommerceById(uid);
-}
+  @errorHandlerUseCase
+  async findComerceByUid(uid: string): Promise<CommerceEntity> {
+    return await this._commerceRepository.findCommerceById(uid);
+  }
 
-@errorHandlerUseCase
-async findCommerces(
-  status ?: CriteriaOptionsStatus,
-  location ?: LocationEntity
-): Promise < CommerceEntity[] > {
-  return await this._commerceRepository.findCommerces(status, location);
-}
+  @errorHandlerUseCase
+  async findCommerces(
+    status?: CriteriaOptionsStatus,
+    location?: LocationEntity
+  ): Promise<CommerceEntity[]> {
+    return await this._commerceRepository.findCommerces(status, location);
+  }
 }

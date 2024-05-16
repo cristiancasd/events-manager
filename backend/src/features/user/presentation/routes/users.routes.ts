@@ -45,14 +45,7 @@ userRoutes.post(
   userCtrl.insertUserCommerceCtrl
 );
 
-userRoutes.get(
-  '/me',
-  [
-    checkTokenMiddleware,
-  ],
-  validateRequest,
-  userCtrl.meCtrl
-);
+userRoutes.get('/me', [checkTokenMiddleware], validateRequest, userCtrl.meCtrl);
 
 /// Find usser by UID
 userRoutes.get(

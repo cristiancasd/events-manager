@@ -2,11 +2,12 @@ import { Button, Box, Grid, Typography, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { EventsLayout } from '../layout/EventsLayout';
-import { createEvent, getEventsList, setEventViewSelected, editEvent } from '../../../store';
+import { createEvent, getEventsList, setEventViewSelected, editEvent, getLevelsList, getTicketsList } from '../../../store';
 import { optionsEventsView } from './eventsConstants';
 import { useEffect, useState } from 'react';
-import { EventCardComponent, EventsTableComponent, EventModalComponent } from '../components';
+import { EventCardComponent, EventsTableComponent, EventModalComponent, TicketsTableComponent } from '../components';
 import Swal from 'sweetalert2';
+import { LoadingBox, eventsStatus } from '../../../shared';
 
 
 const normalizeUrl = (url) => {
@@ -22,14 +23,65 @@ const normalizeUrl = (url) => {
   return value;
 }
 
+const relationLevelTicket = (levelUid, tickets) => {
+  const ticket = tickets.find(ticket => ticket.levelUid === levelUid);
+
+  if (ticket) {
+    return {
+      ticketName: ticket.name,
+      ticketPresale: ticket.presaleFee,
+      ticketSale: ticket.saleFee,
+      ticketUid: ticket.id
+    };
+  }
+
+  return {
+    ticketName: '',
+    ticketPresale: '',
+    ticketSale: '',
+    ticketUid: ''
+  };
+};
+
+
+const arrayLevelsTickets= (levels,tickets)=>{
+  const levelTicketEntity={
+    levelName:'',
+    ticketName:'',
+    ticketPresale: '',
+    ticketSale:'',
+    levelUid:'',
+    ticketUid:'',
+    
+  }
+  return levels.map((data)=>{
+
+    const ticket= relationLevelTicket(data.id, tickets);
+
+    levelTicketEntity.levelName= data.name;
+    levelTicketEntity.levelUid= data.levelUid;
+    levelTicketEntity.ticketName= ticket.ticketName;
+    levelTicketEntity.ticketPresale= ticket.ticketPresale;
+    levelTicketEntity.ticketSale= ticket.ticketSale;
+    levelTicketEntity.ticketUid= ticket.ticketUid;
+
+    return {...levelTicketEntity}
+  })
+}
+
+
+
 export const EventsHomePage = () => {
 
-  const { events, nextEvent } = useSelector((state) => state.events);
+  const { events, nextEvent, eventStatus } = useSelector((state) => state.events);
   const { user } = useSelector((state) => state.auth);
-  const { errorMessage, successMessage } = useSelector((state) => state.common);
+  const { errorMessage, successMessage, isFetching, } = useSelector((state) => state.common);
 
 
-  //MODAL dialog variables
+
+
+
+  //*******************MODAL dialog variables*********************/
   const [openEdit, setOpenEdit] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
 
@@ -40,17 +92,29 @@ export const EventsHomePage = () => {
   const handleCloseCreateDialog = () => setOpenCreate(false);
 
 
-
+  //***************** INITIAL dispatchs ************************** */
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setEventViewSelected(optionsEventsView.events));
     dispatch(getEventsList({ commerceUid: user.commerceUid }));
+    dispatch(getLevelsList({ commerceUid: user.commerceUid }));
+    dispatch(getTicketsList({ commerceUid: user.commerceUid }));
   }, []);
 
-  useEffect(() => {
-    console.log('*************events are ', events)
-  }, [events]);
 
+
+  //********************** TICKETS normalize *************** */
+  const [normalizedLevelsTickets, setNormalizedLevelsTickets] = useState(undefined);
+  const { levels, levelsStatus} = useSelector((state) => state.levels);
+  const { tickets, ticketsStatus } = useSelector((state) => state.tickets);
+  useEffect(()=>{
+    if(levelsStatus.levels!=eventsStatus.initial && ticketsStatus.tickets!=eventsStatus.initial){
+      const levelsTickets= arrayLevelsTickets(levels, tickets)
+      setNormalizedLevelsTickets(levelsTickets??[]);
+    }
+  }),[levelsStatus, ticketsStatus]
+ 
+  //********************POP UP messages*******************+ */
   useEffect(() => {
     if (errorMessage) {
       Swal.fire('Error', errorMessage, 'error');
@@ -81,6 +145,7 @@ export const EventsHomePage = () => {
     </Typography>
   }
 
+  /***************************** Functions *********************** */
   const handleEditEvent = (data) => {
     const event = {
       id: nextEvent.id,
@@ -127,30 +192,44 @@ export const EventsHomePage = () => {
 
       <Container maxWidth="lg">
         <Grid container spacing={2} >
+          
+          {/**Current Event */}
           <Grid item xs={12} md={12} paddingBottom={{ xs: 0, sm: 5 }} >
             {typegraphyFormat('Próximo evento')}
 
-            {nextEvent
-              ? <EventCardComponent
-                name={nextEvent.name}
-                date={nextEvent.date}
-                url={nextEvent.url}
-                description={nextEvent.description}
-                onClick={handleOpenEditDialog}
-              />
-              : <Grid paddingTop={1}>
-                <Button variant='contained' onClick={handleOpenCreateDialog}>
-                  Crear evento
-                </Button>
-              </Grid>
+            {eventStatus.event == eventsStatus.initial || eventStatus.event == eventsStatus.fetching
+              ? <LoadingBox />
+              : nextEvent
+                ? <EventCardComponent
+                  name={nextEvent.name}
+                  date={nextEvent.date}
+                  url={nextEvent.url}
+                  description={nextEvent.description}
+                  onClick={handleOpenEditDialog}
+                />
+                : <Grid paddingTop={1}>
+                  <Button variant='contained' onClick={handleOpenCreateDialog}>
+                    Crear evento
+                  </Button>
+                </Grid>
 
 
             }
           </Grid>
 
+
+          {/**Tickets */}
+          <Grid item xs={12} md={12} paddingTop={{ xs: 0, sm: 5 }}>
+            <TicketsTableComponent/>
+          </Grid>
+
+
+          {/**All events */}
           <Grid item xs={12} md={12} paddingTop={{ xs: 0, sm: 5 }}>
             {typegraphyFormat('Todos los Eventos')}
-            <EventsTableComponent events={events} />
+            {eventStatus.events == eventsStatus.initial || eventStatus.events == eventsStatus.fetching || !normalizedLevelsTickets
+              ? <LoadingBox />
+              : <EventsTableComponent events={events} />}
           </Grid>
         </Grid>
       </Container>

@@ -40,7 +40,7 @@ export class TicketRepositoryImpl implements TicketRepository {
         codeCommerceNotFound
       );
 
-      const {id, ...resto}= data;
+    const { id, ...resto } = data;
 
     const newTicket = ticketRepository.create(resto);
 

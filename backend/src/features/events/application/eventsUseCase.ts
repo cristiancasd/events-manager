@@ -19,24 +19,20 @@ export class EventsUseCase implements EventsUseCaseInterface {
     data: string,
     id: string | undefined,
     isEditRequest: boolean
-
   ): Promise<boolean> {
-
-    try{
+    try {
       const result = await this._eventsRepository.findEventByName(
         commerceUid,
         data
       );
-  
-      return !isEditRequest ? true : result.id==id ? false: true;
-      
-    }catch(err){
+
+      return !isEditRequest ? true : result.id == id ? false : true;
+    } catch (err) {
       if (!(err instanceof NotFoundError)) {
         throw err;
       }
       return false;
     }
-   
   }
 
   @errorHandlerUseCase

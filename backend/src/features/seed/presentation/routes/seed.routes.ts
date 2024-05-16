@@ -5,11 +5,6 @@ import { configureDependencies } from '../../../../config';
 const { seedCtrl } = configureDependencies();
 const seedRoutes = express.Router();
 
-seedRoutes.get(
-  '/create',
-  [],
-  validateRequest,
-  seedCtrl.insertCtrl
-);
+seedRoutes.get('/create', [], validateRequest, seedCtrl.insertCtrl);
 
 export { seedRoutes };

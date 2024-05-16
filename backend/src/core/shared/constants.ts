@@ -28,7 +28,6 @@ export enum ProspectType {
   prospectVip = 'prospect-vip'
 }
 
-
 /// En resumen, esta expresión regular establece condiciones para garantizar que una contraseña
 /// cumpla con ciertos criterios de seguridad, como la inclusión de al menos una letra mayúscula,
 /// una letra minúscula, un dígito y un carácter no alfanumérico. También se asegura de que no haya

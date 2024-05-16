@@ -1,14 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { findNextEvent } from './utils/findNextEvent';
+import { eventsStatus } from '../../shared';
 
 export const eventsSlice = createSlice({
   name: 'events',
   initialState: {
     nextEvent: undefined,
     events: [],
-    eventViewSelected: undefined
+    eventViewSelected: undefined,
+    eventStatus: {
+      event: eventsStatus.initial,
+      events: eventsStatus.initial,
+    }
+    ,
   },
   reducers: {
+    setEventStatus: (state,{payload})=>{
+      const {event, events}=payload;
+      if(event) state.eventStatus.event=event;
+      if(events) state.eventStatus.events=events;
+    },
+
     setEventViewSelected: (state,{payload})=>{
       state.eventsView=payload;
     },
@@ -34,4 +46,4 @@ export const eventsSlice = createSlice({
   },
 });
 
-export const { setEventViewSelected, setNextEvent, setEvents, addEvent, editEventById } = eventsSlice.actions;
+export const { setEventViewSelected, setNextEvent, setEvents, addEvent, editEventById, setEventStatus } = eventsSlice.actions;

@@ -25,7 +25,7 @@ export class TypeOrmEventRepository implements EventsRepository {
   async findEventByName(
     commerceUid: string,
     name: string
-  ): Promise<EventEntity > {
+  ): Promise<EventEntity> {
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
     const queryBuilder = eventRepository
       .createQueryBuilder('event')
@@ -42,7 +42,7 @@ export class TypeOrmEventRepository implements EventsRepository {
   async createEvent(data: EventEntity): Promise<EventEntity> {
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
-    const {id, ...resto}=data;
+    const { id, ...resto } = data;
     const newEvent = eventRepository.create(resto);
     const commerce = await commerceRepository.findOneBy({
       id: data.commerceUid
@@ -66,31 +66,28 @@ export class TypeOrmEventRepository implements EventsRepository {
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
   }
 
-
   @errorHandlerTypeOrm
   async editEvent(data: EventEntity): Promise<EventEntity> {
-
     const eventRepository = connectDB.getRepository(EventTypeORMEntity);
     const eventFound = await eventRepository.findOneBy({ id: data.id });
     if (!eventFound)
       throw new NotFoundError(errorMessageEventNotFound, codeEventNotFound);
 
-    console.log('*****eventFound', eventFound)
-    console.log('*****dataInput', data)
+    console.log('*****eventFound', eventFound);
+    console.log('*****dataInput', data);
 
     const eventSaved = await eventRepository.save({
       ...eventFound,
       ...data
     });
 
-    console.log('*****eventSaved', eventSaved)
+    console.log('*****eventSaved', eventSaved);
 
     if (!eventSaved) throw new DataBaseError(errorMsgDb);
     return new EventValue({
       ...eventSaved,
       commerceUid: eventSaved.commerce.id
     });
-
   }
 
   @errorHandlerTypeOrm

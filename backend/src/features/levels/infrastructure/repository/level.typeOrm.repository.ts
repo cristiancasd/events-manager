@@ -51,7 +51,7 @@ export class TypeOrmLevelRepository implements LevelRepository {
   @errorHandlerTypeOrm
   async createLevel(data: LevelEntity): Promise<LevelEntity> {
     const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
-    const {id, ...resto}=data;
+    const { id, ...resto } = data;
     const newLevel = levelRepository.create(resto);
     const commerce = await this.commerceUseCase.findComerceByUid(
       data.commerceUid

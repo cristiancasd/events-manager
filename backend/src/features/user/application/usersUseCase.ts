@@ -119,31 +119,34 @@ export class UserUseCase implements UserUseCaseInterface {
 
   @errorHandlerUseCase
   async meDataByUid(token: string): Promise<MeEntity> {
-    const { commerceUid, role, userUid } = await this._authUseCase.getTokenData(token);
+    const { commerceUid, role, userUid } = await this._authUseCase.getTokenData(
+      token
+    );
 
-    
     const meMaster: MeEntity = {
-      commerceName:'',
-      commerceUid:'',
+      commerceName: '',
+      commerceUid: '',
       role: 'master',
-      userName:'',
-      userUid:''
-    }
+      userName: '',
+      userUid: ''
+    };
 
-    if (role == CommerceUserRoles.masterAdmin){
-      console.log('is master user')
+    if (role == CommerceUserRoles.masterAdmin) {
+      console.log('is master user');
       return meMaster;
     }
-    const userData= await this.findUserByUid(userUid);
-    const commerceData= await this._commerceUseCase.findComerceByUid(commerceUid);
+    const userData = await this.findUserByUid(userUid);
+    const commerceData = await this._commerceUseCase.findComerceByUid(
+      commerceUid
+    );
 
     return {
       userUid: userData.id,
       role: userData.role,
       userName: userData.name,
       commerceUid: commerceData.id,
-      commerceName: commerceData.name,
-    }
+      commerceName: commerceData.name
+    };
   }
 
   @errorHandlerUseCase

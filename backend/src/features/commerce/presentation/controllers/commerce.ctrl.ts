@@ -44,8 +44,6 @@ export class CommerceController {
     res.status(200).send(result);
   };
 
-  
-
   public findByCriteriaCtrl = async (req: Request, res: Response) => {
     const { status, locationType, location } = req.query;
 

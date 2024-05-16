@@ -46,7 +46,7 @@ export class TypeOrmCommerceRepository implements CommerceRepository {
   @errorHandlerTypeOrm
   async createCommerce(data: CommerceEntity): Promise<CommerceEntity> {
     const commerceRepository = connectDB.getRepository(CommerceTypeORMEntity);
-    const {id,...resto}=data;
+    const { id, ...resto } = data;
     const newCommerce = commerceRepository.create(resto);
     const commerce = await commerceRepository.save(newCommerce);
     return new CommerceValue(commerce);

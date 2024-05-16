@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { SeedUseCase } from '../../application';
 
-
 export class SeedController {
   constructor(private seedUseCase: SeedUseCase) {}
 
@@ -9,5 +8,4 @@ export class SeedController {
     const result = await this.seedUseCase.createSeed();
     res.status(200).send(result);
   };
-
 }

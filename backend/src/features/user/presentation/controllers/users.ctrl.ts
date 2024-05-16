@@ -18,7 +18,7 @@ export class UserController {
 
   public meCtrl = async (req: Request, res: Response) => {
     const token = req.headers['authorization'];
-    const result = await this.userUseCase.meDataByUid(token??'');
+    const result = await this.userUseCase.meDataByUid(token ?? '');
     res.status(200).send(result);
   };
 

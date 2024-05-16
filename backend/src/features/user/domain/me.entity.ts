@@ -1,4 +1,3 @@
-
 export interface MeEntity {
   commerceUid: string;
   userUid: string;
@@ -7,8 +6,6 @@ export interface MeEntity {
   userName: string;
 
   role: string;
-
-
 
   /*nick: string;
   phone: string;
@@ -23,6 +20,4 @@ export interface MeEntity {
   levelUid: string;
   isActive: boolean;
   freeSpace?: string;*/
-
 }
-  

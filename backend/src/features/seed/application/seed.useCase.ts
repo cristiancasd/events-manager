@@ -1,4 +1,9 @@
-import { CommerceUserRoles, CriteriaOptionsLocation, NotFoundError, errorHandlerUseCase } from '../../../core';
+import {
+  CommerceUserRoles,
+  CriteriaOptionsLocation,
+  NotFoundError,
+  errorHandlerUseCase
+} from '../../../core';
 import { AttendeesProspectUseCase } from '../../attendees-prospect';
 import { AttendeesUserUseCase } from '../../attendees-user/application/attendeesUser.useCase';
 import { AuthUseCase } from '../../auth';
@@ -12,12 +17,16 @@ import { TicketEntity, TicketUseCase } from '../../tickets';
 import { UserUseCase } from '../../user';
 import { UserTicketUseCase } from '../../user-ticket';
 import { SeedUseCaSeInterface } from '../domain/seed.useCase';
-import { seedCommerceService, seedEventsService, seedLevelsService, seedTicketsService, seedUsersService } from './services';
-
+import {
+  seedCommerceService,
+  seedEventsService,
+  seedLevelsService,
+  seedTicketsService,
+  seedUsersService
+} from './services';
 
 export class SeedUseCase implements SeedUseCaSeInterface {
   constructor(
-
     private readonly _authUseCase: AuthUseCase,
     private readonly _commerceUseCase: CommerceUseCase,
     private readonly _eventsUseCase: EventsUseCase,
@@ -27,24 +36,36 @@ export class SeedUseCase implements SeedUseCaSeInterface {
     private readonly _attendeeUserUseCase: AttendeesUserUseCase,
     private readonly _attendeeProspectUseCase: AttendeesProspectUseCase,
     private readonly _ticketUseCase: TicketUseCase,
-    private readonly _userTicketUseCase: UserTicketUseCase,
-
-  ) { }
-
-
+    private readonly _userTicketUseCase: UserTicketUseCase
+  ) {}
 
   @errorHandlerUseCase
   async createSeed(): Promise<boolean> {
-
     const { commerceUid } = await seedCommerceService(this._commerceUseCase);
-    const { levelUid1, levelUid2 } = await seedLevelsService(this._levelUseCase, commerceUid)
+    const { levelUid1, levelUid2 } = await seedLevelsService(
+      this._levelUseCase,
+      commerceUid
+    );
     /*const {userUid1, userUid2}= await seedUsersService(this._userUseCase,commerceUid,levelUid1, levelUid2)
     const {eventUid1, eventUid2}= await seedEventsService(this._eventsUseCase, commerceUid)
     const {ticketUid1,ticketUid2}= await seedTicketsService(this._ticketUseCase, commerceUid, levelUid1, levelUid2)*/
 
-    const seedUsersPromise = seedUsersService(this._userUseCase, commerceUid, levelUid1, levelUid2);
-    const seedEventsPromise = seedEventsService(this._eventsUseCase, commerceUid);
-    const seedTicketsPromise = seedTicketsService(this._ticketUseCase, commerceUid, levelUid1, levelUid2);
+    const seedUsersPromise = seedUsersService(
+      this._userUseCase,
+      commerceUid,
+      levelUid1,
+      levelUid2
+    );
+    const seedEventsPromise = seedEventsService(
+      this._eventsUseCase,
+      commerceUid
+    );
+    const seedTicketsPromise = seedTicketsService(
+      this._ticketUseCase,
+      commerceUid,
+      levelUid1,
+      levelUid2
+    );
 
     const [usersResult, eventsResult, ticketsResult] = await Promise.all([
       seedUsersPromise,
@@ -56,10 +77,9 @@ export class SeedUseCase implements SeedUseCaSeInterface {
     const { eventUid1, eventUid2 } = eventsResult;
     const { ticketUid1, ticketUid2 } = ticketsResult;
 
-
     return true;
 
-    // ---------------------------------Create commerce-----------------------------// 
+    // ---------------------------------Create commerce-----------------------------//
     /*let commerceUid=''
 
     const commerce: CommerceEntity= {
@@ -89,8 +109,7 @@ export class SeedUseCase implements SeedUseCaSeInterface {
         commerceUid = commerceFound[0].id;
     }*/
 
-
-    // ---------------------------------Create levels-----------------------------// 
+    // ---------------------------------Create levels-----------------------------//
     /*let levelUid1='';
     let levelUid2='';
 
@@ -129,8 +148,7 @@ export class SeedUseCase implements SeedUseCaSeInterface {
       
     }*/
 
-
-    // ---------------------------------Create users-----------------------------// 
+    // ---------------------------------Create users-----------------------------//
     /*let userUid1='';
     let userUid2='';
 
@@ -180,7 +198,7 @@ export class SeedUseCase implements SeedUseCaSeInterface {
       userUid2=userFound.id;
     }*/
 
-    // --------------------------------- create Events -----------------------------// 
+    // --------------------------------- create Events -----------------------------//
     /*let eventUid1='';
     let eventUid2='';
 
@@ -223,7 +241,7 @@ export class SeedUseCase implements SeedUseCaSeInterface {
 
     }catch(err){}*/
 
-    // --------------------------------- create tickets -----------------------------// 
+    // --------------------------------- create tickets -----------------------------//
     /*let ticketUid1='';
     let ticketUid2='';
 
@@ -265,7 +283,6 @@ export class SeedUseCase implements SeedUseCaSeInterface {
 
     }catch(err){}
 */
-
 
     return true;
   }

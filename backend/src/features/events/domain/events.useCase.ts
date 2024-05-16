@@ -1,8 +1,12 @@
 import { EventEntity } from './event.entity';
 
 export interface EventsUseCaseInterface {
-  validateDuplicatedData(commerceUid: string, data: string, id: string | undefined,
-    isEditRequest: boolean): Promise<boolean>;
+  validateDuplicatedData(
+    commerceUid: string,
+    data: string,
+    id: string | undefined,
+    isEditRequest: boolean
+  ): Promise<boolean>;
   createEvent(input: EventEntity, commerceUid: string): Promise<EventEntity>;
   editEvent(input: EventEntity): Promise<EventEntity>;
   deleteEventByUid(uid: string): Promise<boolean>;

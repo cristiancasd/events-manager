@@ -88,7 +88,6 @@ commerceRoutes.get(
   commerceCtrl.findCtrl
 );
 
-
 /*commerceRoutes.get(
   '/me',
   [
@@ -97,8 +96,6 @@ commerceRoutes.get(
   validateRequest,
   commerceCtrl.meCtrl
 );*/
-
-
 
 /// Find commerce by Criteria
 commerceRoutes.get(

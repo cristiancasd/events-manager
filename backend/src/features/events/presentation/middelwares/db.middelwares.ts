@@ -25,19 +25,17 @@ export const checkEventNameMiddleware = async (
   if (errors.isEmpty()) {
     try {
       if (!commerceUid) throw new BadRequestError(commerceIdInvalidMessage);
-      
+
       let isEditRequest = false;
       if (req.method === 'PUT') {
         isEditRequest = true;
       }
-      
-      
+
       const nameExist = await eventsUseCase.validateDuplicatedData(
         commerceUid?.toString() ?? '',
         name,
         id as string | undefined,
         isEditRequest
-
       );
 
       if (nameExist)

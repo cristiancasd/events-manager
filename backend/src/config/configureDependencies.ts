@@ -60,11 +60,10 @@ import { SeedController, SeedUseCase } from '../features/seed';
 
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {
-
   const authRepository: AuthRepository = new AuthRepositoryImpl();
   const authUseCase = new AuthUseCase(authRepository);
   const authCtrl = new AuthController(authUseCase);
-  
+
   const commerceRepository: CommerceRepository =
     new TypeOrmCommerceRepository();
   const commerceUseCase = new CommerceUseCase(commerceRepository);
@@ -84,14 +83,12 @@ export const configureDependencies = () => {
     commerceUseCase,
     levelUseCase
   );
-  const userUseCase = new UserUseCase(   
-    authUseCase, 
+  const userUseCase = new UserUseCase(
+    authUseCase,
     commerceUseCase,
-    userRepository,
+    userRepository
   );
   const userCtrl = new UserController(userUseCase);
-
-
 
   const prospectsRepository = new ProspectsTypeORMRepository(userUseCase);
   const prospectsUseCase = new ProspectsUseCase(prospectsRepository);
@@ -133,12 +130,10 @@ export const configureDependencies = () => {
     attendeeUserUseCase,
     attendeeProspectUseCase,
     ticketUseCase,
-    userTicketUseCase,
+    userTicketUseCase
   );
 
   const seedCtrl = new SeedController(seedUseCase);
-
-
 
   return {
     commerceRepository,
@@ -166,6 +161,6 @@ export const configureDependencies = () => {
     userTicketCtrl,
     userTicketUseCase,
     seedCtrl,
-    seedUseCase,
+    seedUseCase
   };
 };

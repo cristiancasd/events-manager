@@ -24,13 +24,13 @@ export class EventTypeORMEntity {
   @Column({ length: 50 })
   name!: string;
 
-  @Column({ length: 50, nullable: true  })
+  @Column({ length: 50, nullable: true })
   description?: string;
 
   @Column()
   date!: Date;
 
-  @Column({ length: 50, nullable: true  })
+  @Column({ length: 50, nullable: true })
   url?: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
