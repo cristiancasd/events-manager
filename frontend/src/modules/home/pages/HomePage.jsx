@@ -5,17 +5,15 @@ import static_URLs from '../../../config/staticUrls';
 import { useNavigate } from 'react-router-dom';
 
 export const HomePage = () => {
-
   const navigate = useNavigate();
 
-
-  const navigateToEvents=()=>{
+  const navigateToEvents = () => {
     navigate('/events');
-  }
+  };
 
-  const navigateToUsers=()=>{
+  const navigateToUsers = () => {
     navigate('/home');
-  }
+  };
   return (
     <CommonLayout title="Administra tus Eventos">
       <Container maxWidth="lg">

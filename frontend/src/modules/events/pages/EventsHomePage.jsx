@@ -2,13 +2,26 @@ import { Button, Box, Grid, Typography, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { EventsLayout } from '../layout/EventsLayout';
-import { createEvent, getEventsList, setEventViewSelected, editEvent, getLevelsList, getTicketsList } from '../../../store';
+import {
+  createEvent,
+  getEventsList,
+  setEventViewSelected,
+  editEvent,
+  getLevelsList,
+  getTicketsList,
+  createTicket,
+} from '../../../store';
 import { optionsEventsView } from './eventsConstants';
 import { useEffect, useState } from 'react';
-import { EventCardComponent, EventsTableComponent, EventModalComponent, TicketsTableComponent } from '../components';
+import {
+  EventCardComponent,
+  EventsTableComponent,
+  EventModalComponent,
+  TicketsTableComponent,
+  TicketModalComponent,
+} from '../components';
 import Swal from 'sweetalert2';
 import { LoadingBox, eventsStatus } from '../../../shared';
-
 
 const normalizeUrl = (url) => {
   let value;
@@ -21,17 +34,17 @@ const normalizeUrl = (url) => {
   }
 
   return value;
-}
+};
 
 const relationLevelTicket = (levelUid, tickets) => {
-  const ticket = tickets.find(ticket => ticket.levelUid === levelUid);
+  const ticket = tickets.find((ticket) => ticket.levelUid === levelUid);
 
   if (ticket) {
     return {
       ticketName: ticket.name,
       ticketPresale: ticket.presaleFee,
       ticketSale: ticket.saleFee,
-      ticketUid: ticket.id
+      ticketUid: ticket.id,
     };
   }
 
@@ -39,47 +52,37 @@ const relationLevelTicket = (levelUid, tickets) => {
     ticketName: '',
     ticketPresale: '',
     ticketSale: '',
-    ticketUid: ''
+    ticketUid: '',
   };
 };
 
-
-const arrayLevelsTickets= (levels,tickets)=>{
-  const levelTicketEntity={
-    levelName:'',
-    ticketName:'',
+const arrayLevelsTickets = (levels, tickets) => {
+  const levelTicketEntity = {
+    levelName: '',
+    ticketName: '',
     ticketPresale: '',
-    ticketSale:'',
-    levelUid:'',
-    ticketUid:'',
-    
-  }
-  return levels.map((data)=>{
+    ticketSale: '',
+    levelUid: '',
+    ticketUid: '',
+  };
+  return levels.map((data) => {
+    const ticket = relationLevelTicket(data.id, tickets);
 
-    const ticket= relationLevelTicket(data.id, tickets);
+    levelTicketEntity.levelName = data.name;
+    levelTicketEntity.levelUid = data.levelUid;
+    levelTicketEntity.ticketName = ticket.ticketName;
+    levelTicketEntity.ticketPresale = ticket.ticketPresale;
+    levelTicketEntity.ticketSale = ticket.ticketSale;
+    levelTicketEntity.ticketUid = ticket.ticketUid;
 
-    levelTicketEntity.levelName= data.name;
-    levelTicketEntity.levelUid= data.levelUid;
-    levelTicketEntity.ticketName= ticket.ticketName;
-    levelTicketEntity.ticketPresale= ticket.ticketPresale;
-    levelTicketEntity.ticketSale= ticket.ticketSale;
-    levelTicketEntity.ticketUid= ticket.ticketUid;
-
-    return {...levelTicketEntity}
-  })
-}
-
-
+    return { ...levelTicketEntity };
+  });
+};
 
 export const EventsHomePage = () => {
-
   const { events, nextEvent, eventStatus } = useSelector((state) => state.events);
   const { user } = useSelector((state) => state.auth);
-  const { errorMessage, successMessage, isFetching, } = useSelector((state) => state.common);
-
-
-
-
+  const { errorMessage, successMessage, isFetching } = useSelector((state) => state.common);
 
   //*******************MODAL dialog variables*********************/
   const [openEdit, setOpenEdit] = useState(false);
@@ -91,7 +94,6 @@ export const EventsHomePage = () => {
   const handleOpenCreateDialog = () => setOpenCreate(true);
   const handleCloseCreateDialog = () => setOpenCreate(false);
 
-
   //***************** INITIAL dispatchs ************************** */
   const dispatch = useDispatch();
   useEffect(() => {
@@ -101,19 +103,18 @@ export const EventsHomePage = () => {
     dispatch(getTicketsList({ commerceUid: user.commerceUid }));
   }, []);
 
-
-
   //********************** TICKETS normalize *************** */
   const [normalizedLevelsTickets, setNormalizedLevelsTickets] = useState(undefined);
-  const { levels, levelsStatus} = useSelector((state) => state.levels);
+  const { levels, levelsStatus } = useSelector((state) => state.levels);
   const { tickets, ticketsStatus } = useSelector((state) => state.tickets);
-  useEffect(()=>{
-    if(levelsStatus.levels!=eventsStatus.initial && ticketsStatus.tickets!=eventsStatus.initial){
-      const levelsTickets= arrayLevelsTickets(levels, tickets)
-      setNormalizedLevelsTickets(levelsTickets??[]);
+  useEffect(() => {
+    if (levelsStatus.levels != eventsStatus.initial && ticketsStatus.tickets != eventsStatus.initial) {
+      const levelsTickets = arrayLevelsTickets(levels, tickets);
+      setNormalizedLevelsTickets(levelsTickets ?? []);
     }
-  }),[levelsStatus, ticketsStatus]
- 
+  }),
+    [levelsStatus, ticketsStatus];
+
   //********************POP UP messages*******************+ */
   useEffect(() => {
     if (errorMessage) {
@@ -125,25 +126,29 @@ export const EventsHomePage = () => {
     if (successMessage) {
       Swal.fire({
         //position: "top-end",
-        icon: "success",
+        icon: 'success',
         title: successMessage,
         showConfirmButton: false,
-        timer: 1000
+        timer: 1000,
       });
     }
   }, [successMessage]);
 
-
   const typegraphyFormat = (text) => {
-    return <Typography fontSize={20} sx={{
-      display: 'flex',
+    return (
+      <Typography
+        fontSize={20}
+        sx={{
+          display: 'flex',
 
-      color: 'primary.main',
-      fontWeight: 'bold',
-    }}>
-      {text}
-    </Typography>
-  }
+          color: 'primary.main',
+          fontWeight: 'bold',
+        }}
+      >
+        {text}
+      </Typography>
+    );
+  };
 
   /***************************** Functions *********************** */
   const handleEditEvent = (data) => {
@@ -154,9 +159,9 @@ export const EventsHomePage = () => {
       description: data.description ?? '',
       url: normalizeUrl(data.url),
       commerceUid: user.commerceUid,
-    }
-    dispatch(editEvent(event))
-  }
+    };
+    dispatch(editEvent(event));
+  };
 
   const handleCreateEvent = (data) => {
     const event = {
@@ -165,10 +170,9 @@ export const EventsHomePage = () => {
       description: data.description ?? '',
       url: normalizeUrl(data.url),
       commerceUid: user.commerceUid,
-    }
-    dispatch(createEvent(event))
-  }
-
+    };
+    dispatch(createEvent(event));
+  };
 
   return (
     <EventsLayout title="Administra tus Eventos">
@@ -181,7 +185,6 @@ export const EventsHomePage = () => {
         event={nextEvent}
       />
 
-
       <EventModalComponent
         actionName={'Crear'}
         title={'Crear evento'}
@@ -191,45 +194,45 @@ export const EventsHomePage = () => {
       />
 
       <Container maxWidth="lg">
-        <Grid container spacing={2} >
-          
+        <Grid container spacing={2}>
           {/**Current Event */}
-          <Grid item xs={12} md={12} paddingBottom={{ xs: 0, sm: 5 }} >
+          <Grid item xs={12} md={12} paddingBottom={{ xs: 0, sm: 5 }}>
             {typegraphyFormat('Próximo evento')}
 
-            {eventStatus.event == eventsStatus.initial || eventStatus.event == eventsStatus.fetching
-              ? <LoadingBox />
-              : nextEvent
-                ? <EventCardComponent
-                  name={nextEvent.name}
-                  date={nextEvent.date}
-                  url={nextEvent.url}
-                  description={nextEvent.description}
-                  onClick={handleOpenEditDialog}
-                />
-                : <Grid paddingTop={1}>
-                  <Button variant='contained' onClick={handleOpenCreateDialog}>
-                    Crear evento
-                  </Button>
-                </Grid>
-
-
-            }
+            {eventStatus.event == eventsStatus.initial || eventStatus.event == eventsStatus.fetching ? (
+              <LoadingBox />
+            ) : nextEvent ? (
+              <EventCardComponent
+                name={nextEvent.name}
+                date={nextEvent.date}
+                url={nextEvent.url}
+                description={nextEvent.description}
+                onClick={handleOpenEditDialog}
+              />
+            ) : (
+              <Grid paddingTop={1}>
+                <Button variant="contained" onClick={handleOpenCreateDialog}>
+                  Crear evento
+                </Button>
+              </Grid>
+            )}
           </Grid>
-
 
           {/**Tickets */}
           <Grid item xs={12} md={12} paddingTop={{ xs: 0, sm: 5 }}>
-            <TicketsTableComponent/>
+            <TicketsTableComponent />
           </Grid>
-
 
           {/**All events */}
           <Grid item xs={12} md={12} paddingTop={{ xs: 0, sm: 5 }}>
             {typegraphyFormat('Todos los Eventos')}
-            {eventStatus.events == eventsStatus.initial || eventStatus.events == eventsStatus.fetching || !normalizedLevelsTickets
-              ? <LoadingBox />
-              : <EventsTableComponent events={events} />}
+            {eventStatus.events == eventsStatus.initial ||
+            eventStatus.events == eventsStatus.fetching ||
+            !normalizedLevelsTickets ? (
+              <LoadingBox />
+            ) : (
+              <EventsTableComponent events={events} />
+            )}
           </Grid>
         </Grid>
       </Container>

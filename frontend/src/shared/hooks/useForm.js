@@ -39,13 +39,8 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
   }, [formValidation]);
 
   const onInputChange = ({ target }) => {
-    //const { name, value } = target;
-    let { name, value } = target;
+    const { name, value } = target;
 
-    if (!!+value && value < 0) {
-      value = 0;
-    } else {
-    }
     setFormState({
       ...formState,
       [name]: value,

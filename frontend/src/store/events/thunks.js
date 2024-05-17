@@ -1,5 +1,5 @@
 import { backendApi } from '../../api';
-import { setEventViewSelected, setNextEvent, setEvents, addEvent, editEventById, setEventStatus  } from './eventsSlice';
+import { setEventViewSelected, setNextEvent, setEvents, addEvent, editEventById, setEventStatus } from './eventsSlice';
 import { createEventPath, getEventPath, editEventPath } from './constants';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { findNextEvent } from './utils/findNextEvent';
@@ -9,16 +9,15 @@ import { eventsStatus } from '../../shared';
 export const getEventsList = ({ commerceUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setEventStatus({events: eventsStatus.fetching}))
+    dispatch(setEventStatus({ events: eventsStatus.fetching }));
     try {
       const { data } = await backendApi.get(getEventPath(commerceUid));
 
-      const eventsList= normalizeEventsArray(data)
-      const nextEvent=findNextEvent(eventsList);
+      const eventsList = normalizeEventsArray(data);
+      const nextEvent = findNextEvent(eventsList);
 
       dispatch(setEvents(eventsList));
       dispatch(setNextEvent(nextEvent));
-
     } catch (error) {
       console.log(error);
       const message = existError(error);
@@ -27,24 +26,21 @@ export const getEventsList = ({ commerceUid }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setEventStatus({events: eventsStatus.ok, event: eventsStatus.ok}))
+    dispatch(setEventStatus({ events: eventsStatus.ok, event: eventsStatus.ok }));
     dispatch(setIsFetching(false));
-
   };
 };
-
 
 export const createEvent = (eventData) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setEventStatus({event: eventsStatus.fetching}))
+    dispatch(setEventStatus({ event: eventsStatus.fetching }));
 
     try {
-      const { data } = await backendApi.post(createEventPath,eventData);
+      const { data } = await backendApi.post(createEventPath, eventData);
 
-      const eventsList= normalizeEventsArray([data])
-      dispatch(addEvent(eventsList))
-
+      const eventsList = normalizeEventsArray([data]);
+      dispatch(addEvent(eventsList));
     } catch (error) {
       console.log(error);
       const message = existError(error);
@@ -53,24 +49,23 @@ export const createEvent = (eventData) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setEventStatus({event: eventsStatus.ok}))
+    dispatch(setEventStatus({ event: eventsStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
 export const editEvent = (eventData) => {
   return async (dispatch) => {
-    dispatch(setEventStatus({event: eventsStatus.fetching}))
+    dispatch(setEventStatus({ event: eventsStatus.fetching }));
     dispatch(setIsFetching(true));
     try {
       const { data } = await backendApi.put(editEventPath, eventData);
-      const eventsList= normalizeEventsArray([data])
-      dispatch(editEventById(eventsList))
+      const eventsList = normalizeEventsArray([data]);
+      dispatch(editEventById(eventsList));
       dispatch(setSuccessMessage('Evento editado'));
       setTimeout(() => {
         dispatch(setSuccessMessage(undefined));
       }, 10);
-
     } catch (error) {
       console.log(error);
       const message = existError(error);
@@ -79,9 +74,8 @@ export const editEvent = (eventData) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setEventStatus({event: eventsStatus.ok}))
+    dispatch(setEventStatus({ event: eventsStatus.ok }));
     dispatch(setIsFetching(false));
-
   };
 };
 

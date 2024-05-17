@@ -11,18 +11,17 @@ export const eventsSlice = createSlice({
     eventStatus: {
       event: eventsStatus.initial,
       events: eventsStatus.initial,
-    }
-    ,
+    },
   },
   reducers: {
-    setEventStatus: (state,{payload})=>{
-      const {event, events}=payload;
-      if(event) state.eventStatus.event=event;
-      if(events) state.eventStatus.events=events;
+    setEventStatus: (state, { payload }) => {
+      const { event, events } = payload;
+      if (event) state.eventStatus.event = event;
+      if (events) state.eventStatus.events = events;
     },
 
-    setEventViewSelected: (state,{payload})=>{
-      state.eventsView=payload;
+    setEventViewSelected: (state, { payload }) => {
+      state.eventsView = payload;
     },
     setNextEvent: (state, { payload }) => {
       state.nextEvent = payload;
@@ -31,19 +30,20 @@ export const eventsSlice = createSlice({
       state.events = payload;
     },
     addEvent: (state, { payload }) => {
-      const newArray= [...state.events, ...payload];
+      const newArray = [...state.events, ...payload];
       state.events = newArray;
-      state.nextEvent=findNextEvent(newArray);
-    }, 
+      state.nextEvent = findNextEvent(newArray);
+    },
     editEventById: (state, { payload }) => {
-      const newArray= state.events.map((data)=>{
-        if(data.id==payload[0].id) return payload[0]
+      const newArray = state.events.map((data) => {
+        if (data.id == payload[0].id) return payload[0];
         return data;
       });
       state.events = newArray;
-      state.nextEvent=findNextEvent(newArray);
-    }, 
+      state.nextEvent = findNextEvent(newArray);
+    },
   },
 });
 
-export const { setEventViewSelected, setNextEvent, setEvents, addEvent, editEventById, setEventStatus } = eventsSlice.actions;
+export const { setEventViewSelected, setNextEvent, setEvents, addEvent, editEventById, setEventStatus } =
+  eventsSlice.actions;

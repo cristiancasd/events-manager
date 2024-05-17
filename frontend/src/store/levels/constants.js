@@ -1,4 +1,3 @@
-export const getLevelPath =(commerceUid)=>{
-    return 'level/find/commerce/'+commerceUid
-}
-
+export const getLevelPath = (commerceUid) => {
+  return 'level/find/commerce/' + commerceUid;
+};

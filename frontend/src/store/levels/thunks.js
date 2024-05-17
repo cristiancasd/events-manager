@@ -4,15 +4,13 @@ import { eventsStatus } from '../../shared';
 import { setLevels, setLevelsStatus } from './levelsSlice';
 import { getLevelPath } from './constants';
 
-
 export const getLevelsList = ({ commerceUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setLevelsStatus({levels: eventsStatus.fetching}))
+    dispatch(setLevelsStatus({ levels: eventsStatus.fetching }));
     try {
       const { data } = await backendApi.get(getLevelPath(commerceUid));
       dispatch(setLevels(data));
-
     } catch (error) {
       console.log(error);
       const message = existError(error);
@@ -21,12 +19,10 @@ export const getLevelsList = ({ commerceUid }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setLevelsStatus({levels: eventsStatus.ok}))
+    dispatch(setLevelsStatus({ levels: eventsStatus.ok }));
     dispatch(setIsFetching(false));
-
   };
 };
-
 
 const existError = (error, email = '') => {
   //console.log('el error users es ', error)

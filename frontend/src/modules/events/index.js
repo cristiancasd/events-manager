@@ -1,2 +1,1 @@
-export { EventsRoutes } from "./routes/EventsRoutes";
-
+export { EventsRoutes } from './routes/EventsRoutes';
