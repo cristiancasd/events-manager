@@ -1,2 +1,9 @@
-export { getTicketsList, createTicket } from './thunks';
-export { setTicketsStatus, setTickets, addTicket, editticketById, ticketsSlice } from './ticketsSlice';
+export { startGetTicketsList, startCreateTicket, startEditTicket } from './thunks';
+export {
+  resetTicketsVariables,
+  setTicketsStatus,
+  setTickets,
+  addTicket,
+  editTicketById,
+  ticketsSlice,
+} from './ticketsSlice';

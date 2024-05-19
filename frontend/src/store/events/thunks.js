@@ -4,12 +4,12 @@ import { createEventPath, getEventPath, editEventPath } from './constants';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { findNextEvent } from './utils/findNextEvent';
 import { normalizeEventsArray } from './utils/normalizeEventsArray';
-import { eventsStatus } from '../../shared';
+import { variableStatus } from '../../shared';
 
-export const getEventsList = ({ commerceUid }) => {
+export const startGetEventsList = ({ commerceUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setEventStatus({ events: eventsStatus.fetching }));
+    dispatch(setEventStatus({ events: variableStatus.fetching }));
     try {
       const { data } = await backendApi.get(getEventPath(commerceUid));
 
@@ -26,15 +26,15 @@ export const getEventsList = ({ commerceUid }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setEventStatus({ events: eventsStatus.ok, event: eventsStatus.ok }));
+    dispatch(setEventStatus({ events: variableStatus.ok, event: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
-export const createEvent = (eventData) => {
+export const startCreateEvent = (eventData) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setEventStatus({ event: eventsStatus.fetching }));
+    dispatch(setEventStatus({ event: variableStatus.fetching }));
 
     try {
       const { data } = await backendApi.post(createEventPath, eventData);
@@ -49,19 +49,19 @@ export const createEvent = (eventData) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setEventStatus({ event: eventsStatus.ok }));
+    dispatch(setEventStatus({ event: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
-export const editEvent = (eventData) => {
+export const startEditEvent = (eventData) => {
   return async (dispatch) => {
-    dispatch(setEventStatus({ event: eventsStatus.fetching }));
+    dispatch(setEventStatus({ event: variableStatus.fetching }));
     dispatch(setIsFetching(true));
     try {
       const { data } = await backendApi.put(editEventPath, eventData);
       const eventsList = normalizeEventsArray([data]);
-      dispatch(editEventById(eventsList));
+      dispatch(editEventById(eventsList[0]));
       dispatch(setSuccessMessage('Evento editado'));
       setTimeout(() => {
         dispatch(setSuccessMessage(undefined));
@@ -74,7 +74,7 @@ export const editEvent = (eventData) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setEventStatus({ event: eventsStatus.ok }));
+    dispatch(setEventStatus({ event: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };

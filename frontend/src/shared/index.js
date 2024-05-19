@@ -1,6 +1,6 @@
 export { LoadingBox } from './ui/components/LoadingBox';
 
-export { eventsStatus } from './constants/constanst';
+export { variableStatus } from './constants/constanst';
 
 export { UserMenu } from './components/UserMenu';
 

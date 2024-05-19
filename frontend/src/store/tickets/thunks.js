@@ -1,13 +1,13 @@
 import { backendApi } from '../../api';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
-import { eventsStatus } from '../../shared';
-import { addTicket, setTickets, setTicketsStatus } from './ticketsSlice';
-import { createTicketPath, getTicketsPath } from './constants';
+import { variableStatus } from '../../shared';
+import { addTicket, editTicketById, setTickets, setTicketsStatus } from './ticketsSlice';
+import { createTicketPath, editTicketPath, getTicketsPath } from './constants';
 
-export const getTicketsList = ({ commerceUid }) => {
+export const startGetTicketsList = ({ commerceUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setTicketsStatus({ tickets: eventsStatus.fetching }));
+    dispatch(setTicketsStatus({ tickets: variableStatus.fetching }));
     try {
       const { data } = await backendApi.get(getTicketsPath(commerceUid));
       dispatch(setTickets(data));
@@ -19,19 +19,18 @@ export const getTicketsList = ({ commerceUid }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setTicketsStatus({ tickets: eventsStatus.ok }));
+    dispatch(setTicketsStatus({ tickets: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
-export const createTicket = ({ ticketData }) => {
+export const startCreateTicket = ({ ticketData }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setTicketsStatus({ tickets: eventsStatus.fetching }));
+    dispatch(setTicketsStatus({ tickets: variableStatus.fetching }));
 
     try {
       const { data } = await backendApi.post(createTicketPath, ticketData);
-      console.log('response data is ', data);
       dispatch(addTicket(data));
       dispatch(setSuccessMessage('Ticket creado'));
       setTimeout(() => {
@@ -45,7 +44,32 @@ export const createTicket = ({ ticketData }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setTicketsStatus({ tickets: eventsStatus.ok }));
+    dispatch(setTicketsStatus({ tickets: variableStatus.ok }));
+    dispatch(setIsFetching(false));
+  };
+};
+
+export const startEditTicket = ({ ticketData }) => {
+  return async (dispatch) => {
+    dispatch(setIsFetching(true));
+    dispatch(setTicketsStatus({ tickets: variableStatus.fetching }));
+
+    try {
+      const { data } = await backendApi.put(editTicketPath, ticketData);
+      dispatch(editTicketById(data));
+      dispatch(setSuccessMessage('Ticket Editado'));
+      setTimeout(() => {
+        dispatch(setSuccessMessage(undefined));
+      }, 10);
+    } catch (error) {
+      console.log(error);
+      const message = existError(error);
+      dispatch(setErrorMessage(message));
+      setTimeout(() => {
+        dispatch(setErrorMessage(undefined));
+      }, 10);
+    }
+    dispatch(setTicketsStatus({ tickets: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };

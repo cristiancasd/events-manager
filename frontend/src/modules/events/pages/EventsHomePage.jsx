@@ -3,25 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { EventsLayout } from '../layout/EventsLayout';
 import {
-  createEvent,
-  getEventsList,
+  startCreateEvent,
+  startGetEventsList,
   setEventViewSelected,
-  editEvent,
-  getLevelsList,
-  getTicketsList,
-  createTicket,
+  startEditEvent,
+  startGetLevelsList,
+  startGetTicketsList,
+  startCreateTicket,
 } from '../../../store';
 import { optionsEventsView } from './eventsConstants';
 import { useEffect, useState } from 'react';
-import {
-  EventCardComponent,
-  EventsTableComponent,
-  EventModalComponent,
-  TicketsTableComponent,
-  TicketModalComponent,
-} from '../components';
+import { EventCardComponent, EventsTableComponent, EventModalComponent, TicketsTableComponent } from '../components';
 import Swal from 'sweetalert2';
-import { LoadingBox, eventsStatus } from '../../../shared';
+import { LoadingBox, variableStatus } from '../../../shared';
 
 const normalizeUrl = (url) => {
   let value;
@@ -98,22 +92,22 @@ export const EventsHomePage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setEventViewSelected(optionsEventsView.events));
-    dispatch(getEventsList({ commerceUid: user.commerceUid }));
-    dispatch(getLevelsList({ commerceUid: user.commerceUid }));
-    dispatch(getTicketsList({ commerceUid: user.commerceUid }));
+    dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
+    dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
+    dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
   }, []);
 
   //********************** TICKETS normalize *************** */
-  const [normalizedLevelsTickets, setNormalizedLevelsTickets] = useState(undefined);
+  /*const [normalizedLevelsTickets, setNormalizedLevelsTickets] = useState(undefined);
   const { levels, levelsStatus } = useSelector((state) => state.levels);
   const { tickets, ticketsStatus } = useSelector((state) => state.tickets);
   useEffect(() => {
-    if (levelsStatus.levels != eventsStatus.initial && ticketsStatus.tickets != eventsStatus.initial) {
+    if (levelsStatus.levels != variableStatus.initial && ticketsStatus.tickets != variableStatus.initial) {
       const levelsTickets = arrayLevelsTickets(levels, tickets);
       setNormalizedLevelsTickets(levelsTickets ?? []);
     }
   }),
-    [levelsStatus, ticketsStatus];
+    [levelsStatus, ticketsStatus];*/
 
   //********************POP UP messages*******************+ */
   useEffect(() => {
@@ -160,7 +154,7 @@ export const EventsHomePage = () => {
       url: normalizeUrl(data.url),
       commerceUid: user.commerceUid,
     };
-    dispatch(editEvent(event));
+    dispatch(startEditEvent(event));
   };
 
   const handleCreateEvent = (data) => {
@@ -171,7 +165,7 @@ export const EventsHomePage = () => {
       url: normalizeUrl(data.url),
       commerceUid: user.commerceUid,
     };
-    dispatch(createEvent(event));
+    dispatch(startCreateEventreateEvent(event));
   };
 
   return (
@@ -199,7 +193,7 @@ export const EventsHomePage = () => {
           <Grid item xs={12} md={12} paddingBottom={{ xs: 0, sm: 5 }}>
             {typegraphyFormat('Próximo evento')}
 
-            {eventStatus.event == eventsStatus.initial || eventStatus.event == eventsStatus.fetching ? (
+            {eventStatus.event == variableStatus.initial || eventStatus.event == variableStatus.fetching ? (
               <LoadingBox />
             ) : nextEvent ? (
               <EventCardComponent
@@ -226,9 +220,8 @@ export const EventsHomePage = () => {
           {/**All events */}
           <Grid item xs={12} md={12} paddingTop={{ xs: 0, sm: 5 }}>
             {typegraphyFormat('Todos los Eventos')}
-            {eventStatus.events == eventsStatus.initial ||
-            eventStatus.events == eventsStatus.fetching ||
-            !normalizedLevelsTickets ? (
+            {eventStatus.events == variableStatus.initial || eventStatus.events == variableStatus.fetching ? (
+              //|| !normalizedLevelsTickets
               <LoadingBox />
             ) : (
               <EventsTableComponent events={events} />

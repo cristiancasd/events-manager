@@ -1,16 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { eventsStatus } from '../../shared';
+import { variableStatus } from '../../shared';
 
 export const ticketsSlice = createSlice({
   name: 'tickets',
   initialState: {
     tickets: [],
     ticketsStatus: {
-      ticket: eventsStatus.initial,
-      tickets: eventsStatus.initial,
+      ticket: variableStatus.initial,
+      tickets: variableStatus.initial,
     },
   },
   reducers: {
+    resetTicketsVariables: (state) => {
+      (state.tickets = []),
+        (state.ticketsStatus = {
+          ticket: variableStatus.initial,
+          tickets: variableStatus.initial,
+        });
+    },
+
     setTicketsStatus: (state, { payload }) => {
       const { ticket, tickets } = payload;
       if (ticket) state.ticketsStatus.ticket = ticket;
@@ -24,9 +32,9 @@ export const ticketsSlice = createSlice({
       const newArray = [...state.tickets, payload];
       state.tickets = newArray;
     },
-    editticketById: (state, { payload }) => {
+    editTicketById: (state, { payload }) => {
       const newArray = state.tickets.map((data) => {
-        if (data.id == payload[0].id) return payload[0];
+        if (data.id == payload.id) return payload;
         return data;
       });
       state.tickets = newArray;
@@ -34,4 +42,4 @@ export const ticketsSlice = createSlice({
   },
 });
 
-export const { setTicketsStatus, setTickets, addTicket, editticketById } = ticketsSlice.actions;
+export const { resetTicketsVariables, setTicketsStatus, setTickets, addTicket, editTicketById } = ticketsSlice.actions;

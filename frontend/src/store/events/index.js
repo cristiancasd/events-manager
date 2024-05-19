@@ -1,6 +1,10 @@
-export { editEvent } from './thunks';
-
-export { createEvent } from './thunks';
-
-export { setEventViewSelected, setNextEvent, setEvents, addEvent, setEventStatus, eventsSlice } from './eventsSlice';
-export { getEventsList } from './thunks';
+export {
+  setEventViewSelected,
+  setNextEvent,
+  setEvents,
+  addEvent,
+  setEventStatus,
+  eventsSlice,
+  resetEventsVariables,
+} from './eventsSlice';
+export { startGetEventsList, startEditEvent, startCreateEvent } from './thunks';

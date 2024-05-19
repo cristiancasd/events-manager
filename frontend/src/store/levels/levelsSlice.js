@@ -1,16 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { eventsStatus } from '../../shared';
+import { variableStatus } from '../../shared';
 
 export const levelsSlice = createSlice({
   name: 'levels',
   initialState: {
     levels: [],
     levelsStatus: {
-      level: eventsStatus.initial,
-      levels: eventsStatus.initial,
+      level: variableStatus.initial,
+      levels: variableStatus.initial,
     },
   },
   reducers: {
+    resetLevelsVariables: (state) => {
+      state.levels = [];
+      state.levelsStatus = {
+        level: variableStatus.initial,
+        levels: variableStatus.initial,
+      };
+    },
+
     setLevelsStatus: (state, { payload }) => {
       const { level, levels } = payload;
       if (level) state.levelsStatus.level = level;
@@ -34,4 +42,4 @@ export const levelsSlice = createSlice({
   },
 });
 
-export const { setLevelsStatus, setLevels, addLevel, editLevelById } = levelsSlice.actions;
+export const { setLevelsStatus, setLevels, addLevel, editLevelById, resetLevelsVariables } = levelsSlice.actions;

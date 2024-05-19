@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { findNextEvent } from './utils/findNextEvent';
-import { eventsStatus } from '../../shared';
+import { variableStatus } from '../../shared';
 
 export const eventsSlice = createSlice({
   name: 'events',
@@ -9,11 +9,21 @@ export const eventsSlice = createSlice({
     events: [],
     eventViewSelected: undefined,
     eventStatus: {
-      event: eventsStatus.initial,
-      events: eventsStatus.initial,
+      event: variableStatus.initial,
+      events: variableStatus.initial,
     },
   },
   reducers: {
+    resetEventsVariables: (state) => {
+      state.nextEvent = undefined;
+      state.events = [];
+      state.eventViewSelected = undefined;
+      state.eventStatus = {
+        event: variableStatus.initial,
+        events: variableStatus.initial,
+      };
+    },
+
     setEventStatus: (state, { payload }) => {
       const { event, events } = payload;
       if (event) state.eventStatus.event = event;
@@ -21,7 +31,7 @@ export const eventsSlice = createSlice({
     },
 
     setEventViewSelected: (state, { payload }) => {
-      state.eventsView = payload;
+      state.eventViewSelected = payload;
     },
     setNextEvent: (state, { payload }) => {
       state.nextEvent = payload;
@@ -36,7 +46,7 @@ export const eventsSlice = createSlice({
     },
     editEventById: (state, { payload }) => {
       const newArray = state.events.map((data) => {
-        if (data.id == payload[0].id) return payload[0];
+        if (data.id == payload.id) return payload;
         return data;
       });
       state.events = newArray;
@@ -45,5 +55,12 @@ export const eventsSlice = createSlice({
   },
 });
 
-export const { setEventViewSelected, setNextEvent, setEvents, addEvent, editEventById, setEventStatus } =
-  eventsSlice.actions;
+export const {
+  setEventViewSelected,
+  setNextEvent,
+  setEvents,
+  addEvent,
+  editEventById,
+  setEventStatus,
+  resetEventsVariables,
+} = eventsSlice.actions;

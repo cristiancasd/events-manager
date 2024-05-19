@@ -9,7 +9,7 @@ import { LoginForm } from '../components/LoginForm';
 import { ImageAuth } from '../components/ImageAuth';
 
 import { useNavigate } from 'react-router-dom';
-import { startLogin } from '../../../store';
+import { resetEventsVariables, resetLevelsVariables, resetTicketsVariables, startLogin } from '../../../store';
 
 export const LoginPage = () => {
   console.log('estoy en Login Page');
@@ -19,6 +19,9 @@ export const LoginPage = () => {
 
   useEffect(() => {
     console.log('estoy en Login Page');
+    dispatch(resetEventsVariables());
+    dispatch(resetLevelsVariables());
+    dispatch(resetTicketsVariables());
   }, []);
 
   const { errorMessageAuth, user } = useSelector((state) => state.auth);

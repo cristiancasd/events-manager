@@ -1,8 +1,9 @@
 import { AppBar, Box, Button, Grid, Toolbar, IconButton } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { UserMenu } from '../../../shared';
-import { Home } from '@mui/icons-material';
+import { EditCalendar, Equalizer, Home, PersonAdd } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export const EventsNavbar = () => {
   const navigate = useNavigate();
@@ -12,27 +13,46 @@ export const EventsNavbar = () => {
   const navigateToAttendees = () => navigate('/events/attendees');
   const navigateToStats = () => navigate('/events/stats');
 
-  const commonSx = { my: 2, color: 'white', display: 'block' };
+  const commonSxIcons = { my: 2, color: 'white', display: 'flex' };
+  const commonSxButtons = { my: 2, color: 'white', display: 'flex', paddingRight: 2, paddingLeft: 2, fontSize: 16 };
+
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down('xs'));
+
   return (
     <AppBar position="fixed">
       <Toolbar>
         <Grid container direction="row" justifyContent="space-between">
-          <Box sx={{ flexGrow: 1, display: 'flex' }}>
-            <IconButton sx={commonSx} onClick={navigateToHome}>
-              {' '}
-              <Home />{' '}
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', sm: 'none' }, justifyContent: 'space-evenly' }}>
+            <IconButton sx={commonSxIcons} onClick={navigateToHome}>
+              <Home />
             </IconButton>
-            <Button sx={commonSx} onClick={navigateToEvents}>
-              {' '}
-              Eventos{' '}
+
+            <IconButton sx={commonSxIcons} onClick={navigateToEvents}>
+              <EditCalendar />
+            </IconButton>
+
+            <IconButton sx={commonSxIcons} onClick={navigateToAttendees}>
+              <PersonAdd />
+            </IconButton>
+
+            <IconButton sx={commonSxIcons} onClick={navigateToStats}>
+              <Equalizer />
+            </IconButton>
+          </Box>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
+            <Button sx={{ ...commonSxButtons }} onClick={navigateToHome}>
+              Inicio
             </Button>
-            <Button sx={commonSx} onClick={navigateToAttendees}>
-              {' '}
-              Asistentes{' '}
+            <Button sx={commonSxButtons} onClick={navigateToEvents}>
+              Eventos
             </Button>
-            <Button sx={commonSx} onClick={navigateToStats}>
-              {' '}
-              Estadisticas{' '}
+            <Button sx={commonSxButtons} onClick={navigateToAttendees}>
+              Asistentes
+            </Button>
+            <Button sx={commonSxButtons} onClick={navigateToStats}>
+              Estadisticas
             </Button>
           </Box>
           <UserMenu />

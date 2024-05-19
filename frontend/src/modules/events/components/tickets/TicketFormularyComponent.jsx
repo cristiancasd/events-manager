@@ -41,6 +41,7 @@ export const TicketFourmularyComponent = ({ onSubmit, actionName, ticket }) => {
             value={presaleFee}
             onChange={onInputChange}
             fullWidth
+            required
           />
         </Grid>
 

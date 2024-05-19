@@ -1,13 +1,13 @@
 import { backendApi } from '../../api';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
-import { eventsStatus } from '../../shared';
+import { variableStatus } from '../../shared';
 import { setLevels, setLevelsStatus } from './levelsSlice';
 import { getLevelPath } from './constants';
 
-export const getLevelsList = ({ commerceUid }) => {
+export const startGetLevelsList = ({ commerceUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setLevelsStatus({ levels: eventsStatus.fetching }));
+    dispatch(setLevelsStatus({ levels: variableStatus.fetching }));
     try {
       const { data } = await backendApi.get(getLevelPath(commerceUid));
       dispatch(setLevels(data));
@@ -19,7 +19,7 @@ export const getLevelsList = ({ commerceUid }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setLevelsStatus({ levels: eventsStatus.ok }));
+    dispatch(setLevelsStatus({ levels: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };

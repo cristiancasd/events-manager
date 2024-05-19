@@ -1,9 +1,9 @@
 import { Grid, Typography, Button, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getLevelsList, getTicketsList } from '../../../../store';
+import { startGetLevelsList, startGetTicketsList } from '../../../../store';
 import { useEffect, useState } from 'react';
-import { LoadingBox, eventsStatus } from '../../../../shared';
+import { LoadingBox, variableStatus } from '../../../../shared';
 import { TicketCardComponent } from './TicketCardComponent';
 
 const relationLevelTicket = (levelUid, tickets) => {
@@ -69,25 +69,27 @@ const columns = [
 ];
 
 export const TicketsTableComponent = () => {
+  const [normalizedLevelsTickets, setNormalizedLevelsTickets] = useState(undefined);
+
+  const { levels, levelsStatus } = useSelector((state) => state.levels);
+  const { tickets, ticketsStatus } = useSelector((state) => state.tickets);
+
   //***************** INITIAL dispatchs ************************** */
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getLevelsList({ commerceUid: user.commerceUid }));
-    dispatch(getTicketsList({ commerceUid: user.commerceUid }));
+    dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
+    dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
   }, []);
 
   //********************** TICKETS normalize *************** */
-  const [normalizedLevelsTickets, setNormalizedLevelsTickets] = useState(undefined);
-  const { levels, levelsStatus } = useSelector((state) => state.levels);
-  const { tickets, ticketsStatus } = useSelector((state) => state.tickets);
+
   useEffect(() => {
-    if (levelsStatus.levels != eventsStatus.initial && ticketsStatus.tickets != eventsStatus.initial) {
+    if (ticketsStatus.tickets == variableStatus.ok && levelsStatus.levels == variableStatus.ok) {
       const levelsTickets = arrayLevelsTickets(levels, tickets);
       setNormalizedLevelsTickets(levelsTickets ?? []);
     }
-  }),
-    [levelsStatus, ticketsStatus];
+  }, [levelsStatus, ticketsStatus, tickets, levels]);
 
   const typegraphyFormat = (text) => {
     return (
@@ -108,8 +110,8 @@ export const TicketsTableComponent = () => {
     <Grid contained paddingBottom={5}>
       {typegraphyFormat('Boletería')}
 
-      {ticketsStatus.tickets == eventsStatus.initial ||
-      ticketsStatus.tickets == eventsStatus.fetching ||
+      {ticketsStatus.tickets == variableStatus.initial ||
+      ticketsStatus.tickets == variableStatus.fetching ||
       !normalizedLevelsTickets ? (
         <LoadingBox />
       ) : (

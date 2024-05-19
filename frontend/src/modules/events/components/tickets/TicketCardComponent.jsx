@@ -1,8 +1,19 @@
-import { Button, Grid, Card, CardActionArea, CardMedia, CardContent, Typography, CardActions } from '@mui/material';
+import {
+  Button,
+  Box,
+  Grid,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+} from '@mui/material';
 import { TicketModalComponent } from './TicketModalComponent';
 import { useState } from 'react';
-import { createTicket } from '../../../../store';
+import { startCreateTicket, startEditTicket } from '../../../../store';
 import { useDispatch, useSelector } from 'react-redux';
+import { LocalActivity } from '@mui/icons-material';
 
 export const TicketCardComponent = ({ id, ticketUid, name, presaleFee, saleFee }) => {
   const dispatch = useDispatch();
@@ -26,10 +37,20 @@ export const TicketCardComponent = ({ id, ticketUid, name, presaleFee, saleFee }
       commerceUid: user.commerceUid,
       levelUid: id,
     };
-    dispatch(createTicket({ ticketData: ticket }));
+    dispatch(startCreateTicket({ ticketData: ticket }));
   };
 
-  const handleEditTicket = (data) => {};
+  const handleEditTicket = (data) => {
+    const ticket = {
+      id: ticketUid,
+      name: name,
+      saleFee: data.saleFee,
+      presaleFee: data.presaleFee,
+      commerceUid: user.commerceUid,
+      levelUid: id,
+    };
+    dispatch(startEditTicket({ ticketData: ticket }));
+  };
 
   return (
     <Grid container justifyContent="center" alignItems="center" padding={2}>
@@ -52,17 +73,53 @@ export const TicketCardComponent = ({ id, ticketUid, name, presaleFee, saleFee }
       />
 
       <Grid item alignSelf="center">
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ minWidth: 275, position: 'relative' }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              backgroundColor: 'primary.main',
+              color: 'white',
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <LocalActivity />
+          </Box>
           <CardContent>
-            <Typography fontSize={20} component="div">
+            <Typography fontSize={20} component="div" fontWeight={450}>
               {name}
             </Typography>
-            <Typography variant="h7" component="div">
-              Preventa: {presaleFee.toLocaleString('es-CO')}
-            </Typography>
-            <Typography variant="h7" component="div">
-              Venta: {saleFee}
-            </Typography>
+            <Grid container backgroundColor="re" paddingTop={2}>
+              <Grid item xs="5">
+                <Typography variant="h7" component="div" fontWeight={100}>
+                  Preventa:
+                </Typography>
+              </Grid>
+              <Grid item xs="7" backgroundColor="yello">
+                <Typography variant="h7" component="div" fontWeight={100}>
+                  {presaleFee.toLocaleString('es-CO')}
+                </Typography>
+              </Grid>
+            </Grid>
+
+            <Grid container backgroundColor="re">
+              <Grid item xs="5">
+                <Typography variant="h7" component="div" fontWeight={100}>
+                  Venta:
+                </Typography>
+              </Grid>
+              <Grid item xs="7" backgroundColor="yello">
+                <Typography variant="h7" component="div" fontWeight={100}>
+                  {saleFee.toLocaleString('es-CO')}
+                </Typography>
+              </Grid>
+            </Grid>
           </CardContent>
           <CardActions>
             {presaleFee == '' ? (
