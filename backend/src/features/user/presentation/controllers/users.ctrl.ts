@@ -40,6 +40,20 @@ export class UserController {
     res.status(200).send(result);
   };
 
+  public findUserByDocumentOrCustomIdCtrl = async (req: Request, res: Response) => {
+    const { commerceUid } = req.params;
+    const { data } = req.query;
+    const input = (data as string) || '';
+
+    const result = await this.userUseCase.findUserByDocumentOrCustomId(
+      commerceUid,
+      input,
+    );
+    res.status(200).send(result);
+  };
+
+  
+
   public findUserByLevelCtrl = async (req: Request, res: Response) => {
     const { commerceUid, levelUid } = req.params;
     const result = await this.userUseCase.findUsersByLevelUid(

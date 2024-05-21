@@ -30,13 +30,13 @@ export class LevelUseCase implements LevelUseCaseInterface {
       nameFound = levelFound ? true : false;
     }
 
-    if (typeId != null) {
+    /*if (typeId != null) {
       const levelFound = await this._levelRepository.findLevelByTypeId(
         commerceUid,
         typeId
       );
       typeIdFound = levelFound ? true : false;
-    }
+    }*/
     return nameFound || typeIdFound ? true : false;
   }
 

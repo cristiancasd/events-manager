@@ -1,3 +1,5 @@
+export { SearchFieldComponent } from './components/SearchFieldComponent';
+
 export { LoadingBox } from './ui/components/LoadingBox';
 
 export { variableStatus } from './constants/constanst';

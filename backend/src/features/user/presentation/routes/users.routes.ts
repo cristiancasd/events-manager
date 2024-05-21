@@ -55,6 +55,20 @@ userRoutes.get(
   userCtrl.findCtrl
 );
 
+
+/// Find usser by CustomId or Documento
+userRoutes.get(
+  '/find/data/:commerceUid',
+  [
+    validateUUIDParam('commerceUid'),
+    checkTokenMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    query('data').isString().withMessage('Data is necesary')
+  ],
+  validateRequest,
+  userCtrl.findUserByDocumentOrCustomIdCtrl
+);
+
 /// Find user by email
 userRoutes.get(
   '/find/email/:commerceUid',

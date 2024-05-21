@@ -1,15 +1,14 @@
 import { AppBar, Box, Button, Grid, Toolbar, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { UserMenu } from '../../../shared';
-import { EditCalendar, Equalizer, Home, PersonAdd } from '@mui/icons-material';
+import { BusinessCenter, EditCalendar, Equalizer, Face, Home, Person, PersonAdd } from '@mui/icons-material';
 
-export const EventsNavbar = () => {
+export const UsersNavbar = () => {
   const navigate = useNavigate();
 
   const navigateToHome = () => navigate('/home');
-  const navigateToEvents = () => navigate('/events');
-  const navigateToAttendees = () => navigate('/events/attendees');
-  const navigateToStats = () => navigate('/events/stats');
+  const navigateToUsers = () => navigate('/users');
+  const navigateToProspects = () => navigate('/users/prospects');
 
   const commonSxIcons = { my: 2, color: 'white', display: 'flex' };
   const commonSxButtons = { my: 2, color: 'white', display: 'flex', paddingRight: 2, paddingLeft: 2, fontSize: 16 };
@@ -23,16 +22,12 @@ export const EventsNavbar = () => {
               <Home />
             </IconButton>
 
-            <IconButton sx={commonSxIcons} onClick={navigateToEvents}>
-              <EditCalendar />
+            <IconButton sx={commonSxIcons} onClick={navigateToUsers}>
+              <BusinessCenter />
             </IconButton>
 
-            <IconButton sx={commonSxIcons} onClick={navigateToAttendees}>
-              <PersonAdd />
-            </IconButton>
-
-            <IconButton sx={commonSxIcons} onClick={navigateToStats}>
-              <Equalizer />
+            <IconButton sx={commonSxIcons} onClick={navigateToProspects}>
+              <Person />
             </IconButton>
           </Box>
 
@@ -40,14 +35,11 @@ export const EventsNavbar = () => {
             <Button sx={{ ...commonSxButtons }} onClick={navigateToHome}>
               Inicio
             </Button>
-            <Button sx={commonSxButtons} onClick={navigateToEvents}>
-              Eventos
+            <Button sx={commonSxButtons} onClick={navigateToUsers}>
+              Usuarios
             </Button>
-            <Button sx={commonSxButtons} onClick={navigateToAttendees}>
-              Asistentes
-            </Button>
-            <Button sx={commonSxButtons} onClick={navigateToStats}>
-              Estadisticas
+            <Button sx={commonSxButtons} onClick={navigateToProspects}>
+              Prospectos
             </Button>
           </Box>
           <UserMenu />

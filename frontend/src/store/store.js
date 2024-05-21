@@ -4,6 +4,7 @@ import { commonSlice } from './common';
 import { eventsSlice } from './events';
 import { levelsSlice } from './levels';
 import { ticketsSlice } from './tickets';
+import { usersSlice } from './users';
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     events: eventsSlice.reducer,
     levels: levelsSlice.reducer,
     tickets: ticketsSlice.reducer,
+    users: usersSlice.reducer,
   },
 });

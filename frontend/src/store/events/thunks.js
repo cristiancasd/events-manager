@@ -114,15 +114,20 @@ export const startLogout = () => {
 const existError = (error, email = '') => {
   //console.log('el error users es ', error)
 
-  if (error.response) {
-    if (error.response.data.errors && Array.isArray(error.response.data.errors)) {
-      const errors = error.response.data.errors[0];
+  try {
+    if (error.response) {
+      if (error.response.data.errors && Array.isArray(error.response.data.errors)) {
+        const errors = error.response.data.errors;
 
-      console.log('errors', errors);
-
-      if (errors.code == 804) return 'Credenciales invalidas';
-      if (errors.code == 600) return 'Ruta invalida';
+        let errorMessage = '';
+        errors.forEach((data) => {
+          errorMessage += errorMessage + data.message + '\n';
+        });
+        return errorMessage;
+      }
     }
+  } catch (err) {
+    return 'Server Error';
   }
-  return 'Server Error';
+  return 'Error desconocido';
 };

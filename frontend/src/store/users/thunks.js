@@ -1,16 +1,16 @@
 import { backendApi } from '../../api';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { variableStatus } from '../../shared';
-import { addLevel, deleteLevelByUid, setLevels, setLevelsStatus } from './levelsSlice';
-import { createLevelPath, deleteLevelPath, editLevelPath, getLevelPath } from './constants';
+import { setUser, setUsersStatus } from './usersSlice';
+import { findUserByCustomIdOrDocumentPath } from './constants';
 
-export const startGetLevelsList = ({ commerceUid }) => {
+export const startFindUserByDocOrId = ({ commerceUid, toSearch }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setLevelsStatus({ levels: variableStatus.fetching }));
+    dispatch(setUsersStatus({ user: variableStatus.fetching }));
     try {
-      const { data } = await backendApi.get(getLevelPath(commerceUid));
-      dispatch(setLevels(data));
+      const { data } = await backendApi.get(findUserByCustomIdOrDocumentPath(commerceUid, toSearch));
+      dispatch(setUser(data));
     } catch (error) {
       console.log(error);
       const message = existError(error);
@@ -19,20 +19,40 @@ export const startGetLevelsList = ({ commerceUid }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setLevelsStatus({ levels: variableStatus.ok }));
+    dispatch(setUsersStatus({ user: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
-export const startCreateLevel = (levelData) => {
+/*export const startGetTicketsList = ({ commerceUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setLevelsStatus({ level: variableStatus.fetching }));
+    dispatch(setTicketsStatus({ tickets: variableStatus.fetching }));
+    try {
+      const { data } = await backendApi.get(getTicketsPath(commerceUid));
+      dispatch(setTickets(data));
+    } catch (error) {
+      console.log(error);
+      const message = existError(error);
+      dispatch(setErrorMessage(message));
+      setTimeout(() => {
+        dispatch(setErrorMessage(undefined));
+      }, 10);
+    }
+    dispatch(setTicketsStatus({ tickets: variableStatus.ok }));
+    dispatch(setIsFetching(false));
+  };
+};
+
+export const startCreateTicket = ({ ticketData }) => {
+  return async (dispatch) => {
+    dispatch(setIsFetching(true));
+    dispatch(setTicketsStatus({ tickets: variableStatus.fetching }));
 
     try {
-      const { data } = await backendApi.post(createLevelPath, levelData);
-      dispatch(addLevel(data));
-      dispatch(setSuccessMessage('Nivel Creado'));
+      const { data } = await backendApi.post(createTicketPath, ticketData);
+      dispatch(addTicket(data));
+      dispatch(setSuccessMessage('Ticket creado'));
       setTimeout(() => {
         dispatch(setSuccessMessage(undefined));
       }, 10);
@@ -44,47 +64,20 @@ export const startCreateLevel = (levelData) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setLevelsStatus({ level: variableStatus.initial }));
+    dispatch(setTicketsStatus({ tickets: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
-
-export const startDeleteLevel = (levelUid) => {
+export const startEditTicket = ({ ticketData }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setLevelsStatus({ level: variableStatus.fetching }));
+    dispatch(setTicketsStatus({ tickets: variableStatus.fetching }));
 
     try {
-      const { data } = await backendApi.delete(deleteLevelPath(levelUid));
-      dispatch(deleteLevelByUid(levelUid));
-      dispatch(setSuccessMessage('Nivel Eliminado'));
-      setTimeout(() => {
-        dispatch(setSuccessMessage(undefined));
-      }, 10);
-    } catch (error) {
-      console.log(error);
-      const message = existError(error);
-      dispatch(setErrorMessage(message));
-      setTimeout(() => {
-        dispatch(setErrorMessage(undefined));
-      }, 10);
-    }
-    dispatch(setLevelsStatus({ level: variableStatus.initial }));
-    dispatch(setIsFetching(false));
-  };
-};
-
-
-export const startEditLevel = ({ levelData }) => {
-  return async (dispatch) => {
-    dispatch(setIsFetching(true));
-    dispatch(setLevelsStatus({ level: variableStatus.fetching }));
-
-    try {
-      const { data } = await backendApi.put(editLevelPath, levelData);
+      const { data } = await backendApi.put(editTicketPath, ticketData);
       dispatch(editTicketById(data));
-      dispatch(setSuccessMessage('Nivel Editado'));
+      dispatch(setSuccessMessage('Ticket Editado'));
       setTimeout(() => {
         dispatch(setSuccessMessage(undefined));
       }, 10);
@@ -96,10 +89,10 @@ export const startEditLevel = ({ levelData }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setLevelsStatus({ level: variableStatus.ok }));
+    dispatch(setTicketsStatus({ tickets: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
-};
+};*/
 
 const existError = (error, email = '') => {
   //console.log('el error users es ', error)

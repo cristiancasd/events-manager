@@ -4,7 +4,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { CheckingAuth } from '../shared/index';
 import { checkToken } from '../store';
-import { AuthRoutes, EventsRoutes, HomeRoutes, SplashPage } from '../modules';
+import { AuthRoutes, EventsRoutes, HomeRoutes, SplashPage, UsersRoutes } from '../modules';
 
 export const AppRouter = () => {
   const dispatch = useDispatch();
@@ -36,6 +36,7 @@ export const AppRouter = () => {
       <Route path="/auth/*" element={<AuthRoutes />} />
       <Route path="/home/*" element={<HomeRoutes />} />
       <Route path="/events/*" element={<EventsRoutes />} />
+      <Route path="/users/*" element={<UsersRoutes />} />
       <Route path="/*" element={<SplashPage />} />
     </Routes>
   );
