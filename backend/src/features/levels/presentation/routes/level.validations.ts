@@ -5,3 +5,10 @@ export const validateCreateLevelBody: ValidationChain[] = [
   body('typeId').isInt().withMessage('typeId must be int'),
   body('commerceUid').isUUID().withMessage('commerceUid must be UUID')
 ];
+
+
+export const validateEditLevelBody: ValidationChain[] = [
+  ...validateCreateLevelBody,
+  body('id').isUUID().withMessage('id must be UUID')
+];
+

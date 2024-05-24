@@ -4,7 +4,9 @@ import {
   codeCommerceNotFound,
   errorMessageLevelNotFound,
   codeLevelNotFound,
-  errorMessageCommerceNotFound
+  errorMessageCommerceNotFound,
+  DataBaseError,
+  errorMsgDb
 } from '../../../../core';
 
 import { connectDB } from '../../../../database';
@@ -67,6 +69,27 @@ export class TypeOrmLevelRepository implements LevelRepository {
       });
     }
     throw new NotFoundError(errorMessageCommerceNotFound, codeCommerceNotFound);
+  }
+
+  @errorHandlerTypeOrm
+  async editLevel(data: LevelEntity): Promise<LevelEntity> {
+    const levelRepository = connectDB.getRepository(LevelTypeORMEntity);
+    const levelFound = await levelRepository.findOneBy({ id: data.id });
+
+    if (!levelFound)
+      throw new NotFoundError(errorMessageLevelNotFound, codeLevelNotFound);
+
+    const levelSaved = await levelRepository.save({
+      ...levelFound,
+      ...data
+    });
+    if (!levelSaved) throw new DataBaseError(errorMsgDb);
+
+
+    return new LevelValue({
+      ...levelSaved,
+      commerceUid: levelSaved.commerce.id
+    });
   }
 
   @errorHandlerTypeOrm

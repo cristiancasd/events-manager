@@ -10,6 +10,11 @@ export class LevelController {
     res.status(201).send(level);
   };
 
+  public editCtrl = async (req: Request, res: Response) => {
+    const result = await this.levelUseCase.editLevel(req.body);
+    res.status(200).send(result);
+  };
+
   public deleteCtrl = async (req: Request, res: Response) => {
     const { levelId } = req.params;
     const result = await this.levelUseCase.deleteLevelByUid(levelId);

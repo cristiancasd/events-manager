@@ -2,8 +2,8 @@ export const getLevelPath = (commerceUid) => {
   return 'level/find/commerce/' + commerceUid;
 };
 
-export const deleteLevelPath = (levelUid) => {
-  return 'level/delete/' + levelUid;
+export const deleteLevelPath = (commerceUid,levelUid) => {
+  return 'level/delete/' + commerceUid+'/'+levelUid;
 };
 
 

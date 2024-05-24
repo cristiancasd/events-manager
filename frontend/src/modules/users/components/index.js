@@ -1,3 +1,8 @@
-export { LevelNewComponent } from './LevelNewComponent';
-export { LevelListComponent } from './LevelsListComponent';
+export { UserOptionsModalsComponent } from './user/UserOptionsModalComponent';
+
+export { UserFourmularyComponent } from './user/UserFormularyComponent';
+export { UserModalComponent } from './user/UserModalComponent';
+
+export { LevelNewComponent } from './levels/LevelNewComponent';
+export { LevelListComponent } from './levels/LevelsListComponent';
 export { UsersNavbar } from './UsersNavbar';

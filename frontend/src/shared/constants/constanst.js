@@ -9,3 +9,9 @@ export const variableStatus = {
   ok: 'ok',
   fetching: 'fetching',
 };
+
+export const userStatus = {
+  user: 'user',
+  admin: 'admin',
+  superAdmin: 'superAdmin',
+};

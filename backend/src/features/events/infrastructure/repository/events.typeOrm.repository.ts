@@ -73,15 +73,11 @@ export class TypeOrmEventRepository implements EventsRepository {
     if (!eventFound)
       throw new NotFoundError(errorMessageEventNotFound, codeEventNotFound);
 
-    console.log('*****eventFound', eventFound);
-    console.log('*****dataInput', data);
-
     const eventSaved = await eventRepository.save({
       ...eventFound,
       ...data
     });
 
-    console.log('*****eventSaved', eventSaved);
 
     if (!eventSaved) throw new DataBaseError(errorMsgDb);
     return new EventValue({

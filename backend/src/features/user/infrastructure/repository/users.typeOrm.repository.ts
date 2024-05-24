@@ -87,14 +87,21 @@ export class TypeOrmUserRepository implements UserRepository {
     const userCommerceRepository = connectDB.getRepository(
       UserCommerceTypeORMEntity
     );
-    const userCommerce = await userCommerceRepository.findOneBy({
-      commerceUserId: customCommerceId
-    });
-    if (!userCommerce || userCommerce.commerce.id != commerceUid)
+    const commerceUserId= customCommerceId
+    const queryBuilder = userCommerceRepository
+      .createQueryBuilder('userCommerce')
+      .leftJoinAndSelect('userCommerce.level', 'level')
+      .leftJoinAndSelect('userCommerce.commerce', 'commerce')
+      .where('LOWER(userCommerce.commerceUserId) = LOWER(:commerceUserId)', { commerceUserId })
+
+    const userFound = await queryBuilder.getOne();
+
+
+    if (!userFound || userFound.commerce.id != commerceUid)
       throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
     return {
-      ...userCommerce,
-      levelUid: userCommerce.level.id,
+      ...userFound,
+      levelUid: userFound.level.id,
       commerceUid: commerce.id
     };
   }

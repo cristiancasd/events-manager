@@ -2,7 +2,7 @@ import { backendApi } from '../../api';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { variableStatus } from '../../shared';
 import { setUser, setUsersStatus } from './usersSlice';
-import { findUserByCustomIdOrDocumentPath } from './constants';
+import { createUserPath, findUserByCustomIdOrDocumentPath } from './constants';
 
 export const startFindUserByDocOrId = ({ commerceUid, toSearch }) => {
   return async (dispatch) => {
@@ -23,6 +23,33 @@ export const startFindUserByDocOrId = ({ commerceUid, toSearch }) => {
     dispatch(setIsFetching(false));
   };
 };
+
+export const startCreateUser = (user) => {
+  return async (dispatch) => {
+    dispatch(setIsFetching(true));
+    dispatch(setUsersStatus({ user: variableStatus.fetching }));
+    try {
+      const { data } = await backendApi.post(createUserPath,user);
+      dispatch(setUser(data));
+      dispatch(setSuccessMessage('Usuario Creado'));
+      setTimeout(() => {
+        dispatch(setSuccessMessage(undefined));
+      }, 10);
+    } catch (error) {
+      console.log(error);
+      const message = existError(error);
+      dispatch(setErrorMessage(message));
+      setTimeout(() => {
+        dispatch(setErrorMessage(undefined));
+      }, 10);
+    }
+    dispatch(setUsersStatus({ user: variableStatus.ok }));
+    dispatch(setIsFetching(false));
+  };
+};
+
+
+
 
 /*export const startGetTicketsList = ({ commerceUid }) => {
   return async (dispatch) => {
@@ -103,6 +130,8 @@ const existError = (error, email = '') => {
         const errors = error.response.data.errors;
 
         let errorMessage = '';
+
+        if(errors[0].code==805) return 'user not found'
         errors.forEach((data) => {
           errorMessage += errorMessage + data.message + '\n';
         });

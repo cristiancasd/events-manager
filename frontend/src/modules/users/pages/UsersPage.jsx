@@ -6,28 +6,38 @@ import { UsersLayout } from '../layout/UsersLayout';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
-import { startCreateLevel, startDeleteLevel, startEditLevel, startFindUserByDocOrId, startGetLevelsList } from '../../../store';
-import { LevelListComponent } from '../components';
+import { startCreateLevel, startCreateUser, startDeleteLevel, startEditLevel, startFindUserByDocOrId, startGetLevelsList } from '../../../store';
+import { LevelListComponent, UserModalComponent, UserOptionsModalsComponent } from '../components';
 
 export const UsersPage = () => {
   //const { events, nextEvent, eventStatus } = useSelector((state) => state.events);
   //const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const { errorMessage, successMessage, isFetching } = useSelector((state) => state.common);
-  const { usersStatus } = useSelector((state) => state.users);
+  const { usersStatus, user: currentUser } = useSelector((state) => state.users);
   const { levels } = useSelector((state) => state.levels);
 
-  //*******************MODAL dialog variables*********************/
-  //const [openEdit, setOpenEdit] = useState(false);
-  //const [openCreate, setOpenCreate] = useState(false);
+    //*******************MODAL dialog variables*********************/
+    const [openEditUser, setOpenEditUser] = useState(false);
+    const [openCreateUser, setOpenCreateUser] = useState(false);
+  
+    const handleOpenEditDialogUser = () => setOpenEditUser(true);
+    const handleCloseEditDialogUser = () => setOpenEditUser(false);
+  
+    const handleOpenCreateDialogUser = () => setOpenCreateUser(true);
+    const handleCloseCreateDialogUser = () => setOpenCreateUser(false);
 
-  //const handleOpenEditDialog = () => setOpenEdit(true);
-  //const handleCloseEditDialog = () => setOpenEdit(false);
 
-  //const handleOpenCreateDialog = () => setOpenCreate(true);
-  //const handleCloseCreateDialog = () => setOpenCreate(false);
+
+    const [openOptions, setOpenOptions] = useState(false);
+    const handleOpenOptions = () => setOpenOptions(true);
+    const handleCloseOptions = () => setOpenOptions(false);
+  
+   
 
   //***************** INITIAL dispatchs ************************** */
-  const { user } = useSelector((state) => state.auth);
+
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -40,9 +50,20 @@ export const UsersPage = () => {
   //********************POP UP messages*******************+ */
   useEffect(() => {
     if (errorMessage) {
-      Swal.fire('Error', errorMessage, 'error');
+
+      if(errorMessage=='user not found'){
+        handleOpenCreateDialogUser()
+      }else{
+        Swal.fire('Error', errorMessage, 'error');
+
+      }
     }
   }, [errorMessage]);
+
+
+  useEffect(() => {
+    if(currentUser) setOpenOptions(true);
+  }, [currentUser]);
 
   useEffect(() => {
     if (successMessage) {
@@ -83,18 +104,22 @@ export const UsersPage = () => {
     );
   };
   const handleEditLevel = (data) => {
-    console.log('voy a editar');
+    console.log('voy a editar data',data);
     const level = {
       id: data.id,
       name: data.levelName,
       typeId: 4,
       commerceUid: user.commerceUid,
     };
-    dispatch(startEditLevel(level))
+    dispatch(startEditLevel({levelData:level}))
   };
 
   const handleDeleteLevel=(data)=>{
-    dispatch(startDeleteLevel(data));
+    dispatch(startDeleteLevel({
+      levelUid:data,
+      commerceUid: user.commerceUid,
+    
+    }));
   }
 
   const handleCreateLevel = (data) => {
@@ -106,18 +131,59 @@ export const UsersPage = () => {
     dispatch(startCreateLevel(level));
   };
 
+
+  const handleEditUser=(data)=>{
+
+  }
+
+  const handleCreateUser=(data)=>{
+    console.log(data);
+    const userToCreate={
+      ...data,
+      password: data.document,
+      commerceUid: user.commerceUid,
+      isActive:true,
+      name: data.userName,
+    }
+    console.log('data ',data)
+    dispatch(startCreateUser(userToCreate))
+  }
+
   return (
     <UsersLayout title="Administra tus Usuarios">
-      {/*<EventModalComponent
+      <UserModalComponent
         actionName={'Editar'}
-        title={'Editar evento'}
-        onSubmit={handleEditEvent}
-        open={openEdit}
-        handleClose={handleCloseEditDialog}
-        event={nextEvent}
+        title={'Editar Usuario'}
+        onSubmit={handleEditUser}
+        open={openEditUser}
+        handleClose={handleCloseEditDialogUser}
+        user={currentUser}
       />
 
-      <EventModalComponent
+      <UserModalComponent
+        actionName={'Crear'}
+        title={'Crear Usuario'}
+        onSubmit={handleCreateUser}
+        open={openCreateUser}
+        handleClose={handleCloseCreateDialogUser}
+        user={undefined}
+      />
+
+
+      <UserOptionsModalsComponent
+        onAddTicket={()=>{}}
+        open={openOptions}
+        handleClose={handleCloseOptions}
+
+
+        onEditUser={()=>{ if(currentUser) {
+          //setOpenOptions(false)
+          setOpenEditUser(true)
+        }}}
+        user={currentUser}
+      />
+
+      {/*<EventModalComponent
         actionName={'Crear'}
         title={'Crear evento'}
         onSubmit={handleCreateEvent}

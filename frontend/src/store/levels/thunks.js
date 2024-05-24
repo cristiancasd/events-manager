@@ -1,7 +1,7 @@
 import { backendApi } from '../../api';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { variableStatus } from '../../shared';
-import { addLevel, deleteLevelByUid, setLevels, setLevelsStatus } from './levelsSlice';
+import { addLevel, deleteLevelByUid, editLevelById, setLevels, setLevelsStatus } from './levelsSlice';
 import { createLevelPath, deleteLevelPath, editLevelPath, getLevelPath } from './constants';
 
 export const startGetLevelsList = ({ commerceUid }) => {
@@ -50,13 +50,13 @@ export const startCreateLevel = (levelData) => {
 };
 
 
-export const startDeleteLevel = (levelUid) => {
+export const startDeleteLevel = ({levelUid, commerceUid}) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
     dispatch(setLevelsStatus({ level: variableStatus.fetching }));
 
     try {
-      const { data } = await backendApi.delete(deleteLevelPath(levelUid));
+      const { data } = await backendApi.delete(deleteLevelPath(commerceUid,levelUid));
       dispatch(deleteLevelByUid(levelUid));
       dispatch(setSuccessMessage('Nivel Eliminado'));
       setTimeout(() => {
@@ -83,7 +83,7 @@ export const startEditLevel = ({ levelData }) => {
 
     try {
       const { data } = await backendApi.put(editLevelPath, levelData);
-      dispatch(editTicketById(data));
+      dispatch(editLevelById(data));
       dispatch(setSuccessMessage('Nivel Editado'));
       setTimeout(() => {
         dispatch(setSuccessMessage(undefined));

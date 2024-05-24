@@ -21,23 +21,35 @@ export const checkLevelNameMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, typeId, commerceUid } = req.body;
+  const { name, typeId, commerceUid, id } = req.body;
 
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
+
+      let isEditRequest = false;
+      if (req.method === 'PUT') {
+        isEditRequest = true;
+      }
+
       if (!commerceUid) throw new BadRequestError(commerceIdInvalidMessage);
       const nameExist = await levelUseCase.validateDuplicatedData(
         commerceUid?.toString() ?? '',
+        id as string | undefined,
+        isEditRequest,
         name,
-        undefined
+        undefined,
+        
       );
       if (nameExist)
         throw new DataBaseError(duplicatedNameMessage, codeDbNameDuplicated);
       const typeIdExist = await levelUseCase.validateDuplicatedData(
         commerceUid?.toString() ?? '',
+        id as string | undefined,
+        isEditRequest,
         undefined,
-        typeId
+        typeId,
+        
       );
       if (typeIdExist)
         throw new DataBaseError(

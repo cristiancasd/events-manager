@@ -17,8 +17,12 @@ export class LevelUseCase implements LevelUseCaseInterface {
   @errorHandlerUseCase
   async validateDuplicatedData(
     commerceUid: string,
+    id: string | undefined,
+    isEditRequest: boolean,
     name?: string,
-    typeId?: number
+    typeId?: number,
+    
+
   ): Promise<boolean> {
     let nameFound = false;
     let typeIdFound = false;
@@ -28,6 +32,15 @@ export class LevelUseCase implements LevelUseCaseInterface {
         name
       );
       nameFound = levelFound ? true : false;
+
+      return !levelFound
+        ? false
+        :  !isEditRequest 
+        ? true 
+        : levelFound.id == id 
+          ? false 
+          : true;
+
     }
 
     /*if (typeId != null) {
@@ -37,6 +50,7 @@ export class LevelUseCase implements LevelUseCaseInterface {
       );
       typeIdFound = levelFound ? true : false;
     }*/
+
     return nameFound || typeIdFound ? true : false;
   }
 
@@ -44,6 +58,12 @@ export class LevelUseCase implements LevelUseCaseInterface {
   async createLevel(input: LevelEntity): Promise<LevelEntity> {
     const levelValue = new LevelValue(input);
     return await this._levelRepository.createLevel(levelValue);
+  }
+
+  @errorHandlerUseCase
+  async editLevel(data: LevelEntity): Promise<LevelEntity> {
+    const levelValue = new LevelValue(data);
+    return await this._levelRepository.editLevel(levelValue);
   }
 
   @errorHandlerUseCase
