@@ -27,15 +27,28 @@ export class UserUseCase implements UserUseCaseInterface {
   @errorHandlerUseCase
   async validateDuplicatedData(
     commerceUid: string,
+    isEditRequest: boolean,
+    id?: string,
     document?: string,
-    commerceUserId?: string
+    commerceUserId?: string,
+
   ): Promise<boolean> {
+    console.log('******************* id', id)
+    console.log('******************* commerceUserId', commerceUserId)
+
     let documentFound = false;
     let commerceUserIdFound = false;
     if (document != null) {
       try {
-        await this._userRepository.findUserByDocument(document);
-        documentFound = true;
+        //user core
+        const resultCore=await this._userRepository.findUserByDocument(document);
+        const resultUserCommerce=await this._userRepository.findUserCommerceByEmail(commerceUid, resultCore.email);
+
+
+        console.log(id, resultCore.id, resultUserCommerce.id)
+        documentFound = !isEditRequest ? true : resultUserCommerce.id == id ? false : true;
+      console.log(documentFound)
+      
       } catch (err) {
         if (!(err instanceof NotFoundError)) {
           throw err;
@@ -45,11 +58,12 @@ export class UserUseCase implements UserUseCaseInterface {
 
     if (commerceUserId != null) {
       try {
-        await this._userRepository.findUserCommerceByCustomCommerceId(
+        const result=await this._userRepository.findUserCommerceByCustomCommerceId(
           commerceUid,
           commerceUserId
         );
-        commerceUserIdFound = true;
+        commerceUserIdFound = !isEditRequest ? true : result.id == id ? false : true;
+        
       } catch (err) {
         if (!(err instanceof NotFoundError)) {
           throw err;
@@ -95,6 +109,15 @@ export class UserUseCase implements UserUseCaseInterface {
     const userValue = new UserValue(input);
     return await this._userRepository.createUser(userValue);
   }
+
+  @errorHandlerUseCase
+  async editUser(input: UserEntity): Promise<UserEntity> {
+    console.log('estoy en application editUser')
+
+    const userValue = new UserValue(input);
+    return await this._userRepository.editUser(userValue);
+  }
+
 
   @errorHandlerUseCase
   async createUserCommerce(input: UserCommerceEntity): Promise<UserEntity> {

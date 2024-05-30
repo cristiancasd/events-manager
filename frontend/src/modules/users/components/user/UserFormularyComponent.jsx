@@ -10,7 +10,7 @@ const emptyUser = {
   email: '',
   phone: '',
   document: '',
-  role: '',
+  role: userStatus.user,
   levelUid: '',
 };
 
@@ -32,6 +32,7 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
         <Grid item xs={12} sx={{ mt: 2 }}>
           <TextField
             label="Nombre"
+            size='small'
             type="text"
             placeholder="Escribe valor venta"
             fullWidth
@@ -44,6 +45,8 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
         <Grid item xs={12} sx={{ mt: 2 }}>
           <TextField
             label="Correo electrónico"
+            size='small'
+
             type="email"
             placeholder="Escribe valor preventa"
             name="email"
@@ -53,9 +56,11 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
             required
           />
         </Grid>
-        <Grid item xs={12} sx={{ mt: 2 }}>
+        <Grid item xs={6} sx={{ mt: 2 }} paddingRight={1}>
           <TextField
             label="Celular"
+            size='small'
+
             type="text"
             placeholder="Escribe num. de celular"
             fullWidth
@@ -65,9 +70,11 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
             required
           />
         </Grid>
-        <Grid item xs={12} sx={{ mt: 2 }}>
+        <Grid item xs={6} sx={{ mt: 2 }}  paddingLeft={1}>
           <TextField
             label="Cédula"
+            size='small'
+
             type="text"
             placeholder="Escribe la cédula"
             fullWidth
@@ -80,6 +87,8 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
         <Grid item xs={12} sx={{ mt: 2 }}>
           <TextField
             label="Código ID"
+            size='small'
+
             type="text"
             placeholder="Escribe el ID"
             fullWidth
@@ -94,6 +103,8 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
             <InputLabel id="role_">Nivel</InputLabel>
             <Select
               labelId="nivel"
+              size='small'
+
               id="levelUid"
               value={levelUid}
               name="levelUid"
@@ -115,6 +126,8 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
             <InputLabel id="role_">Roles</InputLabel>
             <Select
               labelId="role"
+              size='small'
+
               id="role"
               value={role}
               name="role"

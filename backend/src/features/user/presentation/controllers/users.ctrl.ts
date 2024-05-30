@@ -10,6 +10,13 @@ export class UserController {
     res.status(201).send(user);
   };
 
+  public editCtrl = async (req: Request, res: Response) => {
+    console.log('estoy en editar controller ')
+    const body = req.body;
+    const user = await this.userUseCase.editUser(body);
+    res.status(201).send(user);
+  };
+
   public insertUserCommerceCtrl = async (req: Request, res: Response) => {
     const body = req.body;
     const user = await this.userUseCase.createUserCommerce(body);

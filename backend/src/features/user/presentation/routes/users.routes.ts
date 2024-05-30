@@ -5,7 +5,8 @@ import { configureDependencies } from '../../../../config';
 import { checkUserNameMiddleware } from '../middelwares/usersdb.middelwares';
 import {
   validateCreateUserBody,
-  validateCreateUserCommerceBody
+  validateCreateUserCommerceBody,
+  validateEditUserBody
 } from './users.validations';
 import {
   checkTokenMiddleware,
@@ -30,6 +31,19 @@ userRoutes.post(
   ],
   validateRequest,
   userCtrl.insertCtrl
+);
+
+userRoutes.put(
+  `/edit`,
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateEditUserBody,
+    checkUserNameMiddleware
+  ],
+  validateRequest,
+  userCtrl.editCtrl
 );
 
 userRoutes.post(

@@ -6,7 +6,7 @@ import { UsersLayout } from '../layout/UsersLayout';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
-import { startCreateLevel, startCreateUser, startDeleteLevel, startEditLevel, startFindUserByDocOrId, startGetLevelsList } from '../../../store';
+import { startCreateLevel, startCreateUser, startDeleteLevel, startEditLevel, startEditUser, startFindUserByDocOrId, startGetLevelsList } from '../../../store';
 import { LevelListComponent, UserModalComponent, UserOptionsModalsComponent } from '../components';
 
 export const UsersPage = () => {
@@ -133,6 +133,16 @@ export const UsersPage = () => {
 
 
   const handleEditUser=(data)=>{
+    console.log('handleEditUser...',data);
+    const userToEdit={
+      ...data,
+      password: data.document,
+      commerceUid: user.commerceUid,
+      isActive:true,
+      name: data.userName,
+    }
+    console.log('data ',data, userToEdit)
+    dispatch(startEditUser(userToEdit))
 
   }
 

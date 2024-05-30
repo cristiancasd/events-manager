@@ -45,7 +45,7 @@ export class TypeOrmUserRepository implements UserRepository {
   constructor(
     private commerceUseCase: CommerceUseCase,
     private levelUseCase: LevelUseCase
-  ) {}
+  ) { }
 
   @errorHandlerTypeOrm
   async findUserByDocument(document: string): Promise<UserCoreEntity> {
@@ -87,7 +87,7 @@ export class TypeOrmUserRepository implements UserRepository {
     const userCommerceRepository = connectDB.getRepository(
       UserCommerceTypeORMEntity
     );
-    const commerceUserId= customCommerceId
+    const commerceUserId = customCommerceId
     const queryBuilder = userCommerceRepository
       .createQueryBuilder('userCommerce')
       .leftJoinAndSelect('userCommerce.level', 'level')
@@ -175,6 +175,65 @@ export class TypeOrmUserRepository implements UserRepository {
       });
 
     return await buildUserEntityUtil(user, userCommerce);
+  }
+
+  @errorHandlerTypeOrm
+  async editUser(data: UserEntity): Promise<UserEntity> {
+    console.log('estoy en repository editUser')
+    const userRepository = connectDB.getRepository(UserTypeORMEntity);
+    const userCommerceRepository = connectDB.getRepository(
+      UserCommerceTypeORMEntity
+    );
+
+
+    const userCommerceFound = await userCommerceRepository.findOneBy({ id: data.id })
+    if (!userCommerceFound)
+      throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
+
+
+    const commerce = await this.commerceUseCase.findComerceByUid(
+      data.commerceUid
+    );
+
+    const level = await this.levelUseCase.findLevelByUid(data.levelUid);
+
+    if (level == null || (level != null && level.commerceUid != commerce.id))
+      throw new BadRequestError(errorMessageLevelNotFound, codeLevelNotFound);
+
+    // Create users DB
+    //const user = userRepository.create(resto);
+
+    const userCoreFound = userCommerceFound.user;
+    
+    const newUserCommerce = data.password
+      ? await userCommerceRepository.save({
+        ...userCommerceFound,
+        ...data,
+        password: bcrypt.hashSync(data.password, 10),
+        level,
+        commerce,
+        //user: userCoreFound,
+      })
+      : await userCommerceRepository.save({
+        ...userCommerceFound,
+        ...data,
+        level,
+        commerce,
+       // user: userCoreFound,
+      });
+
+      const {id,...resto}=data;
+
+    const newUser = await userRepository.save({
+      ...userCoreFound,
+      ...resto,
+    })
+
+
+
+
+
+    return await buildUserEntityUtil(newUser, newUserCommerce);
   }
 
   @errorHandlerTypeOrm

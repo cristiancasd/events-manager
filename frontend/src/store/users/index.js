@@ -1,3 +1,3 @@
-export { startFindUserByDocOrId , startCreateUser} from './thunks';
+export { startFindUserByDocOrId , startCreateUser,startEditUser} from './thunks';
 
 export { setUser, usersSlice, setUsersStatus, addUser, editUserById } from './usersSlice';

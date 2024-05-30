@@ -2,7 +2,7 @@ import { backendApi } from '../../api';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { variableStatus } from '../../shared';
 import { setUser, setUsersStatus } from './usersSlice';
-import { createUserPath, findUserByCustomIdOrDocumentPath } from './constants';
+import { createUserPath, editUserPath, findUserByCustomIdOrDocumentPath } from './constants';
 
 export const startFindUserByDocOrId = ({ commerceUid, toSearch }) => {
   return async (dispatch) => {
@@ -32,6 +32,30 @@ export const startCreateUser = (user) => {
       const { data } = await backendApi.post(createUserPath,user);
       dispatch(setUser(data));
       dispatch(setSuccessMessage('Usuario Creado'));
+      setTimeout(() => {
+        dispatch(setSuccessMessage(undefined));
+      }, 10);
+    } catch (error) {
+      console.log(error);
+      const message = existError(error);
+      dispatch(setErrorMessage(message));
+      setTimeout(() => {
+        dispatch(setErrorMessage(undefined));
+      }, 10);
+    }
+    dispatch(setUsersStatus({ user: variableStatus.ok }));
+    dispatch(setIsFetching(false));
+  };
+};
+
+export const startEditUser = (user) => {
+  return async (dispatch) => {
+    dispatch(setIsFetching(true));
+    dispatch(setUsersStatus({ user: variableStatus.fetching }));
+    try {
+      const { data } = await backendApi.put(editUserPath,user);
+      dispatch(setUser(data));
+      dispatch(setSuccessMessage('Usuario Editado'));
       setTimeout(() => {
         dispatch(setSuccessMessage(undefined));
       }, 10);
