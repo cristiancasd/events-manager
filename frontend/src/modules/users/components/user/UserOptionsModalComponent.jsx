@@ -1,15 +1,6 @@
-
 import Button from '@mui/material/Button';
 
-
-import {
-  
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  
-} from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { UserFourmularyComponent } from './UserFormularyComponent';
 import { UserOptionsComponent } from './UserOptionsComponent';
 
@@ -24,7 +15,6 @@ export const UserOptionsModalsComponent = ({ user, onEditUser, onAddTicket, open
     handleClose();
   };
 
-
   return (
     <div>
       <Dialog
@@ -36,11 +26,7 @@ export const UserOptionsModalsComponent = ({ user, onEditUser, onAddTicket, open
       >
         <DialogTitle id="scroll-dialog-title">Información del Usuario</DialogTitle>
         <DialogContent dividers={scroll === 'paper'}>
-          <UserOptionsComponent
-           onEditUser={handleEdit} 
-           onAddTicket={handleAddTicket} 
-           user={user}
-            />
+          <UserOptionsComponent onEditUser={handleEdit} onAddTicket={handleAddTicket} user={user} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="gris">

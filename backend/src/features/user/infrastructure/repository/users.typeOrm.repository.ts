@@ -204,7 +204,9 @@ export class TypeOrmUserRepository implements UserRepository {
     //const user = userRepository.create(resto);
 
     const userCoreFound = userCommerceFound.user;
-    
+
+    const {password, ...restoUserCommerceFound}= userCommerceFound;
+    console.log('*******************************************++++data.password',data.password)
     const newUserCommerce = data.password
       ? await userCommerceRepository.save({
         ...userCommerceFound,
@@ -215,7 +217,7 @@ export class TypeOrmUserRepository implements UserRepository {
         //user: userCoreFound,
       })
       : await userCommerceRepository.save({
-        ...userCommerceFound,
+        ...restoUserCommerceFound,
         ...data,
         level,
         commerce,

@@ -35,11 +35,10 @@ export const levelsSlice = createSlice({
     },
 
     deleteLevelByUid: (state, { payload }) => {
-      const newArray =[] 
-      
+      const newArray = [];
+
       state.levels.map((data) => {
-        if(data.id !== payload) newArray.push(data)
-          
+        if (data.id !== payload) newArray.push(data);
       });
       state.levels = newArray;
     },
@@ -54,4 +53,5 @@ export const levelsSlice = createSlice({
   },
 });
 
-      export const { setLevelsStatus, setLevels, addLevel, deleteLevelByUid, editLevelById, resetLevelsVariables } = levelsSlice.actions;
+export const { setLevelsStatus, setLevels, addLevel, deleteLevelByUid, editLevelById, resetLevelsVariables } =
+  levelsSlice.actions;

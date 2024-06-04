@@ -14,5 +14,5 @@ export const getUsersByLevelPath = (commerceUid, levelUid) => {
   return 'user/find/level/' + commerceUid + '/' + levelUid;
 };
 
-export const createUserPath= '/user/create/complete'
-export const editUserPath= '/user/edit'
+export const createUserPath = '/user/create/complete';
+export const editUserPath = '/user/edit';

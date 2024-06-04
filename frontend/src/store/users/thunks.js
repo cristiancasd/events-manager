@@ -29,7 +29,7 @@ export const startCreateUser = (user) => {
     dispatch(setIsFetching(true));
     dispatch(setUsersStatus({ user: variableStatus.fetching }));
     try {
-      const { data } = await backendApi.post(createUserPath,user);
+      const { data } = await backendApi.post(createUserPath, user);
       dispatch(setUser(data));
       dispatch(setSuccessMessage('Usuario Creado'));
       setTimeout(() => {
@@ -53,7 +53,7 @@ export const startEditUser = (user) => {
     dispatch(setIsFetching(true));
     dispatch(setUsersStatus({ user: variableStatus.fetching }));
     try {
-      const { data } = await backendApi.put(editUserPath,user);
+      const { data } = await backendApi.put(editUserPath, user);
       dispatch(setUser(data));
       dispatch(setSuccessMessage('Usuario Editado'));
       setTimeout(() => {
@@ -71,9 +71,6 @@ export const startEditUser = (user) => {
     dispatch(setIsFetching(false));
   };
 };
-
-
-
 
 /*export const startGetTicketsList = ({ commerceUid }) => {
   return async (dispatch) => {
@@ -155,7 +152,7 @@ const existError = (error, email = '') => {
 
         let errorMessage = '';
 
-        if(errors[0].code==805) return 'user not found'
+        if (errors[0].code == 805) return 'user not found';
         errors.forEach((data) => {
           errorMessage += errorMessage + data.message + '\n';
         });

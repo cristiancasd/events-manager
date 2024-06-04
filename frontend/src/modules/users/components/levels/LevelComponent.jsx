@@ -2,24 +2,22 @@ import { Cancel, CancelOutlined, Check, DeleteOutline, DragHandleRounded } from 
 import { Button, Grid, TextField, IconButton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDelete }) =>{
+export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDelete }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    setValue(level.name??'')
+    setValue(level.name ?? '');
   }, [openEdit]);
 
   const onClickAction = (event) => {
     event.preventDefault();
-    setOpenEdit(false)
+    setOpenEdit(false);
 
-    handleEdit(
-        {
-            id: level.id,
-            levelName: value,
-        }
-    );
+    handleEdit({
+      id: level.id,
+      levelName: value,
+    });
   };
   return (
     <Grid paddingTop={1}>
@@ -31,7 +29,7 @@ export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDe
                 <TextField
                   size="small"
                   type="text"
-                  placeholder='Escribe el nivel'
+                  placeholder="Escribe el nivel"
                   fullWidth
                   name="value"
                   value={value}
@@ -42,20 +40,20 @@ export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDe
 
               <Grid paddingLeft={1}>
                 <Tooltip title="Guardar">
-                            <IconButton
-                                type="submit"
-                                sx={{
-                                color: 'primary.main',
-                                ':hover': {
-                                    color: 'white',
-                                    backgroundColor: 'primary.main',
-                                    opacity: 10,
-                                },
-                                }}
-                                onClick={()=>onClickAction}
-                            >
-                                <Check color="primary.main" />
-                            </IconButton>
+                  <IconButton
+                    type="submit"
+                    sx={{
+                      color: 'primary.main',
+                      ':hover': {
+                        color: 'white',
+                        backgroundColor: 'primary.main',
+                        opacity: 10,
+                      },
+                    }}
+                    onClick={() => onClickAction}
+                  >
+                    <Check color="primary.main" />
+                  </IconButton>
                 </Tooltip>
                 <Tooltip title="Cancelar">
                   <IconButton onClick={() => setOpenEdit(false)}>
@@ -63,7 +61,7 @@ export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDe
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Eliminar">
-                  <IconButton onClick={()=>handleDelete(level.id)}>
+                  <IconButton onClick={() => handleDelete(level.id)}>
                     <DeleteOutline />
                   </IconButton>
                 </Tooltip>
@@ -84,4 +82,4 @@ export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDe
       </Grid>
     </Grid>
   );
-}
+};

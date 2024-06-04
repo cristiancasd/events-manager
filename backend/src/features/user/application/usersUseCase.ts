@@ -113,8 +113,11 @@ export class UserUseCase implements UserUseCaseInterface {
   @errorHandlerUseCase
   async editUser(input: UserEntity): Promise<UserEntity> {
     console.log('estoy en application editUser')
+    console.log('estoy en application editUser input', input)
 
     const userValue = new UserValue(input);
+    console.log('estoy en application editUser userValue', userValue)
+
     return await this._userRepository.editUser(userValue);
   }
 

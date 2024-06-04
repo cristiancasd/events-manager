@@ -19,7 +19,8 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
 
   const [userFormField, setUserFormField] = useState(user ?? emptyUser);
 
-  const { userName, email, phone, document, role, commerceUserId, levelUid, onInputChange, formState } = useForm(userFormField);
+  const { userName, email, phone, document, role, commerceUserId, levelUid, onInputChange, formState } =
+    useForm(userFormField);
 
   const basicSubmit = async (event) => {
     event.preventDefault();
@@ -32,7 +33,7 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
         <Grid item xs={12} sx={{ mt: 2 }}>
           <TextField
             label="Nombre"
-            size='small'
+            size="small"
             type="text"
             placeholder="Escribe valor venta"
             fullWidth
@@ -45,8 +46,7 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
         <Grid item xs={12} sx={{ mt: 2 }}>
           <TextField
             label="Correo electrónico"
-            size='small'
-
+            size="small"
             type="email"
             placeholder="Escribe valor preventa"
             name="email"
@@ -59,8 +59,7 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
         <Grid item xs={6} sx={{ mt: 2 }} paddingRight={1}>
           <TextField
             label="Celular"
-            size='small'
-
+            size="small"
             type="text"
             placeholder="Escribe num. de celular"
             fullWidth
@@ -70,11 +69,10 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
             required
           />
         </Grid>
-        <Grid item xs={6} sx={{ mt: 2 }}  paddingLeft={1}>
+        <Grid item xs={6} sx={{ mt: 2 }} paddingLeft={1}>
           <TextField
             label="Cédula"
-            size='small'
-
+            size="small"
             type="text"
             placeholder="Escribe la cédula"
             fullWidth
@@ -87,8 +85,7 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
         <Grid item xs={12} sx={{ mt: 2 }}>
           <TextField
             label="Código ID"
-            size='small'
-
+            size="small"
             type="text"
             placeholder="Escribe el ID"
             fullWidth
@@ -99,12 +96,11 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
           />
         </Grid>
         <Grid item xs={12} sx={{ mt: 2 }}>
-        <FormControl fullWidth>
+          <FormControl fullWidth>
             <InputLabel id="role_">Nivel</InputLabel>
             <Select
               labelId="nivel"
-              size='small'
-
+              size="small"
               id="levelUid"
               value={levelUid}
               name="levelUid"
@@ -112,22 +108,21 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
               onChange={onInputChange}
               required
             >
-              {
-                levels.map(data=><MenuItem key={data.id} value={data.id}>
+              {levels.map((data) => (
+                <MenuItem key={data.id} value={data.id}>
                   {data.name}
-                </MenuItem>)
-              }
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
 
         <Grid item xs={12} sx={{ mt: 2 }}>
-        <FormControl fullWidth>
+          <FormControl fullWidth>
             <InputLabel id="role_">Roles</InputLabel>
             <Select
               labelId="role"
-              size='small'
-
+              size="small"
               id="role"
               value={role}
               name="role"
@@ -135,17 +130,15 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
               onChange={onInputChange}
               required
             >
-              
-                <MenuItem key={userStatus.user} value={userStatus.user}>
-                  Usuario
-                </MenuItem>
-                <MenuItem key={userStatus.admin} value={userStatus.admin}>
-                  Administrador
-                </MenuItem>
-                <MenuItem key={userStatus.superAdmin} value={userStatus.superAdmin}>
-                  Super Administrador
-                </MenuItem>
-                
+              <MenuItem key={userStatus.user} value={userStatus.user}>
+                Usuario
+              </MenuItem>
+              <MenuItem key={userStatus.admin} value={userStatus.admin}>
+                Administrador
+              </MenuItem>
+              <MenuItem key={userStatus.superAdmin} value={userStatus.superAdmin}>
+                Super Administrador
+              </MenuItem>
             </Select>
           </FormControl>
         </Grid>

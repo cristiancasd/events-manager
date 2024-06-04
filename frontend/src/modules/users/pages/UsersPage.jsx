@@ -6,63 +6,85 @@ import { UsersLayout } from '../layout/UsersLayout';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
-import { startCreateLevel, startCreateUser, startDeleteLevel, startEditLevel, startEditUser, startFindUserByDocOrId, startGetLevelsList } from '../../../store';
-import { LevelListComponent, UserModalComponent, UserOptionsModalsComponent } from '../components';
+import {
+  startCreateLevel,
+  startCreateUser,
+  startDeleteLevel,
+  startEditLevel,
+  startEditUser,
+  startFindTicketUser,
+  startFindUserByDocOrId,
+  startGetEventsList,
+  startGetLevelsList,
+  startGetTicketsList,
+} from '../../../store';
+import { LevelListComponent, TicketUserOptionsModalsComponent, UserModalComponent, UserOptionsModalsComponent } from '../components';
 
 export const UsersPage = () => {
-  //const { events, nextEvent, eventStatus } = useSelector((state) => state.events);
-  //const { user } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.auth);
   const { errorMessage, successMessage, isFetching } = useSelector((state) => state.common);
   const { usersStatus, user: currentUser } = useSelector((state) => state.users);
   const { levels } = useSelector((state) => state.levels);
+  const { tickets } = useSelector((state) => state.tickets);
+  const { nextEvent } = useSelector((state) => state.events);
 
-    //*******************MODAL dialog variables*********************/
-    const [openEditUser, setOpenEditUser] = useState(false);
-    const [openCreateUser, setOpenCreateUser] = useState(false);
-  
-    const handleOpenEditDialogUser = () => setOpenEditUser(true);
-    const handleCloseEditDialogUser = () => setOpenEditUser(false);
-  
-    const handleOpenCreateDialogUser = () => setOpenCreateUser(true);
-    const handleCloseCreateDialogUser = () => setOpenCreateUser(false);
+  //*******************MODAL dialog variables*********************/
+  const [openCreateUser, setOpenCreateUser] = useState(false);
+  const [openEditUser, setOpenEditUser] = useState(false);
 
 
+  const handleOpenEditDialogUser = () => setOpenEditUser(true);
+  const handleCloseEditDialogUser = () => setOpenEditUser(false);
 
-    const [openOptions, setOpenOptions] = useState(false);
-    const handleOpenOptions = () => setOpenOptions(true);
-    const handleCloseOptions = () => setOpenOptions(false);
-  
-   
+  const handleOpenCreateDialogUser = () => setOpenCreateUser(true);
+  const handleCloseCreateDialogUser = () => setOpenCreateUser(false);
+
+  const [openOptions, setOpenOptions] = useState(false);
+  const handleOpenOptions = () => setOpenOptions(true);
+  const handleCloseOptions = () => setOpenOptions(false);
+
+
+
+  const [openAddTicket, setOpenAddTicket] = useState(false);
+  const handleOpenAddTicket = () => setOpenAddTicket(true);
+  const handleCloseAddTicket= () => setOpenAddTicket(false);
+
+
 
   //***************** INITIAL dispatchs ************************** */
 
-
-
   const dispatch = useDispatch();
+  //TODO: validate, do this just when the variables are undefined
   useEffect(() => {
-    //dispatch(setEventViewSelected(optionsEventsView.events));
-    //dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
+    dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
     dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
-    //dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
+    dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
   }, []);
 
   //********************POP UP messages*******************+ */
   useEffect(() => {
     if (errorMessage) {
-
-      if(errorMessage=='user not found'){
-        handleOpenCreateDialogUser()
-      }else{
-        Swal.fire('Error', errorMessage, 'error');
-
+      if (errorMessage == 'user not found') {
+        handleOpenCreateDialogUser();
+        return;
       }
+
+      if (errorMessage == 'Ticket not found') return;
+
+      Swal.fire('Error', errorMessage, 'error');
     }
   }, [errorMessage]);
 
-
   useEffect(() => {
-    if(currentUser) setOpenOptions(true);
+    if (currentUser && nextEvent) {
+      dispatch(
+        startFindTicketUser({
+          userCommerceUid: currentUser.id,
+          eventUid: nextEvent.id,
+        })
+      );
+      setOpenOptions(true);
+    }
   }, [currentUser]);
 
   useEffect(() => {
@@ -104,23 +126,24 @@ export const UsersPage = () => {
     );
   };
   const handleEditLevel = (data) => {
-    console.log('voy a editar data',data);
+    console.log('voy a editar data', data);
     const level = {
       id: data.id,
       name: data.levelName,
       typeId: 4,
       commerceUid: user.commerceUid,
     };
-    dispatch(startEditLevel({levelData:level}))
+    dispatch(startEditLevel({ levelData: level }));
   };
 
-  const handleDeleteLevel=(data)=>{
-    dispatch(startDeleteLevel({
-      levelUid:data,
-      commerceUid: user.commerceUid,
-    
-    }));
-  }
+  const handleDeleteLevel = (data) => {
+    dispatch(
+      startDeleteLevel({
+        levelUid: data,
+        commerceUid: user.commerceUid,
+      })
+    );
+  };
 
   const handleCreateLevel = (data) => {
     const level = {
@@ -131,33 +154,30 @@ export const UsersPage = () => {
     dispatch(startCreateLevel(level));
   };
 
-
-  const handleEditUser=(data)=>{
-    console.log('handleEditUser...',data);
-    const userToEdit={
+  const handleEditUser = (data) => {
+    console.log('handleEditUser...', data);
+    const userToEdit = {
       ...data,
-      password: data.document,
       commerceUid: user.commerceUid,
-      isActive:true,
+      isActive: true,
       name: data.userName,
-    }
-    console.log('data ',data, userToEdit)
-    dispatch(startEditUser(userToEdit))
+    };
+    console.log('data ', data, userToEdit);
+    dispatch(startEditUser(userToEdit));
+  };
 
-  }
-
-  const handleCreateUser=(data)=>{
+  const handleCreateUser = (data) => {
     console.log(data);
-    const userToCreate={
+    const userToCreate = {
       ...data,
       password: data.document,
       commerceUid: user.commerceUid,
-      isActive:true,
+      isActive: true,
       name: data.userName,
-    }
-    console.log('data ',data)
-    dispatch(startCreateUser(userToCreate))
-  }
+    };
+    console.log('data ', data);
+    dispatch(startCreateUser(userToCreate));
+  };
 
   return (
     <UsersLayout title="Administra tus Usuarios">
@@ -179,27 +199,31 @@ export const UsersPage = () => {
         user={undefined}
       />
 
-
       <UserOptionsModalsComponent
-        onAddTicket={()=>{}}
+        onAddTicket={handleOpenAddTicket}
         open={openOptions}
         handleClose={handleCloseOptions}
-
-
-        onEditUser={()=>{ if(currentUser) {
-          //setOpenOptions(false)
-          setOpenEditUser(true)
-        }}}
+        onEditUser={() => {
+          if (currentUser) {
+            setOpenEditUser(true);
+          }
+        }}
         user={currentUser}
       />
 
-      {/*<EventModalComponent
-        actionName={'Crear'}
-        title={'Crear evento'}
-        onSubmit={handleCreateEvent}
-        open={openCreate}
-        handleClose={handleCloseCreateDialog}
-      />*/}
+
+
+      <TicketUserOptionsModalsComponent
+        user={currentUser}
+        open={openAddTicket}
+        handleClose={handleCloseAddTicket}
+        onAddTicketToUser={() => {
+          console.log('estoy en el proceso de agregar un ticket')
+        }}
+      />
+
+
+
       <Container maxWidth="lg">
         <Grid container spacing={2} backgroundColor="re">
           <Grid item xs={12} md={12} paddingBottom={{ xs: 0, sm: 5 }}>
@@ -213,15 +237,13 @@ export const UsersPage = () => {
             <Grid item xs={11} md={12} paddingBottom={{ xs: 0, sm: 5 }} paddingTop={{ xs: 2, sm: 5 }}>
               {typegraphyFormat('Niveles')}
 
-              <LevelListComponent 
-              handleDelete={handleDeleteLevel}
-              levels={levels} handleCreate={handleCreateLevel} handleEdit={handleEditLevel} />
+              <LevelListComponent
+                handleDelete={handleDeleteLevel}
+                levels={levels}
+                handleCreate={handleCreateLevel}
+                handleEdit={handleEditLevel}
+              />
             </Grid>
-
-            {
-              //eventStatus.event == variableStatus.initial || eventStatus.event == variableStatus.fetching
-              true ? <LoadingBox /> : 'algo'
-            }
           </Grid>
         </Grid>
       </Container>

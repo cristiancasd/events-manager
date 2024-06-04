@@ -5,6 +5,7 @@ import { eventsSlice } from './events';
 import { levelsSlice } from './levels';
 import { ticketsSlice } from './tickets';
 import { usersSlice } from './users';
+import { ticketUsersSlice } from './ticket-user';
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     levels: levelsSlice.reducer,
     tickets: ticketsSlice.reducer,
     users: usersSlice.reducer,
+    ticketUsers: ticketUsersSlice.reducer,
   },
 });

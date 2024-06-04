@@ -49,14 +49,13 @@ export const startCreateLevel = (levelData) => {
   };
 };
 
-
-export const startDeleteLevel = ({levelUid, commerceUid}) => {
+export const startDeleteLevel = ({ levelUid, commerceUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
     dispatch(setLevelsStatus({ level: variableStatus.fetching }));
 
     try {
-      const { data } = await backendApi.delete(deleteLevelPath(commerceUid,levelUid));
+      const { data } = await backendApi.delete(deleteLevelPath(commerceUid, levelUid));
       dispatch(deleteLevelByUid(levelUid));
       dispatch(setSuccessMessage('Nivel Eliminado'));
       setTimeout(() => {
@@ -74,7 +73,6 @@ export const startDeleteLevel = ({levelUid, commerceUid}) => {
     dispatch(setIsFetching(false));
   };
 };
-
 
 export const startEditLevel = ({ levelData }) => {
   return async (dispatch) => {

@@ -1,15 +1,6 @@
-
 import Button from '@mui/material/Button';
 
-
-import {
-  
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  
-} from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { UserFourmularyComponent } from './UserFormularyComponent';
 
 export const UserModalComponent = ({ onSubmit, title, actionName, user, open, handleClose }) => {
@@ -29,7 +20,11 @@ export const UserModalComponent = ({ onSubmit, title, actionName, user, open, ha
       >
         <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>
         <DialogContent dividers={scroll === 'paper'}>
-          <UserFourmularyComponent actionName={actionName} onSubmit={handleActionSubmit} user={user?{...user, userName: user?.name??''}:undefined} />
+          <UserFourmularyComponent
+            actionName={actionName}
+            onSubmit={handleActionSubmit}
+            user={user ? { ...user, userName: user?.name ?? '' } : undefined}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="gris">

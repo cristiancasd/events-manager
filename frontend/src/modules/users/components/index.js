@@ -1,3 +1,5 @@
+export { TicketUserOptionsModalsComponent } from './ticket-user/TicketUserOptionsModalComponent';
+
 export { UserOptionsModalsComponent } from './user/UserOptionsModalComponent';
 
 export { UserFourmularyComponent } from './user/UserFormularyComponent';
