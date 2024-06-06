@@ -1,4 +1,4 @@
-export { getLevelNameById, } from './utils/levels.utils';
+export { getLevelNameById } from './utils/levels.utils';
 
 export { startDeleteLevel, startGetLevelsList, startCreateLevel, startEditLevel } from './thunks';
 export {

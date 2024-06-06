@@ -5,6 +5,3 @@ export const getLevelNameById = (levelUid, levels) => {
   });
   return name;
 };
-
-
-

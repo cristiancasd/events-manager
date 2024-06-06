@@ -7,10 +7,14 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
 import {
+  setTicketUser,
+  setUser,
   startCreateLevel,
+  startCreateTicketUser,
   startCreateUser,
   startDeleteLevel,
   startEditLevel,
+  startEditTicketUser,
   startEditUser,
   startFindTicketUser,
   startFindUserByDocOrId,
@@ -18,7 +22,13 @@ import {
   startGetLevelsList,
   startGetTicketsList,
 } from '../../../store';
-import { LevelListComponent, TicketUserOptionsModalsComponent, UserModalComponent, UserOptionsModalsComponent } from '../components';
+import {
+  LevelListComponent,
+  TicketUserOptionsModalsComponent,
+  UserModalComponent,
+  UserOptionsModalsComponent,
+} from '../components';
+import { TicketUserEditModalsComponent } from '../components/ticket-user/TicketUserEditModalComponent';
 
 export const UsersPage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -32,7 +42,6 @@ export const UsersPage = () => {
   const [openCreateUser, setOpenCreateUser] = useState(false);
   const [openEditUser, setOpenEditUser] = useState(false);
 
-
   const handleOpenEditDialogUser = () => setOpenEditUser(true);
   const handleCloseEditDialogUser = () => setOpenEditUser(false);
 
@@ -43,19 +52,20 @@ export const UsersPage = () => {
   const handleOpenOptions = () => setOpenOptions(true);
   const handleCloseOptions = () => setOpenOptions(false);
 
-
-
   const [openAddTicket, setOpenAddTicket] = useState(false);
   const handleOpenAddTicket = () => setOpenAddTicket(true);
-  const handleCloseAddTicket= () => setOpenAddTicket(false);
+  const handleCloseAddTicket = () => setOpenAddTicket(false);
 
-
+  const [openEditTicket, setOpenEditTicket] = useState(false);
+  const handleOpenEditTicket = () => setOpenEditTicket(true);
+  const handleCloseEditTicket = () => setOpenEditTicket(false);
 
   //***************** INITIAL dispatchs ************************** */
 
   const dispatch = useDispatch();
   //TODO: validate, do this just when the variables are undefined
   useEffect(() => {
+    dispatch(setUser(undefined));
     dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
     dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
     dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
@@ -65,11 +75,15 @@ export const UsersPage = () => {
   useEffect(() => {
     if (errorMessage) {
       if (errorMessage == 'user not found') {
+        dispatch(setUser(undefined));
         handleOpenCreateDialogUser();
         return;
       }
 
-      if (errorMessage == 'Ticket not found') return;
+      if (errorMessage == 'Ticket not found') {
+        dispatch(setTicketUser(undefined));
+        return;
+      }
 
       Swal.fire('Error', errorMessage, 'error');
     }
@@ -179,6 +193,19 @@ export const UsersPage = () => {
     dispatch(startCreateUser(userToCreate));
   };
 
+  const handleAddTicketToUser = (data) => {
+    const ticketToAdd = {
+      ...data,
+      totalAttendees: 0,
+      eventUid: nextEvent.id,
+    };
+    dispatch(startCreateTicketUser(ticketToAdd));
+  };
+
+  const handleEditTicketUser = (data) => {
+    dispatch(startEditTicketUser(data));
+  };
+
   return (
     <UsersLayout title="Administra tus Usuarios">
       <UserModalComponent
@@ -201,6 +228,7 @@ export const UsersPage = () => {
 
       <UserOptionsModalsComponent
         onAddTicket={handleOpenAddTicket}
+        onEditTicket={handleOpenEditTicket}
         open={openOptions}
         handleClose={handleCloseOptions}
         onEditUser={() => {
@@ -211,18 +239,21 @@ export const UsersPage = () => {
         user={currentUser}
       />
 
-
-
       <TicketUserOptionsModalsComponent
         user={currentUser}
         open={openAddTicket}
         handleClose={handleCloseAddTicket}
-        onAddTicketToUser={() => {
-          console.log('estoy en el proceso de agregar un ticket')
-        }}
+        onAddTicketToUser={handleAddTicketToUser}
       />
 
-
+      {openEditTicket && (
+        <TicketUserEditModalsComponent
+          user={currentUser}
+          open={openEditTicket}
+          handleClose={handleCloseEditTicket}
+          onEditTicketUser={handleEditTicketUser}
+        />
+      )}
 
       <Container maxWidth="lg">
         <Grid container spacing={2} backgroundColor="re">
