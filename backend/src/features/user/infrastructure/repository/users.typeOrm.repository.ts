@@ -310,11 +310,15 @@ export class TypeOrmUserRepository implements UserRepository {
       UserCommerceTypeORMEntity
     );
 
+    console.log('prueba... findUsersByLevelUid')
+
     const queryBuilder = userCommerceRepository
       .createQueryBuilder('userCommerce')
       .leftJoinAndSelect('userCommerce.commerce', 'commerce')
+      .leftJoinAndSelect('userCommerce.level', 'level')
       .where('userCommerce.commerce.id = :commerceUid', { commerceUid })
       .andWhere('userCommerce.level.id = :levelUid', { levelUid });
+      console.log('prueba... ')
 
     const users = await queryBuilder.getMany();
     let userArray: UserEntity[] = [];
@@ -325,6 +329,8 @@ export class TypeOrmUserRepository implements UserRepository {
         userArray.push(user);
       }
     }
+    console.log('prueba... userArray',userArray)
+
     return userArray;
   }
 

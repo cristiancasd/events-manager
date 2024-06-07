@@ -193,6 +193,7 @@ export class UserUseCase implements UserUseCaseInterface {
     commerceUid: string,
     levelUid: string
   ): Promise<UserEntity[]> {
+    
     return await this._userRepository.findUsersByLevelUid(
       commerceUid,
       levelUid

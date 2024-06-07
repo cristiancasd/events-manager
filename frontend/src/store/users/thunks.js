@@ -1,8 +1,8 @@
 import { backendApi } from '../../api';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { variableStatus } from '../../shared';
-import { setUser, setUsersStatus } from './usersSlice';
-import { createUserPath, editUserPath, findUserByCustomIdOrDocumentPath } from './constants';
+import { setUser, setUsers, setUsersStatus } from './usersSlice';
+import { createUserPath, editUserPath, findUserByCustomIdOrDocumentPath, getUsersByLevelPath } from './constants';
 
 export const startFindUserByDocOrId = ({ commerceUid, toSearch }) => {
   return async (dispatch) => {
@@ -20,6 +20,29 @@ export const startFindUserByDocOrId = ({ commerceUid, toSearch }) => {
       }, 10);
     }
     dispatch(setUsersStatus({ user: variableStatus.ok }));
+    dispatch(setIsFetching(false));
+  };
+};
+
+
+export const startGetUsersByLevel = ({ commerceUid, levelUid }) => {
+  return async (dispatch) => {
+    dispatch(setIsFetching(true));
+    dispatch(setUsersStatus({ users: variableStatus.fetching }));
+    try {
+      const { data } = await backendApi.get(getUsersByLevelPath(commerceUid, levelUid));
+      dispatch(setUsers(data));
+    } catch (error) {
+      dispatch(setUsers([]));
+
+      console.log(error);
+      const message = existError(error);
+      dispatch(setErrorMessage(message));
+      setTimeout(() => {
+        dispatch(setErrorMessage(undefined));
+      }, 10);
+    }
+    dispatch(setUsersStatus({ users: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };

@@ -13,12 +13,12 @@ export const usersSlice = createSlice({
   },
   reducers: {
     resetUsersVariables: (state) => {
-      (state.users = []),
-        (state.user = undefined),
-        (state.usersStatus = {
+      state.users = [],
+      state.user = undefined,
+      state.usersStatus = {
           user: variableStatus.initial,
           users: variableStatus.initial,
-        });
+      };
     },
 
     setUsersStatus: (state, { payload }) => {

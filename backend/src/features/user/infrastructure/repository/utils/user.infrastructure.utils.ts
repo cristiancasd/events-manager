@@ -43,7 +43,10 @@ export async function buildUserEntityFromUserCommerceUtil(
 ): Promise<UserEntity | null> {
   if (!userCommerce) return null;
   const userRepository = connectDB.getRepository(UserTypeORMEntity);
+
+  console.log('prueba... buildUserEntityFromUserCommerceUtil userCommerce',userCommerce)
   const user = await userRepository.findOneBy({ email: userCommerce.email });
+  console.log('prueba... buildUserEntityFromUserCommerceUtil user',user)
 
   if (!user) return null;
 
@@ -58,6 +61,7 @@ export async function buildUserEntityFromUserCommerceUtil(
     commerceUserId: userCommerce.commerceUserId,
     commerceUid: userCommerce.commerce.id,
     levelUid: userCommerce.level.id
+    
   });
 }
 

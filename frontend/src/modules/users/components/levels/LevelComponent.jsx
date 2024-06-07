@@ -2,7 +2,7 @@ import { Cancel, CancelOutlined, Check, DeleteOutline, DragHandleRounded } from 
 import { Button, Grid, TextField, IconButton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDelete }) => {
+export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDelete, handleShowTableByLevel }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [value, setValue] = useState('');
 
@@ -69,7 +69,7 @@ export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDe
             </Grid>
           </form>
         ) : (
-          <Grid width={200} backgroundColor="yello">
+          <Grid width={180} backgroundColor="yello">
             {level.name}
           </Grid>
         )}
@@ -79,6 +79,12 @@ export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDe
             Editar
           </Button>
         )}
+
+        <Grid paddingLeft={2}>
+          <Button variant="outlined" size="small" onClick={() => handleShowTableByLevel(level.id)}>
+            ver tabla
+          </Button>
+        </Grid>   
       </Grid>
     </Grid>
   );

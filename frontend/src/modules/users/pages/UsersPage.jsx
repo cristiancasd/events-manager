@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
 import {
+  resetUsersVariables,
   setTicketUser,
   setUser,
   startCreateLevel,
@@ -21,6 +22,7 @@ import {
   startGetEventsList,
   startGetLevelsList,
   startGetTicketsList,
+  startGetUsersByLevel,
 } from '../../../store';
 import {
   LevelListComponent,
@@ -65,7 +67,7 @@ export const UsersPage = () => {
   const dispatch = useDispatch();
   //TODO: validate, do this just when the variables are undefined
   useEffect(() => {
-    dispatch(setUser(undefined));
+    dispatch(resetUsersVariables());
     dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
     dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
     dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
@@ -206,6 +208,13 @@ export const UsersPage = () => {
     dispatch(startEditTicketUser(data));
   };
 
+  const handleShowTableByLevel=(levelUid)=>{
+    dispatch(startGetUsersByLevel({
+      levelUid,
+      commerceUid: user.commerceUid,
+    }))
+  }
+
   return (
     <UsersLayout title="Administra tus Usuarios">
       <UserModalComponent
@@ -269,6 +278,7 @@ export const UsersPage = () => {
               {typegraphyFormat('Niveles')}
 
               <LevelListComponent
+                handleShowTableByLevel={handleShowTableByLevel}
                 handleDelete={handleDeleteLevel}
                 levels={levels}
                 handleCreate={handleCreateLevel}
