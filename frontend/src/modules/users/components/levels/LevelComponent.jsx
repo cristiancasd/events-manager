@@ -1,8 +1,12 @@
 import { Cancel, CancelOutlined, Check, DeleteOutline, DragHandleRounded } from '@mui/icons-material';
 import { Button, Grid, TextField, IconButton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { variableStatus } from '../../../../shared';
+import { useSelector } from 'react-redux';
 
 export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDelete, handleShowTableByLevel }) => {
+  const { usersStatus } = useSelector((state) => state.users);
+
   const [openEdit, setOpenEdit] = useState(false);
   const [value, setValue] = useState('');
 
@@ -81,10 +85,15 @@ export const LevelComponent = ({ level, isFetching = false, handleEdit, handleDe
         )}
 
         <Grid paddingLeft={2}>
-          <Button variant="outlined" size="small" onClick={() => handleShowTableByLevel(level.id)}>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => handleShowTableByLevel(level.id)}
+            disabled={usersStatus.users == variableStatus.fetching}
+          >
             ver tabla
           </Button>
-        </Grid>   
+        </Grid>
       </Grid>
     </Grid>
   );

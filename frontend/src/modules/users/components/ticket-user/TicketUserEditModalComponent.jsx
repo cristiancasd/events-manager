@@ -12,7 +12,7 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import { findTicketByLevelUid, getLevelNameById } from '../../../../store';
+import { getLevelNameById } from '../../../../store';
 import { useEffect, useState } from 'react';
 
 export const TicketUserEditModalsComponent = ({ user, onEditTicketUser, open, handleClose }) => {
@@ -21,7 +21,7 @@ export const TicketUserEditModalsComponent = ({ user, onEditTicketUser, open, ha
   const { events, nextEvent } = useSelector((state) => state.events);
   const { ticketUser } = useSelector((state) => state.ticketUsers);
 
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(ticketUser?.fee ?? '');
   const [isPresale, setIsPresale] = useState('');
 
   const handleEditTicketUser = () => {

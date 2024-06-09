@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Container, Button } from '@mui/material';
+import { Box, Grid, Typography, Container, Divider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { UsersLayout } from '../layout/UsersLayout';
@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
 import {
+  getLevelNameById,
   resetUsersVariables,
   setTicketUser,
   setUser,
@@ -27,6 +28,7 @@ import {
 import {
   LevelListComponent,
   TicketUserOptionsModalsComponent,
+  UserLevelTableComponent,
   UserModalComponent,
   UserOptionsModalsComponent,
 } from '../components';
@@ -35,7 +37,7 @@ import { TicketUserEditModalsComponent } from '../components/ticket-user/TicketU
 export const UsersPage = () => {
   const { user } = useSelector((state) => state.auth);
   const { errorMessage, successMessage, isFetching } = useSelector((state) => state.common);
-  const { usersStatus, user: currentUser } = useSelector((state) => state.users);
+  const { usersStatus, user: currentUser, users } = useSelector((state) => state.users);
   const { levels } = useSelector((state) => state.levels);
   const { tickets } = useSelector((state) => state.tickets);
   const { nextEvent } = useSelector((state) => state.events);
@@ -142,7 +144,6 @@ export const UsersPage = () => {
     );
   };
   const handleEditLevel = (data) => {
-    console.log('voy a editar data', data);
     const level = {
       id: data.id,
       name: data.levelName,
@@ -171,19 +172,16 @@ export const UsersPage = () => {
   };
 
   const handleEditUser = (data) => {
-    console.log('handleEditUser...', data);
     const userToEdit = {
       ...data,
       commerceUid: user.commerceUid,
       isActive: true,
       name: data.userName,
     };
-    console.log('data ', data, userToEdit);
     dispatch(startEditUser(userToEdit));
   };
 
   const handleCreateUser = (data) => {
-    console.log(data);
     const userToCreate = {
       ...data,
       password: data.document,
@@ -191,7 +189,6 @@ export const UsersPage = () => {
       isActive: true,
       name: data.userName,
     };
-    console.log('data ', data);
     dispatch(startCreateUser(userToCreate));
   };
 
@@ -208,12 +205,14 @@ export const UsersPage = () => {
     dispatch(startEditTicketUser(data));
   };
 
-  const handleShowTableByLevel=(levelUid)=>{
-    dispatch(startGetUsersByLevel({
-      levelUid,
-      commerceUid: user.commerceUid,
-    }))
-  }
+  const handleShowTableByLevel = (levelUid) => {
+    dispatch(
+      startGetUsersByLevel({
+        levelUid,
+        commerceUid: user.commerceUid,
+      })
+    );
+  };
 
   return (
     <UsersLayout title="Administra tus Usuarios">
@@ -235,18 +234,20 @@ export const UsersPage = () => {
         user={undefined}
       />
 
-      <UserOptionsModalsComponent
-        onAddTicket={handleOpenAddTicket}
-        onEditTicket={handleOpenEditTicket}
-        open={openOptions}
-        handleClose={handleCloseOptions}
-        onEditUser={() => {
-          if (currentUser) {
-            setOpenEditUser(true);
-          }
-        }}
-        user={currentUser}
-      />
+      {currentUser && (
+        <UserOptionsModalsComponent
+          onAddTicket={handleOpenAddTicket}
+          onEditTicket={handleOpenEditTicket}
+          open={openOptions}
+          handleClose={handleCloseOptions}
+          onEditUser={() => {
+            if (currentUser) {
+              setOpenEditUser(true);
+            }
+          }}
+          user={currentUser}
+        />
+      )}
 
       <TicketUserOptionsModalsComponent
         user={currentUser}
@@ -274,7 +275,11 @@ export const UsersPage = () => {
               fetching={usersStatus.user === variableStatus.fetching}
             />
 
-            <Grid item xs={11} md={12} paddingBottom={{ xs: 0, sm: 5 }} paddingTop={{ xs: 2, sm: 5 }}>
+            <Grid paddingTop={5}>
+              <Divider />
+            </Grid>
+
+            <Grid item xs={11} md={12} paddingBottom={{ xs: 0, sm: 0 }} paddingTop={{ xs: 2, sm: 5 }}>
               {typegraphyFormat('Niveles')}
 
               <LevelListComponent
@@ -285,6 +290,17 @@ export const UsersPage = () => {
                 handleEdit={handleEditLevel}
               />
             </Grid>
+
+            <Grid paddingTop={5}>
+              <Divider />
+            </Grid>
+
+            {levels && levels.length > 0 && users && users.length > 0 && (
+              <Grid paddingTop={5}>
+                {typegraphyFormat(`Usuarios del nivel: ${getLevelNameById(users[0].levelUid, levels)}`)}
+                <UserLevelTableComponent users={users} />
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </Container>

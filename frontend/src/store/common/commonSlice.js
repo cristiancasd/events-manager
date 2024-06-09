@@ -6,6 +6,7 @@ export const commonSlice = createSlice({
     errorMessage: undefined,
     successMessage: undefined,
     isFetching: false,
+    toGlobalSearch: undefined,
   },
   reducers: {
     setErrorMessage: (state, { payload }) => {
@@ -17,7 +18,10 @@ export const commonSlice = createSlice({
     setIsFetching: (state, { payload }) => {
       state.isFetching = payload;
     },
+    setToGloalSearch: (state, { payload }) => {
+      state.toGlobalSearch = payload;
+    },
   },
 });
 
-export const { setErrorMessage, setSuccessMessage, setIsFetching } = commonSlice.actions;
+export const { setErrorMessage, setSuccessMessage, setIsFetching, setToGloalSearch } = commonSlice.actions;

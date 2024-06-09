@@ -63,7 +63,7 @@ export const UserOptionsComponent = ({ onEditUser, onAddTicket, onEditTicket, us
             {lineText('Boleta', (ticketUser?.fee ?? '').toLocaleString('es-CO'))}
           </Grid>
           <Grid item xs={6} md={6} sx={{ mt: 2 }}>
-            {lineText('Preventa', ticketUser && ticketUser.hasPresale ? (ticketUser.hasPresale ? 'Si' : 'No') : '')}
+            {lineText('Preventa', ticketUser ? (ticketUser.hasPresale ? 'Si' : 'No') : '')}
           </Grid>
         </>
       )}

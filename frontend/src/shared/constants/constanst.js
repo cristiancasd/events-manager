@@ -15,3 +15,8 @@ export const userStatus = {
   admin: 'admin',
   superAdmin: 'superAdmin',
 };
+
+export const prospectTypes = {
+  prospect: 'prospect',
+  prospectVip: 'prospect-vip',
+};

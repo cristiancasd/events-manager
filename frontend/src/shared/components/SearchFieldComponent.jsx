@@ -1,17 +1,21 @@
 import { Search } from '@mui/icons-material';
 import { Button, Grid, TextField, Typography, IconButton, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { setToGloalSearch } from '../../store';
+import { useDispatch } from 'react-redux';
 
 const formFields = {
   toSearch: '',
 };
 
 export const SearchFieldComponent = ({ onSubmit, customPlaceholder = '', fetching = false }) => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState('');
   const [isFetching, setIsFetching] = useState(false);
 
   const onClick = (event) => {
     event.preventDefault();
+    dispatch(setToGloalSearch(value));
     onSubmit(value);
   };
 

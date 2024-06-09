@@ -1,3 +1,5 @@
+export { UserLevelTableComponent } from './users-level/UsersLevelTableComponent';
+
 export { TicketUserOptionsModalsComponent } from './ticket-user/TicketUserOptionsModalComponent';
 
 export { UserOptionsModalsComponent } from './user/UserOptionsModalComponent';

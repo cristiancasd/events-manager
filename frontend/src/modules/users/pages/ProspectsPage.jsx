@@ -1,39 +1,66 @@
-import { Button, Box, Grid, Typography, Container } from '@mui/material';
+import { Box, Grid, Typography, Container, Divider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { UsersLayout } from '../layout/UsersLayout';
 
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { LoadingBox, variableStatus } from '../../../shared';
+import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
+import {
+  resetProspectsVariables,
+  setProspect,
+  startCreateProspect,
+  startEditProspect,
+  startGetProspectsByUser,
+  startFindProspectByPhone,
+  setToGloalSearch,
+} from '../../../store';
+import { ProspectModalComponent } from '../components/prospects/ProspectModalComponent';
+import { ProspectOptionsModalsComponent } from '../components/prospects/ProspectOptionsModalComponent';
 
 export const ProspectsPage = () => {
-  //const { events, nextEvent, eventStatus } = useSelector((state) => state.events);
-  //const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const { errorMessage, successMessage, isFetching } = useSelector((state) => state.common);
+  const { prospectsStatus, prospect: currentProspect, prospects } = useSelector((state) => state.prospects);
 
   //*******************MODAL dialog variables*********************/
-  //const [openEdit, setOpenEdit] = useState(false);
-  //const [openCreate, setOpenCreate] = useState(false);
+  const [openCreateProspect, setOpenCreateProspect] = useState(false);
+  const [openEditProspect, setOpenEditProspect] = useState(false);
 
-  //const handleOpenEditDialog = () => setOpenEdit(true);
-  //const handleCloseEditDialog = () => setOpenEdit(false);
+  const handleOpenEditDialogProspect = () => setOpenEditProspect(true);
+  const handleCloseEditDialogProspect = () => setOpenEditProspect(false);
 
-  //const handleOpenCreateDialog = () => setOpenCreate(true);
-  //const handleCloseCreateDialog = () => setOpenCreate(false);
+  const handleOpenCreateDialogProspect = () => setOpenCreateProspect(true);
+  const handleCloseCreateDialogProspect = () => setOpenCreateProspect(false);
+
+  const [openOptions, setOpenOptions] = useState(false);
+  const handleOpenOptions = () => setOpenOptions(true);
+  const handleCloseOptions = () => setOpenOptions(false);
 
   //***************** INITIAL dispatchs ************************** */
+
   const dispatch = useDispatch();
+  //TODO: validate, do this just when the variables are undefined
   useEffect(() => {
-    //dispatch(setEventViewSelected(optionsEventsView.events));
-    //dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
-    //dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
-    //dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
+    dispatch(setToGloalSearch(undefined));
+    dispatch(resetProspectsVariables());
   }, []);
 
-  //********************POP UP messages*******************+ */
+  useEffect(() => {
+    if (currentProspect) {
+      handleOpenOptions();
+    }
+  }, [currentProspect]);
+
   useEffect(() => {
     if (errorMessage) {
+      if (errorMessage == 'user not found') return;
+
+      if (errorMessage == 'prospect not found') {
+        dispatch(setProspect(undefined));
+        handleOpenCreateDialogProspect();
+        return;
+      }
       Swal.fire('Error', errorMessage, 'error');
     }
   }, [errorMessage]);
@@ -67,69 +94,94 @@ export const ProspectsPage = () => {
   };
 
   /***************************** Functions *********************** */
-  const handleEditEvent = (data) => {
-    /*const event = {
-      id: nextEvent.id,
-      date: data.date,
-      name: data.eventName,
-      description: data.description ?? '',
-      url: normalizeUrl(data.url),
-      commerceUid: user.commerceUid,
-    };
-    dispatch(startEditEvent(event));*/
+
+  const handleSearchProspect = (data) => {
+    dispatch(
+      startFindProspectByPhone({
+        commerceUid: user.commerceUid,
+        prospectPhone: data,
+      })
+    );
   };
 
-  const handleCreateEvent = (data) => {
-    /*const event = {
-      date: data.date,
-      name: data.eventName,
-      description: data.description ?? '',
-      url: normalizeUrl(data.url),
+  const handleEditProspect = (data) => {
+    const prospectToEdit = {
+      ...data,
       commerceUid: user.commerceUid,
     };
-    dispatch(startCreateEventreateEvent(event));*/
+    dispatch(startEditProspect(prospectToEdit));
+  };
+
+  const handleCreateProspect = (data) => {
+    const prospectToCreate = {
+      ...data,
+      commerceUid: user.commerceUid,
+    };
+    dispatch(startCreateProspect(prospectToCreate));
+  };
+
+  const handleShowTableByUser = (userUid) => {
+    dispatch(
+      startGetProspectsByUser({
+        userUid,
+      })
+    );
   };
 
   return (
     <UsersLayout title="Administra tus Prospectos">
-      {/*<EventModalComponent
+      {currentProspect && (
+        <ProspectOptionsModalsComponent
+          open={openOptions}
+          handleClose={handleCloseOptions}
+          onEditProspect={() => {
+            if (currentProspect) {
+              handleOpenEditDialogProspect();
+            }
+          }}
+          prospect={currentProspect}
+        />
+      )}
+
+      <ProspectModalComponent
         actionName={'Editar'}
-        title={'Editar evento'}
-        onSubmit={handleEditEvent}
-        open={openEdit}
-        handleClose={handleCloseEditDialog}
-        event={nextEvent}
+        title={'Editar Prospecto'}
+        onSubmit={handleEditProspect}
+        open={openEditProspect}
+        handleClose={handleCloseEditDialogProspect}
+        prospect={currentProspect}
       />
 
-      <EventModalComponent
+      <ProspectModalComponent
         actionName={'Crear'}
-        title={'Crear evento'}
-        onSubmit={handleCreateEvent}
-        open={openCreate}
-        handleClose={handleCloseCreateDialog}
-      />*/}
+        title={'Crear Prospecto'}
+        onSubmit={handleCreateProspect}
+        open={openCreateProspect}
+        handleClose={handleCloseCreateDialogProspect}
+        prospect={undefined}
+      />
+
       <Container maxWidth="lg">
-        <Grid container spacing={2}>
-          {/**Current Event */}
+        <Grid container spacing={2} backgroundColor="re">
           <Grid item xs={12} md={12} paddingBottom={{ xs: 0, sm: 5 }}>
-            {typegraphyFormat('Prospectos')}
+            {typegraphyFormat('Prospecto')}
+            <SearchFieldComponent
+              onSubmit={handleSearchProspect}
+              customPlaceholder="Escribe el celular"
+              fetching={prospectsStatus.prospect === variableStatus.fetching}
+            />
+
+            <Grid paddingTop={5}>
+              <Divider />
+            </Grid>
+
+            {/*prospects.length > 0 && <Grid paddingTop={5}>
+              {typegraphyFormat(`Prospectos del nivel: ${getLevelNameById(prospects[0].levelUid, levels)}`)}
+              <ProspectLevelTableComponent
+                prospects={prospects}
+              />
+            </Grid>*/}
           </Grid>
-
-          {/**Tickets 
-          <Grid item xs={12} md={12} paddingTop={{ xs: 0, sm: 5 }}>
-            <TicketsTableComponent />
-          </Grid>*/}
-
-          {/**All events 
-          <Grid item xs={12} md={12} paddingTop={{ xs: 0, sm: 5 }}>
-            {typegraphyFormat('Todos los Eventos')}
-            {eventStatus.events == variableStatus.initial || eventStatus.events == variableStatus.fetching ? (
-              //|| !normalizedLevelsTickets
-              <LoadingBox />
-            ) : (
-              <EventsTableComponent events={events} />
-            )}
-          </Grid>*/}
         </Grid>
       </Container>
     </UsersLayout>

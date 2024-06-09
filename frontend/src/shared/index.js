@@ -1,4 +1,4 @@
-export { userStatus } from './constants/constanst';
+export { userStatus, prospectTypes } from './constants/constanst';
 
 export { SearchFieldComponent } from './components/SearchFieldComponent';
 
