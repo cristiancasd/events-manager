@@ -2,8 +2,6 @@ import { AppBar, Box, Button, Grid, Toolbar, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { UserMenu } from '../../../shared';
 import { EditCalendar, Equalizer, Home, PersonAdd } from '@mui/icons-material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 export const EventsNavbar = () => {
   const navigate = useNavigate();
@@ -15,9 +13,6 @@ export const EventsNavbar = () => {
 
   const commonSxIcons = { my: 2, color: 'white', display: 'flex' };
   const commonSxButtons = { my: 2, color: 'white', display: 'flex', paddingRight: 2, paddingLeft: 2, fontSize: 16 };
-
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down('xs'));
 
   return (
     <AppBar position="fixed">

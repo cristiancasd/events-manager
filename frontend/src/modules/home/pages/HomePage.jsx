@@ -12,7 +12,7 @@ export const HomePage = () => {
   };
 
   const navigateToUsers = () => {
-    navigate('/home');
+    navigate('/users');
   };
   return (
     <CommonLayout title="Administra tus Eventos">

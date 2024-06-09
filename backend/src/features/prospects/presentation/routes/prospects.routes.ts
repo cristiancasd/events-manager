@@ -60,7 +60,7 @@ prospectRoutes.get(
   prospectsCtrl.findProspectCtrl
 );
 
-/// Find prospect by phone
+/// get prospects by user
 prospectRoutes.get(
   '/find/allbyuser/:userCommerceUid',
   [checkTokenMiddleware, validateUUIDParam('userCommerceUid')],

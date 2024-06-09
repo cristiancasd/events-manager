@@ -5,7 +5,7 @@ import { body, query } from 'express-validator';
 import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkLevelNameMiddleware } from '../middelwares/db.middelwares';
-import { validateCreateLevelBody } from './level.validations';
+import { validateCreateLevelBody, validateEditLevelBody } from './level.validations';
 import {
   checkTokenMiddleware,
   isAdminMiddleware,
@@ -28,6 +28,19 @@ levelRoutes.post(
   ],
   validateRequest,
   levelCtrl.insertCtrl
+);
+
+levelRoutes.put(
+  `/edit`,
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateEditLevelBody,
+    checkLevelNameMiddleware
+  ],
+  validateRequest,
+  levelCtrl.editCtrl
 );
 
 /// Delete Level

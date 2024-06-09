@@ -18,7 +18,13 @@ export interface UserRepository {
   ): Promise<UserCommerceEntity>;
 
   createUser(user: UserEntity): Promise<UserEntity>;
+  editUser(user: UserEntity): Promise<UserEntity>;
+
+
   createUserCommerce(user: UserCommerceEntity): Promise<UserCommerceEntity>;
+  //editUserCommerce(user: UserCommerceEntity): Promise<UserCommerceEntity>;
+
+
 
   findUserCommerceByUid(uid: string): Promise<UserCommerceEntity>;
   findUsersByLevelUid(

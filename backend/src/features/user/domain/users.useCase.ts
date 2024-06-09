@@ -4,8 +4,10 @@ import { UserEntity } from './users.entity';
 export interface UserUseCaseInterface {
   validateDuplicatedData(
     commerceUid: string,
+    isEditRequest: boolean,
+    id?: string,
     document?: string,
-    commerceUserId?: string
+    commerceUserId?: string,
   ): Promise<boolean>;
 
   findUserByDocumentOrCustomId(
@@ -20,6 +22,8 @@ export interface UserUseCaseInterface {
   ): Promise<UserEntity>;
 
   createUserCommerce(user: UserCommerceEntity): Promise<UserEntity>;
+
+  editUser(user: UserEntity, userCommerce: UserCommerceEntity, ): Promise<UserEntity>;
 
   findUserByUid(uid: string): Promise<UserEntity>;
 

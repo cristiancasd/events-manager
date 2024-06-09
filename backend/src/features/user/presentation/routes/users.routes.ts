@@ -5,7 +5,8 @@ import { configureDependencies } from '../../../../config';
 import { checkUserNameMiddleware } from '../middelwares/usersdb.middelwares';
 import {
   validateCreateUserBody,
-  validateCreateUserCommerceBody
+  validateCreateUserCommerceBody,
+  validateEditUserBody
 } from './users.validations';
 import {
   checkTokenMiddleware,
@@ -32,6 +33,19 @@ userRoutes.post(
   userCtrl.insertCtrl
 );
 
+userRoutes.put(
+  `/edit`,
+  [
+    checkTokenMiddleware,
+    isAdminMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    ...validateEditUserBody,
+    checkUserNameMiddleware
+  ],
+  validateRequest,
+  userCtrl.editCtrl
+);
+
 userRoutes.post(
   `/create/usercommerce`,
   [
@@ -53,6 +67,20 @@ userRoutes.get(
   [checkTokenMiddleware, isAdminMiddleware, validateUUIDParam('userId')],
   validateRequest,
   userCtrl.findCtrl
+);
+
+
+/// Find usser by CustomId or Documento
+userRoutes.get(
+  '/find/data/:commerceUid',
+  [
+    validateUUIDParam('commerceUid'),
+    checkTokenMiddleware,
+    validateCommerceUidAndStateMiddleware,
+    query('data').isString().withMessage('Data is necesary')
+  ],
+  validateRequest,
+  userCtrl.findUserByDocumentOrCustomIdCtrl
 );
 
 /// Find user by email
