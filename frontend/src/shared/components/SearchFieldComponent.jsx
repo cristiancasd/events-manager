@@ -8,7 +8,7 @@ const formFields = {
   toSearch: '',
 };
 
-export const SearchFieldComponent = ({ onSubmit, customPlaceholder = '', fetching = false }) => {
+export const SearchFieldComponent = ({ onSubmit, customPlaceholder = '', fetching = false, inputLabel = 'Buscar' }) => {
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
   const [isFetching, setIsFetching] = useState(false);
@@ -44,7 +44,7 @@ export const SearchFieldComponent = ({ onSubmit, customPlaceholder = '', fetchin
         <Grid container backgroundColor="re" minWidth={'300px'}>
           <Grid item xs={12} sx={{ mt: 2 }} sm={10} backgroundColor="">
             <TextField
-              label="Buscar"
+              label={inputLabel}
               type="text"
               placeholder={customPlaceholder}
               fullWidth
