@@ -20,3 +20,12 @@ export const prospectTypes = {
   prospect: 'prospect',
   prospectVip: 'prospect-vip',
 };
+
+export const pagesOptions = {
+  home: 'Inicio',
+  events: 'Eventos',
+  attendees: 'Asistentes',
+  stats: 'Estadisticas',
+  users: 'Usuarios',
+  prospects: 'Prospects',
+};

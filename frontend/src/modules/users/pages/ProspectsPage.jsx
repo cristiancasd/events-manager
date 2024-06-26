@@ -5,7 +5,7 @@ import { UsersLayout } from '../layout/UsersLayout';
 
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
+import { LoadingBox, SearchFieldComponent, pagesOptions, variableStatus } from '../../../shared';
 import {
   resetProspectsVariables,
   setProspect,
@@ -14,6 +14,7 @@ import {
   startGetProspectsByUser,
   startFindProspectByPhone,
   setToGloalSearch,
+  setCurrentPage,
 } from '../../../store';
 import { ProspectModalComponent } from '../components/prospects/ProspectModalComponent';
 import { ProspectOptionsModalsComponent } from '../components/prospects/ProspectOptionsModalComponent';
@@ -42,6 +43,7 @@ export const ProspectsPage = () => {
   const dispatch = useDispatch();
   //TODO: validate, do this just when the variables are undefined
   useEffect(() => {
+    dispatch(setCurrentPage(pagesOptions.prospects));
     dispatch(setToGloalSearch(undefined));
     dispatch(resetProspectsVariables());
   }, []);

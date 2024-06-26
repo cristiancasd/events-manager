@@ -5,6 +5,7 @@ import { EventsLayout } from '../layout/EventsLayout';
 import {
   findTicketByLevelUid,
   resetUsersVariables,
+  setCurrentPage,
   setEventViewSelected,
   startCreateTicketUser,
   startFindTicketUser,
@@ -15,7 +16,7 @@ import {
 } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { optionsEventsView } from './eventsConstants';
-import { SearchFieldComponent, variableStatus } from '../../../shared';
+import { SearchFieldComponent, pagesOptions, variableStatus } from '../../../shared';
 import { RegisterUserModalComponent } from '../components/users/RegisterUserModalComponent';
 import Swal from 'sweetalert2';
 
@@ -33,6 +34,7 @@ export const EventsAttendeesPage = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(setCurrentPage(pagesOptions.attendees));
     dispatch(resetUsersVariables());
     dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
     dispatch(startGetEventsList({ commerceUid: user.commerceUid }));

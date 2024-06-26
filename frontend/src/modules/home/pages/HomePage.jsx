@@ -1,10 +1,18 @@
 import { Box, Grid, Card, CardActionArea, CardMedia, CardContent, Typography, Container } from '@mui/material';
-import { CommonLayout } from '../../../shared';
+import { CommonLayout, pagesOptions } from '../../../shared';
 import { CardComponent } from '../components/CardComponent';
 import static_URLs from '../../../config/staticUrls';
 import { useNavigate } from 'react-router-dom';
+import { setCurrentPage } from '../../../store';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 export const HomePage = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setCurrentPage(pagesOptions.home));
+  }, []);
+
   const navigate = useNavigate();
 
   const navigateToEvents = () => {

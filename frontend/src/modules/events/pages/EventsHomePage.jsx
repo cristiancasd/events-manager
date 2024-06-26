@@ -10,12 +10,13 @@ import {
   startGetLevelsList,
   startGetTicketsList,
   startCreateTicket,
+  setCurrentPage,
 } from '../../../store';
 import { optionsEventsView } from './eventsConstants';
 import { useEffect, useState } from 'react';
 import { EventCardComponent, EventsTableComponent, EventModalComponent, TicketsTableComponent } from '../components';
 import Swal from 'sweetalert2';
-import { LoadingBox, variableStatus } from '../../../shared';
+import { LoadingBox, pagesOptions, variableStatus } from '../../../shared';
 
 const normalizeUrl = (url) => {
   let value;
@@ -91,6 +92,7 @@ export const EventsHomePage = () => {
   //***************** INITIAL dispatchs ************************** */
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(setCurrentPage(pagesOptions.events));
     dispatch(setEventViewSelected(optionsEventsView.events));
     dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
     dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));

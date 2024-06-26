@@ -1,10 +1,13 @@
 import { AppBar, Box, Button, Grid, Toolbar, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { UserMenu } from '../../../shared';
+import { UserMenu, pagesOptions } from '../../../shared';
 import { EditCalendar, Equalizer, Home, PersonAdd } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 
 export const EventsNavbar = () => {
   const navigate = useNavigate();
+
+  const { currentPage } = useSelector((state) => state.common);
 
   const navigateToHome = () => navigate('/home');
   const navigateToEvents = () => navigate('/events');
@@ -23,31 +26,68 @@ export const EventsNavbar = () => {
               <Home />
             </IconButton>
 
-            <IconButton sx={commonSxIcons} onClick={navigateToEvents}>
+            <IconButton
+              sx={{ ...commonSxIcons, backgroundColor: currentPage == pagesOptions.events ? 'darkgreen' : '' }}
+              onClick={navigateToEvents}
+            >
               <EditCalendar />
             </IconButton>
 
-            <IconButton sx={commonSxIcons} onClick={navigateToAttendees}>
+            <IconButton
+              sx={{ ...commonSxIcons, backgroundColor: currentPage == pagesOptions.attendees ? 'darkgreen' : '' }}
+              onClick={navigateToAttendees}
+            >
               <PersonAdd />
             </IconButton>
 
-            <IconButton sx={commonSxIcons} onClick={navigateToStats}>
+            <IconButton
+              sx={{ ...commonSxIcons, backgroundColor: currentPage == pagesOptions.stats ? 'darkgreen' : '' }}
+              onClick={navigateToStats}
+            >
               <Equalizer />
             </IconButton>
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
-            <Button sx={{ ...commonSxButtons }} onClick={navigateToHome}>
-              Inicio
+            <Button
+              sx={{
+                ...commonSxButtons,
+                backgroundColor: currentPage == pagesOptions.home ? 'darkgreen' : '',
+                '&:hover': { backgroundColor: 'darkgreen' },
+              }}
+              onClick={navigateToHome}
+            >
+              {pagesOptions.home}
             </Button>
-            <Button sx={commonSxButtons} onClick={navigateToEvents}>
-              Eventos
+            <Button
+              sx={{
+                ...commonSxButtons,
+                backgroundColor: currentPage == pagesOptions.events ? 'darkgreen' : '',
+                '&:hover': { backgroundColor: 'darkgreen' },
+              }}
+              onClick={navigateToEvents}
+            >
+              {pagesOptions.events}
             </Button>
-            <Button sx={commonSxButtons} onClick={navigateToAttendees}>
-              Asistentes
+            <Button
+              sx={{
+                ...commonSxButtons,
+                backgroundColor: currentPage == pagesOptions.attendees ? 'darkgreen' : '',
+                '&:hover': { backgroundColor: 'darkgreen' },
+              }}
+              onClick={navigateToAttendees}
+            >
+              {pagesOptions.attendees}
             </Button>
-            <Button sx={commonSxButtons} onClick={navigateToStats}>
-              Estadisticas
+            <Button
+              sx={{
+                ...commonSxButtons,
+                backgroundColor: currentPage == pagesOptions.stats ? 'darkgreen' : '',
+                '&:hover': { backgroundColor: 'darkgreen' },
+              }}
+              onClick={navigateToStats}
+            >
+              {pagesOptions.stats}
             </Button>
           </Box>
           <UserMenu />
