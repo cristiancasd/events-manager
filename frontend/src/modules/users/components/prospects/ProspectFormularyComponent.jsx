@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography, FormControl, Select, InputLabel, MenuItem } from '@mui/material';
+import { Button, Grid, TextField, Typography, FormControl, Select, MenuItem } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useForm, prospectTypes } from '../../../../shared';

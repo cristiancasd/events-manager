@@ -4,6 +4,7 @@ import { Box, Grid, Typography, Container, Divider } from '@mui/material';
 import { EventsLayout } from '../layout/EventsLayout';
 import {
   findTicketByLevelUid,
+  getLevelNameById,
   resetUsersVariables,
   setCurrentPage,
   setEventViewSelected,
@@ -16,21 +17,14 @@ import {
 } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { optionsEventsView } from './eventsConstants';
-import { SearchFieldComponent, pagesOptions, variableStatus } from '../../../shared';
+import { SearchFieldComponent, SelectorAndButtonComponent, pagesOptions, variableStatus } from '../../../shared';
 import { RegisterUserModalComponent } from '../components/users/RegisterUserModalComponent';
 import Swal from 'sweetalert2';
+import { startListAttendeesByEventAndLevel } from '../../../store/attendees/thunks';
+import { AttendeesUsersLevelTableComponent } from '../components/attendeesUsers/AttendeesUsersLevelTableComponent';
 
 export const EventsAttendeesPage = () => {
-  const { user } = useSelector((state) => state.auth);
-  const { prospectsStatus, prospect: currentProspect, prospects } = useSelector((state) => state.prospects);
-  const { usersStatus, user: currentUser, users } = useSelector((state) => state.users);
-  const { nextEvent } = useSelector((state) => state.events);
-  const { tickets } = useSelector((state) => state.tickets);
-  const { errorMessage, successMessage, isFetching } = useSelector((state) => state.common);
-
-  const [openOptions, setOpenOptions] = useState(false);
-  const handleOpenOptions = () => setOpenOptions(true);
-  const handleCloseOptions = () => setOpenOptions(false);
+  
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -41,6 +35,20 @@ export const EventsAttendeesPage = () => {
     dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
     dispatch(setEventViewSelected(optionsEventsView.attendees));
   }, []);
+
+  const { user } = useSelector((state) => state.auth);
+  const { prospectsStatus, prospect: currentProspect, prospects } = useSelector((state) => state.prospects);
+  const { usersStatus, user: currentUser, users } = useSelector((state) => state.users);
+  const { nextEvent } = useSelector((state) => state.events);
+  const { levels } = useSelector((state) => state.levels);
+  const { attendees,attendeesStatus } = useSelector((state) => state.attendees);
+
+  const { tickets } = useSelector((state) => state.tickets);
+  const { errorMessage, successMessage, toGlobalSearch } = useSelector((state) => state.common);
+
+  const [openOptions, setOpenOptions] = useState(false);
+  const handleOpenOptions = () => setOpenOptions(true);
+  const handleCloseOptions = () => setOpenOptions(false);
 
   useEffect(() => {
     if (currentUser && nextEvent) {
@@ -124,6 +132,13 @@ export const EventsAttendeesPage = () => {
       }
     }
   }, [errorMessage]);
+  //TODO: review this
+  const handleListUsersAttendees=(levelUid)=>{
+    dispatch(startListAttendeesByEventAndLevel({
+      eventUid: nextEvent.id,
+      levelUid: levelUid,
+    }))
+  }
 
   return (
     <EventsLayout title="Asistentes">
@@ -153,6 +168,31 @@ export const EventsAttendeesPage = () => {
               <Divider />
             </Grid>
           </Grid>
+
+          <Grid item xs={12} md={6} paddingBottom={{ xs: 0, sm: 5 }}>
+            {typegraphyFormat('Distribuidores Registrados')}
+            <SelectorAndButtonComponent
+            onSubmit={handleListUsersAttendees}
+            customPlaceholder=''
+            fetching={attendeesStatus.attendees==variableStatus.fetching}
+            inputLabel=''
+            options={levels}
+            />
+
+            {levels && levels.length > 0 && attendees && attendees.length > 0 && (
+              <Grid paddingTop={5}>
+                {typegraphyFormat(`Usuarios del nivel: ${getLevelNameById(toGlobalSearch, levels)}`)}
+                <AttendeesUsersLevelTableComponent attendeesUser={attendees} />
+              </Grid>
+            )}
+          </Grid>
+          
+
+
+          <Grid item xs={12} md={12} paddingBottom={{ xs: 0, sm: 5 }}>
+            {typegraphyFormat('Prospectos Registrados')}
+          </Grid>
+
         </Grid>
       </Container>
     </EventsLayout>
