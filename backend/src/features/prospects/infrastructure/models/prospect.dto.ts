@@ -28,6 +28,9 @@ export class ProspectTypeORMEntity {
   @Column()
   type!: ProspectType;
 
+  @Column({ default: true })
+  isActive?: boolean;
+
   @Column()
   commerceUid!: string;
 
