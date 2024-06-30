@@ -12,9 +12,10 @@ const emptyUser = {
   document: '',
   role: userStatus.user,
   levelUid: '',
+  commerceUserId: '',
 };
 
-export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
+export const UserFourmularyComponent = ({ onSubmit, actionName, user, disabledRole }) => {
   const { levels } = useSelector((state) => state.levels);
 
   const [userFormField, setUserFormField] = useState(user ?? emptyUser);
@@ -129,6 +130,7 @@ export const UserFourmularyComponent = ({ onSubmit, actionName, user }) => {
               label="role"
               onChange={onInputChange}
               required
+              disabled={disabledRole ?? false}
             >
               <MenuItem key={userStatus.user} value={userStatus.user}>
                 Usuario

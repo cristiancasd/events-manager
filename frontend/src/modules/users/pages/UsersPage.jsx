@@ -5,10 +5,11 @@ import { UsersLayout } from '../layout/UsersLayout';
 
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { LoadingBox, SearchFieldComponent, variableStatus } from '../../../shared';
+import { LoadingBox, SearchFieldComponent, pagesOptions, variableStatus } from '../../../shared';
 import {
   getLevelNameById,
   resetUsersVariables,
+  setCurrentPage,
   setTicketUser,
   setUser,
   startCreateLevel,
@@ -69,6 +70,7 @@ export const UsersPage = () => {
   const dispatch = useDispatch();
   //TODO: validate, do this just when the variables are undefined
   useEffect(() => {
+    dispatch(setCurrentPage(pagesOptions.users));
     dispatch(resetUsersVariables());
     dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
     dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
@@ -89,7 +91,7 @@ export const UsersPage = () => {
         return;
       }
 
-      Swal.fire('Error', errorMessage, 'error');
+      errorMessage.code ? Swal.fire('Error', errorMessage.message, 'error') : Swal.fire('Error', errorMessage, 'error');
     }
   }, [errorMessage]);
 
@@ -188,6 +190,7 @@ export const UsersPage = () => {
       commerceUid: user.commerceUid,
       isActive: true,
       name: data.userName,
+      email: data.email.toLowerCase(),
     };
     dispatch(startCreateUser(userToCreate));
   };

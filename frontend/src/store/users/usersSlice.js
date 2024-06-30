@@ -19,6 +19,7 @@ export const usersSlice = createSlice({
           user: variableStatus.initial,
           users: variableStatus.initial,
         });
+      console.log('**** en resetUsersVariables **state.user**', state.user);
     },
 
     setUsersStatus: (state, { payload }) => {

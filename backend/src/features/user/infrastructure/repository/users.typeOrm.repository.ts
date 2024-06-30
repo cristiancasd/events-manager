@@ -45,7 +45,7 @@ export class TypeOrmUserRepository implements UserRepository {
   constructor(
     private commerceUseCase: CommerceUseCase,
     private levelUseCase: LevelUseCase
-  ) { }
+  ) {}
 
   @errorHandlerTypeOrm
   async findUserByDocument(document: string): Promise<UserCoreEntity> {
@@ -63,7 +63,9 @@ export class TypeOrmUserRepository implements UserRepository {
   @errorHandlerTypeOrm
   async findUserByEmail(email: string): Promise<UserCoreEntity> {
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
-    const user = await userRepository.findOneBy({ email: email });
+    const user = await userRepository.findOneBy({
+      email: email.toLocaleLowerCase()
+    });
 
     if (!user)
       throw new NotFoundError(
@@ -87,15 +89,16 @@ export class TypeOrmUserRepository implements UserRepository {
     const userCommerceRepository = connectDB.getRepository(
       UserCommerceTypeORMEntity
     );
-    const commerceUserId = customCommerceId
+    const commerceUserId = customCommerceId;
     const queryBuilder = userCommerceRepository
       .createQueryBuilder('userCommerce')
       .leftJoinAndSelect('userCommerce.level', 'level')
       .leftJoinAndSelect('userCommerce.commerce', 'commerce')
-      .where('LOWER(userCommerce.commerceUserId) = LOWER(:commerceUserId)', { commerceUserId })
+      .where('LOWER(userCommerce.commerceUserId) = LOWER(:commerceUserId)', {
+        commerceUserId
+      });
 
     const userFound = await queryBuilder.getOne();
-
 
     if (!userFound || userFound.commerce.id != commerceUid)
       throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
@@ -179,17 +182,17 @@ export class TypeOrmUserRepository implements UserRepository {
 
   @errorHandlerTypeOrm
   async editUser(data: UserEntity): Promise<UserEntity> {
-    console.log('estoy en repository editUser')
+    console.log('estoy en repository editUser');
     const userRepository = connectDB.getRepository(UserTypeORMEntity);
     const userCommerceRepository = connectDB.getRepository(
       UserCommerceTypeORMEntity
     );
 
-
-    const userCommerceFound = await userCommerceRepository.findOneBy({ id: data.id })
+    const userCommerceFound = await userCommerceRepository.findOneBy({
+      id: data.id
+    });
     if (!userCommerceFound)
       throw new NotFoundError(errorMessageUserNotFound, codeUserNotFound);
-
 
     const commerce = await this.commerceUseCase.findComerceByUid(
       data.commerceUid
@@ -205,35 +208,34 @@ export class TypeOrmUserRepository implements UserRepository {
 
     const userCoreFound = userCommerceFound.user;
 
-    const {password, ...restoUserCommerceFound}= userCommerceFound;
-    console.log('*******************************************++++data.password',data.password)
+    const { password, ...restoUserCommerceFound } = userCommerceFound;
+    console.log(
+      '*******************************************++++data.password',
+      data.password
+    );
     const newUserCommerce = data.password
       ? await userCommerceRepository.save({
-        ...userCommerceFound,
-        ...data,
-        password: bcrypt.hashSync(data.password, 10),
-        level,
-        commerce,
-        //user: userCoreFound,
-      })
+          ...userCommerceFound,
+          ...data,
+          password: bcrypt.hashSync(data.password, 10),
+          level,
+          commerce
+          //user: userCoreFound,
+        })
       : await userCommerceRepository.save({
-        ...restoUserCommerceFound,
-        ...data,
-        level,
-        commerce,
-       // user: userCoreFound,
-      });
+          ...restoUserCommerceFound,
+          ...data,
+          level,
+          commerce
+          // user: userCoreFound,
+        });
 
-      const {id,...resto}=data;
+    const { id, ...resto } = data;
 
     const newUser = await userRepository.save({
       ...userCoreFound,
-      ...resto,
-    })
-
-
-
-
+      ...resto
+    });
 
     return await buildUserEntityUtil(newUser, newUserCommerce);
   }
@@ -310,7 +312,7 @@ export class TypeOrmUserRepository implements UserRepository {
       UserCommerceTypeORMEntity
     );
 
-    console.log('prueba... findUsersByLevelUid')
+    console.log('prueba... findUsersByLevelUid');
 
     const queryBuilder = userCommerceRepository
       .createQueryBuilder('userCommerce')
@@ -318,7 +320,7 @@ export class TypeOrmUserRepository implements UserRepository {
       .leftJoinAndSelect('userCommerce.level', 'level')
       .where('userCommerce.commerce.id = :commerceUid', { commerceUid })
       .andWhere('userCommerce.level.id = :levelUid', { levelUid });
-      console.log('prueba... ')
+    console.log('prueba... ');
 
     const users = await queryBuilder.getMany();
     let userArray: UserEntity[] = [];
@@ -329,7 +331,7 @@ export class TypeOrmUserRepository implements UserRepository {
         userArray.push(user);
       }
     }
-    console.log('prueba... userArray',userArray)
+    console.log('prueba... userArray', userArray);
 
     return userArray;
   }

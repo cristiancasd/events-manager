@@ -69,7 +69,6 @@ userRoutes.get(
   userCtrl.findCtrl
 );
 
-
 /// Find usser by CustomId or Documento
 userRoutes.get(
   '/find/data/:commerceUid',

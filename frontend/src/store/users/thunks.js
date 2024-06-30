@@ -201,6 +201,11 @@ const existError = (error, email = '') => {
         let errorMessage = '';
 
         if (errors[0].code == 805) return 'user not found';
+        if (errors[0].code >= 700 && errors[0].code <= 720)
+          return {
+            message: errors[0].message,
+            code: errors[0].code,
+          };
         errors.forEach((data) => {
           errorMessage += errorMessage + data.message + '\n';
         });

@@ -26,9 +26,7 @@ export const validateCreateUserBody: ValidationChain[] = [
     .withMessage('freeSpace must be String')
 ];
 
-
 export const validateEditUserBody: ValidationChain[] = [
-
   body('id').isUUID().withMessage('commerceUid must be UUID'),
   body('role')
     .isIn(['user', 'admin', 'super-admin', 'other'])

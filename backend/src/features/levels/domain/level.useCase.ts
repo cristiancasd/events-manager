@@ -6,8 +6,7 @@ export interface LevelUseCaseInterface {
     id: string | undefined,
     isEditRequest: boolean,
     name?: string,
-    typeId?: number,
-    
+    typeId?: number
   ): Promise<boolean>;
   createLevel(input: LevelEntity, commerceUid: string): Promise<LevelEntity>;
   editLevel(data: LevelEntity): Promise<LevelEntity>;

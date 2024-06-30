@@ -1,6 +1,6 @@
+import { variableStatus } from '../../shared';
 import { createSlice } from '@reduxjs/toolkit';
 import { findNextEvent } from './utils/findNextEvent';
-import { variableStatus } from '../../shared';
 
 export const eventsSlice = createSlice({
   name: 'events',

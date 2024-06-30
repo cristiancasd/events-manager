@@ -15,7 +15,9 @@ import {
   resetTicketsVariables,
   startLogin,
   resetUsersVariables,
+  setCurrentPage,
 } from '../../../store';
+import { pagesOptions } from '../../../shared';
 
 export const LoginPage = () => {
   console.log('estoy en Login Page');
@@ -25,6 +27,7 @@ export const LoginPage = () => {
 
   useEffect(() => {
     console.log('estoy en Login Page');
+    dispatch(setCurrentPage(undefined));
     dispatch(resetEventsVariables());
     dispatch(resetLevelsVariables());
     dispatch(resetTicketsVariables());

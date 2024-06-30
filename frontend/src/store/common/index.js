@@ -1,1 +1,8 @@
-export { commonSlice, setToGloalSearch, setErrorMessage, setSuccessMessage, setIsFetching } from './commonSlice';
+export {
+  commonSlice,
+  setToGloalSearch,
+  setErrorMessage,
+  setSuccessMessage,
+  setIsFetching,
+  setCurrentPage,
+} from './commonSlice';

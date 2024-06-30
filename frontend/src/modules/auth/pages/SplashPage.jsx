@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 import { CircularProgress, Grid } from '@mui/material';
 import React from 'react';
+import { setCurrentPage } from '../../../store';
 
 export const SplashPage = ({ message = '' }) => {
   console.log('estoy en splash page');
@@ -11,8 +12,11 @@ export const SplashPage = ({ message = '' }) => {
   const { status } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setCurrentPage(undefined));
+
     if (status == 'authenticated') navigate('/home');
     if (status == 'not-authenticated') navigate('/auth');
   }, [status]);

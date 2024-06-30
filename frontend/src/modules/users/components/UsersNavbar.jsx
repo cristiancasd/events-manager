@@ -1,10 +1,12 @@
 import { AppBar, Box, Button, Grid, Toolbar, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { UserMenu } from '../../../shared';
+import { UserMenu, pagesOptions } from '../../../shared';
 import { BusinessCenter, EditCalendar, Equalizer, Face, Home, Person, PersonAdd } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 
 export const UsersNavbar = () => {
   const navigate = useNavigate();
+  const { currentPage } = useSelector((state) => state.common);
 
   const navigateToHome = () => navigate('/home');
   const navigateToUsers = () => navigate('/users');
@@ -22,24 +24,51 @@ export const UsersNavbar = () => {
               <Home />
             </IconButton>
 
-            <IconButton sx={commonSxIcons} onClick={navigateToUsers}>
+            <IconButton
+              sx={{ ...commonSxIcons, backgroundColor: currentPage == pagesOptions.users ? 'darkgreen' : '' }}
+              onClick={navigateToUsers}
+            >
               <BusinessCenter />
             </IconButton>
 
-            <IconButton sx={commonSxIcons} onClick={navigateToProspects}>
+            <IconButton
+              sx={{ ...commonSxIcons, backgroundColor: currentPage == pagesOptions.prospects ? 'darkgreen' : '' }}
+              onClick={navigateToProspects}
+            >
               <Person />
             </IconButton>
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
-            <Button sx={{ ...commonSxButtons }} onClick={navigateToHome}>
-              Inicio
+            <Button
+              sx={{
+                ...commonSxButtons,
+                backgroundColor: currentPage == pagesOptions.home ? 'darkgreen' : '',
+                '&:hover': { backgroundColor: 'darkgreen' },
+              }}
+              onClick={navigateToHome}
+            >
+              {pagesOptions.home}
             </Button>
-            <Button sx={commonSxButtons} onClick={navigateToUsers}>
-              Usuarios
+            <Button
+              sx={{
+                ...commonSxButtons,
+                backgroundColor: currentPage == pagesOptions.users ? 'darkgreen' : '',
+                '&:hover': { backgroundColor: 'darkgreen' },
+              }}
+              onClick={navigateToUsers}
+            >
+              {pagesOptions.users}
             </Button>
-            <Button sx={commonSxButtons} onClick={navigateToProspects}>
-              Prospectos
+            <Button
+              sx={{
+                ...commonSxButtons,
+                backgroundColor: currentPage == pagesOptions.prospects ? 'darkgreen' : '',
+                '&:hover': { backgroundColor: 'darkgreen' },
+              }}
+              onClick={navigateToProspects}
+            >
+              {pagesOptions.prospects}
             </Button>
           </Box>
           <UserMenu />

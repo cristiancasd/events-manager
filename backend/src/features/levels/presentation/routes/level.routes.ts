@@ -5,7 +5,10 @@ import { body, query } from 'express-validator';
 import { validateRequest, validateUUIDParam } from '../../../../core';
 import { configureDependencies } from '../../../../config';
 import { checkLevelNameMiddleware } from '../middelwares/db.middelwares';
-import { validateCreateLevelBody, validateEditLevelBody } from './level.validations';
+import {
+  validateCreateLevelBody,
+  validateEditLevelBody
+} from './level.validations';
 import {
   checkTokenMiddleware,
   isAdminMiddleware,
