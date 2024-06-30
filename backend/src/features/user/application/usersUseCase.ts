@@ -30,25 +30,32 @@ export class UserUseCase implements UserUseCaseInterface {
     isEditRequest: boolean,
     id?: string,
     document?: string,
-    commerceUserId?: string,
-
+    commerceUserId?: string
   ): Promise<boolean> {
-    console.log('******************* id', id)
-    console.log('******************* commerceUserId', commerceUserId)
+    console.log('******************* id', id);
+    console.log('******************* commerceUserId', commerceUserId);
 
     let documentFound = false;
     let commerceUserIdFound = false;
     if (document != null) {
       try {
         //user core
-        const resultCore=await this._userRepository.findUserByDocument(document);
-        const resultUserCommerce=await this._userRepository.findUserCommerceByEmail(commerceUid, resultCore.email);
+        const resultCore = await this._userRepository.findUserByDocument(
+          document
+        );
+        const resultUserCommerce =
+          await this._userRepository.findUserCommerceByEmail(
+            commerceUid,
+            resultCore.email
+          );
 
-
-        console.log(id, resultCore.id, resultUserCommerce.id)
-        documentFound = !isEditRequest ? true : resultUserCommerce.id == id ? false : true;
-      console.log(documentFound)
-      
+        console.log(id, resultCore.id, resultUserCommerce.id);
+        documentFound = !isEditRequest
+          ? true
+          : resultUserCommerce.id == id
+          ? false
+          : true;
+        console.log(documentFound);
       } catch (err) {
         if (!(err instanceof NotFoundError)) {
           throw err;
@@ -58,12 +65,16 @@ export class UserUseCase implements UserUseCaseInterface {
 
     if (commerceUserId != null) {
       try {
-        const result=await this._userRepository.findUserCommerceByCustomCommerceId(
-          commerceUid,
-          commerceUserId
-        );
-        commerceUserIdFound = !isEditRequest ? true : result.id == id ? false : true;
-        
+        const result =
+          await this._userRepository.findUserCommerceByCustomCommerceId(
+            commerceUid,
+            commerceUserId
+          );
+        commerceUserIdFound = !isEditRequest
+          ? true
+          : result.id == id
+          ? false
+          : true;
       } catch (err) {
         if (!(err instanceof NotFoundError)) {
           throw err;
@@ -112,15 +123,14 @@ export class UserUseCase implements UserUseCaseInterface {
 
   @errorHandlerUseCase
   async editUser(input: UserEntity): Promise<UserEntity> {
-    console.log('estoy en application editUser')
-    console.log('estoy en application editUser input', input)
+    console.log('estoy en application editUser');
+    console.log('estoy en application editUser input', input);
 
     const userValue = new UserValue(input);
-    console.log('estoy en application editUser userValue', userValue)
+    console.log('estoy en application editUser userValue', userValue);
 
     return await this._userRepository.editUser(userValue);
   }
-
 
   @errorHandlerUseCase
   async createUserCommerce(input: UserCommerceEntity): Promise<UserEntity> {
@@ -193,7 +203,6 @@ export class UserUseCase implements UserUseCaseInterface {
     commerceUid: string,
     levelUid: string
   ): Promise<UserEntity[]> {
-    
     return await this._userRepository.findUsersByLevelUid(
       commerceUid,
       levelUid

@@ -18,7 +18,6 @@ export const AuthLayout = ({ children, title = '' }) => {
       >
         <Navbar />
         <Toolbar />
-        <LogoCenter />
 
         {/** login formulary */}
         <Box

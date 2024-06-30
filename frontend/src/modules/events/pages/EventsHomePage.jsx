@@ -114,7 +114,7 @@ export const EventsHomePage = () => {
   //********************POP UP messages*******************+ */
   useEffect(() => {
     if (errorMessage) {
-      Swal.fire('Error', errorMessage, 'error');
+      errorMessage.code ? Swal.fire('Error', errorMessage.message, 'error') : Swal.fire('Error', errorMessage, 'error');
     }
   }, [errorMessage]);
 

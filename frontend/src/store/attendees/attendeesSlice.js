@@ -15,6 +15,7 @@ export const attendeesSlice = createSlice({
   reducers: {
     resetAttendeesVariables: (state) => {
       (state.attendees = []),
+        (state.attendee = undefined),
         (state.attendeesStatus = {
           attendee: variableStatus.initial,
           attendees: variableStatus.initial,

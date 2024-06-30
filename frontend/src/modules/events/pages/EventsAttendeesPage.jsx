@@ -5,10 +5,12 @@ import { EventsLayout } from '../layout/EventsLayout';
 import {
   findTicketByLevelUid,
   getLevelNameById,
+  resetAttendeesVariables,
   resetUsersVariables,
   setCurrentPage,
   setEventViewSelected,
   startCreateTicketUser,
+  startCreateUser,
   startFindTicketUser,
   startFindUserByDocOrId,
   startGetEventsList,
@@ -21,27 +23,30 @@ import { SearchFieldComponent, SelectorAndButtonComponent, pagesOptions, variabl
 import { RegisterUserModalComponent } from '../components/users/RegisterUserModalComponent';
 import Swal from 'sweetalert2';
 import { startListAttendeesByEventAndLevel } from '../../../store/attendees/thunks';
-import { AttendeesUsersLevelTableComponent } from '../components/attendeesUsers/AttendeesUsersLevelTableComponent';
+import { AttendeesUsersLevelTableComponent } from '../components/attendees/AttendeesUsersLevelTableComponent';
+import { AttendeesRegisterModalComponent } from '../components/attendees/AttendeesRegisterModalComponent';
+import { UserModalComponent } from '../../users/components';
 
 export const EventsAttendeesPage = () => {
-  
-
   const dispatch = useDispatch();
+
+  const { user: authUser } = useSelector((state) => state.auth);
+
   useEffect(() => {
     dispatch(setCurrentPage(pagesOptions.attendees));
     dispatch(resetUsersVariables());
-    dispatch(startGetLevelsList({ commerceUid: user.commerceUid }));
-    dispatch(startGetEventsList({ commerceUid: user.commerceUid }));
-    dispatch(startGetTicketsList({ commerceUid: user.commerceUid }));
+    dispatch(resetAttendeesVariables());
+    dispatch(startGetLevelsList({ commerceUid: authUser.commerceUid }));
+    dispatch(startGetEventsList({ commerceUid: authUser.commerceUid }));
+    dispatch(startGetTicketsList({ commerceUid: authUser.commerceUid }));
     dispatch(setEventViewSelected(optionsEventsView.attendees));
   }, []);
 
-  const { user } = useSelector((state) => state.auth);
   const { prospectsStatus, prospect: currentProspect, prospects } = useSelector((state) => state.prospects);
-  const { usersStatus, user: currentUser, users } = useSelector((state) => state.users);
+  const { usersStatus, user, users } = useSelector((state) => state.users);
   const { nextEvent } = useSelector((state) => state.events);
   const { levels } = useSelector((state) => state.levels);
-  const { attendees,attendeesStatus } = useSelector((state) => state.attendees);
+  const { attendees, attendeesStatus } = useSelector((state) => state.attendees);
 
   const { tickets } = useSelector((state) => state.tickets);
   const { errorMessage, successMessage, toGlobalSearch } = useSelector((state) => state.common);
@@ -50,17 +55,22 @@ export const EventsAttendeesPage = () => {
   const handleOpenOptions = () => setOpenOptions(true);
   const handleCloseOptions = () => setOpenOptions(false);
 
+  const [openCreateUser, setOpenCreateUser] = useState(false);
+  const handleOpeCreateUser = () => setOpenCreateUser(true);
+  const handleCloseCreateUser = () => setOpenCreateUser(false);
+
   useEffect(() => {
-    if (currentUser && nextEvent) {
+    if (user && nextEvent) {
+      console.log('************aqui**', user);
       dispatch(
         startFindTicketUser({
-          userCommerceUid: currentUser.id,
+          userCommerceUid: user.id,
           eventUid: nextEvent.id,
         })
       );
       handleOpenOptions();
     }
-  }, [currentUser]);
+  }, [user]);
 
   const typegraphyFormat = (text) => {
     return (
@@ -96,7 +106,7 @@ export const EventsAttendeesPage = () => {
   const handleSearchDistribuidor = (data) => {
     dispatch(
       startFindUserByDocOrId({
-        commerceUid: user.commerceUid,
+        commerceUid: authUser.commerceUid,
         toSearch: data,
       })
     );
@@ -105,8 +115,8 @@ export const EventsAttendeesPage = () => {
   const handleAddTicketToUser = () => {
     const ticketToAdd = {
       hasPresale: true,
-      fee: findTicketByLevelUid(currentUser.levelUid, tickets).presaleFee,
-      userCommerceUid: currentUser.id,
+      fee: findTicketByLevelUid(user.levelUid, tickets).presaleFee,
+      userCommerceUid: user.id,
       totalAttendees: 0,
       eventUid: nextEvent.id,
     };
@@ -127,29 +137,55 @@ export const EventsAttendeesPage = () => {
 
   useEffect(() => {
     if (errorMessage) {
-      if (errorMessage === '710') {
-        Swal.fire('Error', 'El usuario ya está registrado', 'error');
+      if (errorMessage === '710') Swal.fire('Error', 'El usuario ya está registrado', 'error');
+
+      console.log('aqui...........', errorMessage);
+      if (errorMessage.code && errorMessage.code >= 700 && errorMessage.code <= 720)
+        Swal.fire('Error', errorMessage.message, 'error');
+
+      if (errorMessage === 'user not found') {
+        handleOpeCreateUser();
       }
     }
   }, [errorMessage]);
   //TODO: review this
-  const handleListUsersAttendees=(levelUid)=>{
-    dispatch(startListAttendeesByEventAndLevel({
-      eventUid: nextEvent.id,
-      levelUid: levelUid,
-    }))
-  }
+  const handleListUsersAttendees = (levelUid) => {
+    dispatch(
+      startListAttendeesByEventAndLevel({
+        eventUid: nextEvent.id,
+        levelUid: levelUid,
+      })
+    );
+  };
+
+  const handleCreateUser = (data) => {
+    const userToCreate = {
+      ...data,
+      password: data.document,
+      commerceUid: authUser.commerceUid,
+      isActive: true,
+      name: data.userName,
+      email: data.email.toLowerCase(),
+    };
+    dispatch(startCreateUser(userToCreate));
+  };
 
   return (
     <EventsLayout title="Asistentes">
-      {currentUser && (
+      {user && (
         <RegisterUserModalComponent
           onAddTicket={handleAddTicketToUser}
           open={openOptions}
           handleClose={handleCloseOptions}
-          user={currentUser}
+          user={user}
         />
       )}
+
+      <AttendeesRegisterModalComponent
+        handleClose={handleCloseCreateUser}
+        onSubmit={handleCreateUser}
+        open={openCreateUser}
+      />
 
       <Container maxWidth="lg">
         <Grid container spacing={2} backgroundColor="re">
@@ -172,11 +208,11 @@ export const EventsAttendeesPage = () => {
           <Grid item xs={12} md={6} paddingBottom={{ xs: 0, sm: 5 }}>
             {typegraphyFormat('Distribuidores Registrados')}
             <SelectorAndButtonComponent
-            onSubmit={handleListUsersAttendees}
-            customPlaceholder=''
-            fetching={attendeesStatus.attendees==variableStatus.fetching}
-            inputLabel=''
-            options={levels}
+              onSubmit={handleListUsersAttendees}
+              customPlaceholder=""
+              fetching={attendeesStatus.attendees == variableStatus.fetching}
+              inputLabel=""
+              options={levels}
             />
 
             {levels && levels.length > 0 && attendees && attendees.length > 0 && (
@@ -186,13 +222,10 @@ export const EventsAttendeesPage = () => {
               </Grid>
             )}
           </Grid>
-          
 
-
-          <Grid item xs={12} md={12} paddingBottom={{ xs: 0, sm: 5 }}>
+          <Grid item xs={12} md={6} paddingBottom={{ xs: 0, sm: 5 }}>
             {typegraphyFormat('Prospectos Registrados')}
           </Grid>
-
         </Grid>
       </Container>
     </EventsLayout>

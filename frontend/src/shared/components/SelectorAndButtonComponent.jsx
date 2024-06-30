@@ -1,12 +1,26 @@
 import { Search } from '@mui/icons-material';
-import { Button, Grid, TextField, Typography, IconButton, CircularProgress, FormControl, Select, MenuItem} from '@mui/material';
+import {
+  Button,
+  Grid,
+  TextField,
+  Typography,
+  IconButton,
+  CircularProgress,
+  FormControl,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { setToGloalSearch } from '../../store';
 import { useDispatch } from 'react-redux';
 
-
-
-export const SelectorAndButtonComponent = ({ onSubmit, options=[],customPlaceholder = '', fetching = false, inputLabel = 'Buscar' }) => {
+export const SelectorAndButtonComponent = ({
+  onSubmit,
+  options = [],
+  customPlaceholder = '',
+  fetching = false,
+  inputLabel = 'Buscar',
+}) => {
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
   const [isFetching, setIsFetching] = useState(false);
@@ -41,30 +55,27 @@ export const SelectorAndButtonComponent = ({ onSubmit, options=[],customPlacehol
       <form onSubmit={onClick}>
         <Grid container backgroundColor="re" minWidth={'300px'}>
           <Grid item xs={10} sm={10} sx={{ mt: 2 }} backgroundColor="">
-          <FormControl fullWidth>
-            <Select 
-            //size="small" 
-            id="value" 
-            value={value} 
-            name="value"
-             onChange={(event)=>setValue(event.target.value)} 
-             required
-             >
-              {
-                options.map((data,count)=>{
-                  return(
-                    <MenuItem key={data.id??count} value={data.id??data}>
-                      {data.name??data}
+            <FormControl fullWidth>
+              <Select
+                //size="small"
+                id="value"
+                value={value}
+                name="value"
+                onChange={(event) => setValue(event.target.value)}
+                required
+              >
+                {options.map((data, count) => {
+                  return (
+                    <MenuItem key={data.id ?? count} value={data.id ?? data}>
+                      {data.name ?? data}
                     </MenuItem>
-                  )
-                })
-              }
-              
-            </Select>
-          </FormControl>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
 
-          <Grid item xs={2} sm={2} sx={{ mt: 2.1 }} >
+          <Grid item xs={2} sm={2} sx={{ mt: 2.1 }}>
             <Button
               type="submit"
               variant="contained"

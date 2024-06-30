@@ -2,10 +2,10 @@ import { Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useMemo } from 'react';
 
-const VISIBLE_FIELDS = ['commerceUserId', 'name',  'phone',];
+const VISIBLE_FIELDS = ['commerceUserId', 'name', 'phone'];
 
 const columnsRef = [
-  { field: 'commerceUserId', headerName: 'ID', width: 90 },
+  { field: 'commerceUserId', headerName: 'ID', width: 120 },
   {
     field: 'name',
     headerName: 'Nombre',
@@ -14,7 +14,7 @@ const columnsRef = [
   {
     field: 'phone',
     headerName: 'Teléfono',
-    width: 150,
+    width: 120,
   },
 ];
 

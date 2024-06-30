@@ -85,7 +85,6 @@ export class TypeOrmLevelRepository implements LevelRepository {
     });
     if (!levelSaved) throw new DataBaseError(errorMsgDb);
 
-
     return new LevelValue({
       ...levelSaved,
       commerceUid: levelSaved.commerce.id

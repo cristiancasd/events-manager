@@ -8,4 +8,3 @@ export * from './ticket-user';
 export * from './ticket-user';
 export * from './prospects';
 export * from './attendees';
-

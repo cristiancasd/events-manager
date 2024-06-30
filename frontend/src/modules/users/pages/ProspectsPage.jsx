@@ -63,7 +63,7 @@ export const ProspectsPage = () => {
         handleOpenCreateDialogProspect();
         return;
       }
-      Swal.fire('Error', errorMessage, 'error');
+      errorMessage.code ? Swal.fire('Error', errorMessage.message, 'error') : Swal.fire('Error', errorMessage, 'error');
     }
   }, [errorMessage]);
 

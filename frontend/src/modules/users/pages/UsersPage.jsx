@@ -91,7 +91,7 @@ export const UsersPage = () => {
         return;
       }
 
-      Swal.fire('Error', errorMessage, 'error');
+      errorMessage.code ? Swal.fire('Error', errorMessage.message, 'error') : Swal.fire('Error', errorMessage, 'error');
     }
   }, [errorMessage]);
 
@@ -190,6 +190,7 @@ export const UsersPage = () => {
       commerceUid: user.commerceUid,
       isActive: true,
       name: data.userName,
+      email: data.email.toLowerCase(),
     };
     dispatch(startCreateUser(userToCreate));
   };

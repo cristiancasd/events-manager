@@ -28,8 +28,8 @@ export const RegisterUserModalComponent = ({ user, onAddTicket, open, handleClos
     }
   }, [ticketUser]);
 
-  const lineText = (texto1, texto2) => (
-    <Typography>
+  const lineText = (texto1, texto2, bigSize) => (
+    <Typography fontSize={bigSize ? 27 : 20}>
       <span style={{ fontWeight: 'bold' }}>{texto1}:</span> {texto2}
     </Typography>
   );
@@ -54,7 +54,11 @@ export const RegisterUserModalComponent = ({ user, onAddTicket, open, handleClos
             </Grid>
 
             <Grid item xs={12} sx={{ mt: 2 }}>
-              {lineText('Precio', findTicketByLevelUid(user?.levelUid ?? '', tickets).saleFee ?? '', true)}
+              {lineText(
+                'Precio',
+                (findTicketByLevelUid(user?.levelUid ?? '', tickets).saleFee ?? '').toLocaleString('es-CO'),
+                true
+              )}
             </Grid>
 
             <Grid item xs={12} paddingTop={5}>

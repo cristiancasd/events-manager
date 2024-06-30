@@ -26,7 +26,6 @@ export const checkLevelNameMiddleware = async (
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
-
       let isEditRequest = false;
       if (req.method === 'PUT') {
         isEditRequest = true;
@@ -38,8 +37,7 @@ export const checkLevelNameMiddleware = async (
         id as string | undefined,
         isEditRequest,
         name,
-        undefined,
-        
+        undefined
       );
       if (nameExist)
         throw new DataBaseError(duplicatedNameMessage, codeDbNameDuplicated);
@@ -48,8 +46,7 @@ export const checkLevelNameMiddleware = async (
         id as string | undefined,
         isEditRequest,
         undefined,
-        typeId,
-        
+        typeId
       );
       if (typeIdExist)
         throw new DataBaseError(

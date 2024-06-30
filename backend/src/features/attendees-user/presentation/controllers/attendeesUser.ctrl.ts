@@ -6,6 +6,7 @@ export class AttendeesUserController {
 
   public insertCtrl = async (req: Request, res: Response) => {
     const { eventUid, userCommerceUid } = req.body;
+
     const result = await this.attendeesUserUseCase.registerAttendeeUser(
       eventUid,
       userCommerceUid

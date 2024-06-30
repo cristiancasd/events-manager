@@ -20,9 +20,7 @@ export class LevelUseCase implements LevelUseCaseInterface {
     id: string | undefined,
     isEditRequest: boolean,
     name?: string,
-    typeId?: number,
-    
-
+    typeId?: number
   ): Promise<boolean> {
     let nameFound = false;
     let typeIdFound = false;
@@ -35,12 +33,11 @@ export class LevelUseCase implements LevelUseCaseInterface {
 
       return !levelFound
         ? false
-        :  !isEditRequest 
-        ? true 
-        : levelFound.id == id 
-          ? false 
-          : true;
-
+        : !isEditRequest
+        ? true
+        : levelFound.id == id
+        ? false
+        : true;
     }
 
     /*if (typeId != null) {

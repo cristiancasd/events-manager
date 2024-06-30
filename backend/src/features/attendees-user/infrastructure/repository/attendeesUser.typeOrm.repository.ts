@@ -64,7 +64,8 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
         id: attendeeUserSaved.userCommerce.id,
         name: userCommerce.name,
         phone: userCommerce.phone,
-        levelUid: attendeeUserSaved.event.id
+        levelUid: attendeeUserSaved.event.id,
+        commerceUserId: userCommerce.commerceUserId
       })
     });
   }
@@ -107,7 +108,8 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
         id: attendeeUser.userCommerce.id,
         name: userCommerce.name,
         phone: userCommerce.phone,
-        levelUid: attendeeUser.event.id
+        levelUid: attendeeUser.event.id,
+        commerceUserId: userCommerce.commerceUserId
       })
     });
   }
@@ -142,7 +144,8 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
           id: attendeesUser.userCommerce.id,
           name: attendeesUser.userCommerce.user.name,
           phone: attendeesUser.userCommerce.user.phone,
-          levelUid: attendeesUser.userCommerce.level.id
+          levelUid: attendeesUser.userCommerce.level.id,
+          commerceUserId: attendeesUser.userCommerce.commerceUserId
         })
       });
       attendeeUserArray.push(attendeesUserEntity);
@@ -181,7 +184,8 @@ export class AttendeeUserRepositoryImpl implements AttendeeUserRepository {
             id: attendeeUser.userCommerce.id,
             name: attendeeUser.userCommerce.user.name,
             phone: attendeeUser.userCommerce.user.phone,
-            levelUid: attendeeUser.userCommerce.level.id
+            levelUid: attendeeUser.userCommerce.level.id,
+            commerceUserId: attendeeUser.userCommerce.commerceUserId
           })
         });
         attendeeUserArray.push(attendeesUserEntity);

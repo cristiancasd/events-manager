@@ -29,9 +29,6 @@ export const startRegisterUserAtteendee = ({ eventUid, userCommerceUid }) => {
   };
 };
 
-
-
-
 export const startListAttendeesByEventAndLevel = ({ eventUid, levelUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
@@ -40,8 +37,7 @@ export const startListAttendeesByEventAndLevel = ({ eventUid, levelUid }) => {
     try {
       const { data } = await backendApi.get(listAttendeesUserByEventAndLevelPath(eventUid, levelUid));
 
-      const dataNormaliced= data.map((data)=>{
-
+      const dataNormaliced = data.map((data) => {
         return {
           id: data.id,
           eventUid: data.eventUid,
@@ -49,11 +45,9 @@ export const startListAttendeesByEventAndLevel = ({ eventUid, levelUid }) => {
           name: data.userData.name,
           phone: data.userData.phone,
           levelUid: data.userData.levelUid,
-        }
-
-      
-        
-      })
+          commerceUserId: data.userData.commerceUserId,
+        };
+      });
       dispatch(setAttendees(dataNormaliced));
     } catch (error) {
       console.log(error);
@@ -68,8 +62,6 @@ export const startListAttendeesByEventAndLevel = ({ eventUid, levelUid }) => {
     dispatch(setIsFetching(false));
   };
 };
-
-
 
 const existError = (error, email = '') => {
   //console.log('el error users es ', error)

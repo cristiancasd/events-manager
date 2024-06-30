@@ -1,10 +1,14 @@
 import {
   BadRequestError,
+  CustomError,
   NotFoundError,
   attendeeAlreadyRegisteredMessage,
+  codeAttendeeNotFound,
   codeDbAttendeeAlreadyExist,
+  codeTicketNotFound,
   errorHandlerUseCase
 } from '../../../core';
+import { UserTicketUseCaseInterface } from '../../user-ticket';
 import {
   AttendeeUserEntity,
   AttendeeUserRepository,
@@ -13,7 +17,8 @@ import {
 
 export class AttendeesUserUseCase implements AttendeesUserUseCaseInterface {
   constructor(
-    private readonly _attendeesUserRepository: AttendeeUserRepository
+    private readonly _attendeesUserRepository: AttendeeUserRepository,
+    private readonly _userTicketUseCase: UserTicketUseCaseInterface
   ) {}
 
   @errorHandlerUseCase
@@ -22,15 +27,27 @@ export class AttendeesUserUseCase implements AttendeesUserUseCaseInterface {
     userCommerceUid: string
   ): Promise<AttendeeUserEntity> {
     try {
+      await this._userTicketUseCase.findUserTicketByUserAndEvent(
+        userCommerceUid,
+        eventUid
+      );
       await this._attendeesUserRepository.findAttendeeByUserCommerceUid(
         eventUid,
         userCommerceUid
       );
     } catch (err) {
-      return await this._attendeesUserRepository.registerAttendeeUser(
-        eventUid,
-        userCommerceUid
-      );
+      if (err instanceof NotFoundError) {
+        if (err.code === codeTicketNotFound) {
+          throw err;
+        }
+        if (err.code === codeAttendeeNotFound) {
+          return await this._attendeesUserRepository.registerAttendeeUser(
+            eventUid,
+            userCommerceUid
+          );
+        }
+      }
+      throw err;
     }
     throw new BadRequestError(
       attendeeAlreadyRegisteredMessage,

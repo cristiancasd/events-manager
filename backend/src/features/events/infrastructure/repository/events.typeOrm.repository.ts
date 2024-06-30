@@ -78,7 +78,6 @@ export class TypeOrmEventRepository implements EventsRepository {
       ...data
     });
 
-
     if (!eventSaved) throw new DataBaseError(errorMsgDb);
     return new EventValue({
       ...eventSaved,

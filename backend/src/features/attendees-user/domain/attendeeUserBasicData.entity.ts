@@ -3,4 +3,5 @@ export interface AttendeeUserBasicDataEntity {
   name: string;
   phone: string;
   levelUid: string;
+  commerceUserId: string;
 }

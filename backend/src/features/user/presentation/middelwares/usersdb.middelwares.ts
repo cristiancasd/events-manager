@@ -22,28 +22,25 @@ export const checkUserNameMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { document, commerceUserId, commerceUid, levelUid,id } = req.body;
+  const { document, commerceUserId, commerceUid, levelUid, id } = req.body;
 
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     try {
       if (!commerceUid) throw new BadRequestError(commerceIdInvalidMessage);
       if (!levelUid) throw new BadRequestError(LevelUidInvalidMessage);
-      
+
       let isEditRequest = false;
       if (req.method === 'PUT') {
         isEditRequest = true;
       }
 
-
-      
-    
       const documentExist = await userUseCase.validateDuplicatedData(
         commerceUid as string,
         isEditRequest as boolean,
         id as string | undefined,
         document as string,
-        undefined,
+        undefined
       );
       if (documentExist)
         throw new DataBaseError(
@@ -56,8 +53,7 @@ export const checkUserNameMiddleware = async (
         isEditRequest as boolean,
         id as string | undefined,
         undefined,
-        commerceUserId,
-        
+        commerceUserId
       );
 
       if (commerceUserIdExist)

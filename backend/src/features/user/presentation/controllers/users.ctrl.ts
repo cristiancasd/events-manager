@@ -11,7 +11,7 @@ export class UserController {
   };
 
   public editCtrl = async (req: Request, res: Response) => {
-    console.log('estoy en editar controller ')
+    console.log('estoy en editar controller ');
     const body = req.body;
     const user = await this.userUseCase.editUser(body);
     res.status(201).send(user);
@@ -47,19 +47,20 @@ export class UserController {
     res.status(200).send(result);
   };
 
-  public findUserByDocumentOrCustomIdCtrl = async (req: Request, res: Response) => {
+  public findUserByDocumentOrCustomIdCtrl = async (
+    req: Request,
+    res: Response
+  ) => {
     const { commerceUid } = req.params;
     const { data } = req.query;
     const input = (data as string) || '';
 
     const result = await this.userUseCase.findUserByDocumentOrCustomId(
       commerceUid,
-      input,
+      input
     );
     res.status(200).send(result);
   };
-
-  
 
   public findUserByLevelCtrl = async (req: Request, res: Response) => {
     const { commerceUid, levelUid } = req.params;

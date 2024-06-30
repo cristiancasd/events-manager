@@ -94,9 +94,17 @@ export const configureDependencies = () => {
   const prospectsUseCase = new ProspectsUseCase(prospectsRepository);
   const prospectsCtrl = new ProspectsController(prospectsUseCase);
 
+  const userTicketRepository: UserTicketRepository =
+    new UserTicketRepositoryImpl(userUseCase, eventsUseCase);
+  const userTicketUseCase = new UserTicketUseCase(userTicketRepository);
+  const userTicketCtrl = new UserTicketController(userTicketUseCase);
+
   const attendeeUserRepository: AttendeeUserRepository =
     new AttendeeUserRepositoryImpl(eventsUseCase, userUseCase);
-  const attendeeUserUseCase = new AttendeesUserUseCase(attendeeUserRepository);
+  const attendeeUserUseCase = new AttendeesUserUseCase(
+    attendeeUserRepository,
+    userTicketUseCase
+  );
   const attendeeUserCtrl = new AttendeesUserController(attendeeUserUseCase);
 
   const attendeeProspectRepository: AttendeeProspectRepository =
@@ -114,11 +122,6 @@ export const configureDependencies = () => {
   );
   const ticketUseCase = new TicketUseCase(ticketRepository);
   const ticketCtrl = new TicketController(ticketUseCase);
-
-  const userTicketRepository: UserTicketRepository =
-    new UserTicketRepositoryImpl(userUseCase, eventsUseCase);
-  const userTicketUseCase = new UserTicketUseCase(userTicketRepository);
-  const userTicketCtrl = new UserTicketController(userTicketUseCase);
 
   const seedUseCase = new SeedUseCase(
     authUseCase,

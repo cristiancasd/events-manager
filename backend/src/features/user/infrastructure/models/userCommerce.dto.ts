@@ -6,7 +6,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   BeforeInsert,
-  OneToMany
+  OneToMany,
+  BeforeUpdate
 } from 'typeorm';
 import { CommerceTypeORMEntity } from '../../../commerce';
 import { LevelTypeORMEntity } from '../../../levels';
@@ -45,6 +46,12 @@ export class UserCommerceTypeORMEntity {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedOn?: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  convertToLowerCase() {
+    this.email = this.email.toLocaleLowerCase();
+  }
 
   @ManyToOne(
     () => CommerceTypeORMEntity,
