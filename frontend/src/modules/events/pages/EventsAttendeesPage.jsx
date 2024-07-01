@@ -114,7 +114,7 @@ export const EventsAttendeesPage = () => {
 
   const handleAddTicketToUser = () => {
     const ticketToAdd = {
-      hasPresale: true,
+      hasPresale: false,
       fee: findTicketByLevelUid(user.levelUid, tickets).presaleFee,
       userCommerceUid: user.id,
       totalAttendees: 0,

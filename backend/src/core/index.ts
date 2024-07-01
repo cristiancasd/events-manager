@@ -49,7 +49,8 @@ export {
   codeInvalidToken,
   invalidTokenMessage,
   badCredentialsMessage,
-  inactiveProfileMessage
+  inactiveProfileMessage,
+  ProspectType
 } from './shared/constants';
 export { NotFoundError } from './domain/errors/not-found-error';
 export { InactiveDataError } from './domain/errors/inactive-data-error';
