@@ -2,7 +2,9 @@ import {
   BadRequestError,
   NotFoundError,
   attendeeAlreadyRegisteredMessage,
+  codeAttendeeNotFound,
   codeDbAttendeeAlreadyExist,
+  codeTicketNotFound,
   errorHandlerUseCase
 } from '../../../core';
 import {
@@ -28,11 +30,25 @@ export class AttendeesProspectUseCase
         eventUid,
         prospectUid
       );
-    } catch (err) {
-      return await this._attendeesProspectRepository.registerAttendeeProspect(
+      await this._attendeesProspectRepository.findAttendeeByProspectUid(
         eventUid,
         prospectUid
       );
+    } catch (err) {
+
+      if (err instanceof NotFoundError) {
+        if (err.code === codeTicketNotFound) {
+          throw err;
+        }
+        if (err.code === codeAttendeeNotFound) {
+          return await this._attendeesProspectRepository.registerAttendeeProspect(
+            eventUid,
+            prospectUid
+          );
+        }
+      }
+      throw err;
+      
     }
     throw new BadRequestError(
       attendeeAlreadyRegisteredMessage,
