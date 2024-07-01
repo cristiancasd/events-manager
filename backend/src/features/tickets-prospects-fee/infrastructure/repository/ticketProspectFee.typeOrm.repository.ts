@@ -23,9 +23,7 @@ import { TicketProspectFeeTypeORMEntity } from '../models/ticketProspectFee.dto'
 export class TicketProspectFeeRepositoryImpl
   implements TicketProspectFeeRepository
 {
-  constructor(
-    private commerceUseCase: CommerceUseCase,
-  ) {}
+  constructor(private commerceUseCase: CommerceUseCase) {}
 
   @errorHandlerTypeOrm
   async createTicket(

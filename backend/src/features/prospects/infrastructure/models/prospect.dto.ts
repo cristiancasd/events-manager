@@ -13,6 +13,7 @@ import { ProspectType } from '../../../../core/shared/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { UserCommerceTypeORMEntity } from '../../../user/infrastructure/models/userCommerce.dto';
 import { AttendeeProspectTypeORMEntity } from '../../../attendees-prospect/infrastructure/models/attendeeProspect.dto';
+import { ProspectTicketTypeORMEntity } from '../../../prospect-ticket';
 
 @Entity('prospect')
 export class ProspectTypeORMEntity {
@@ -50,6 +51,15 @@ export class ProspectTypeORMEntity {
     }
   )
   userCommerce!: UserCommerceTypeORMEntity;
+
+  @OneToMany(
+    () => ProspectTicketTypeORMEntity,
+    (prospectTicket) => prospectTicket.prospect,
+    {
+      cascade: true
+    }
+  )
+  prospectsTicket!: ProspectTicketTypeORMEntity[];
 
   @OneToMany(
     () => AttendeeProspectTypeORMEntity,

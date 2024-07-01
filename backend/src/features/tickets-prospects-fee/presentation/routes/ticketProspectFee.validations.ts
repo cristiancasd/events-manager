@@ -4,7 +4,13 @@ const prospectTypeValues = Object.values(ProspectType);
 
 export const validateTicketProspectFeeBody: ValidationChain[] = [
   body('commerceUid').isUUID().withMessage('commerceUid must be UUID'),
-  body('name').isIn(prospectTypeValues).withMessage(`name must be one of the following values: ${prospectTypeValues.join(', ')}`),
+  body('name')
+    .isIn(prospectTypeValues)
+    .withMessage(
+      `name must be one of the following values: ${prospectTypeValues.join(
+        ', '
+      )}`
+    ),
   body('fee').isInt().withMessage('fee must be int')
 ];
 

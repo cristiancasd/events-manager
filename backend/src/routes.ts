@@ -1,8 +1,5 @@
 import { Router } from 'express';
-import {
-  commerceRoutes,
-  levelRoutes,
-} from './features';
+import { commerceRoutes, levelRoutes } from './features';
 import { eventsRoutes } from './features/events/presentation/routes/events.routes';
 import { userRoutes } from './features/user/presentation/routes/users.routes';
 import { authRoutes } from './features/auth/presentation/routes/auth.routes';
@@ -13,6 +10,7 @@ import { ticketRoutes } from './features/tickets/presentation/routes/ticket.rout
 import { userTicketRoutes } from './features/user-ticket/presentation/routes/userTicket.routes';
 import { seedRoutes } from './features/seed/presentation/routes/seed.routes';
 import { ticketProspectFeeRoutes } from './features/tickets-prospects-fee/presentation/routes/ticketProspectFee.routes';
+import { prospectTicketRoutes } from './features/prospect-ticket/presentation/routes/prospectTicket.routes';
 
 const router = Router();
 
@@ -28,7 +26,7 @@ router.use('/attendee/user', attendeesUserRoutes);
 router.use('/attendee/prospect', attendeesProspectRoutes);
 router.use('/ticket', ticketRoutes);
 router.use('/ticket-prospect-fee', ticketProspectFeeRoutes);
-
 router.use('/ticket/user', userTicketRoutes);
+router.use('/ticket-prospect-fee/prospect', prospectTicketRoutes);
 
 export default router;

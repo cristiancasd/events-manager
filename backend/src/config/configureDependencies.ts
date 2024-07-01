@@ -63,6 +63,12 @@ import {
   TicketProspectFeeRepositoryImpl,
   TicketProspectfeeUseCase
 } from '../features/tickets-prospects-fee';
+import {
+  ProspectTicketController,
+  ProspectTicketRepository,
+  ProspectTicketRepositoryImpl,
+  ProspectTicketUseCase
+} from '../features/prospect-ticket';
 
 // In this method you choose the dependencies to use
 export const configureDependencies = () => {
@@ -138,6 +144,15 @@ export const configureDependencies = () => {
     ticketProspectFeeUseCase
   );
 
+  const prospectTicketRepository: ProspectTicketRepository =
+    new ProspectTicketRepositoryImpl(prospectsUseCase, eventsUseCase);
+  const prospectTicketUseCase = new ProspectTicketUseCase(
+    prospectTicketRepository
+  );
+  const prospectTicketCtrl = new ProspectTicketController(
+    prospectTicketUseCase
+  );
+
   const seedUseCase = new SeedUseCase(
     authUseCase,
     commerceUseCase,
@@ -180,6 +195,8 @@ export const configureDependencies = () => {
     ticketProspectFeeUseCase,
     userTicketCtrl,
     userTicketUseCase,
+    prospectTicketCtrl,
+    prospectTicketUseCase,
     seedCtrl,
     seedUseCase
   };

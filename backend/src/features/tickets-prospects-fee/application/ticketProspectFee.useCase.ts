@@ -33,7 +33,7 @@ export class TicketProspectfeeUseCase
       throw new DataBaseError(duplicatedNameMessage, codeDbNameDuplicated);
     } catch (err) {
       if (err instanceof NotFoundError) {
-        const dataNormalcied= new TicketProspectFeeValue(data)
+        const dataNormalcied = new TicketProspectFeeValue(data);
         return await this._ticketRepository.createTicket(dataNormalcied);
       } else {
         throw err;
