@@ -22,7 +22,7 @@ export const TicketUserEditModalsComponent = ({ user, onEditTicketUser, open, ha
   const { ticketUser } = useSelector((state) => state.ticketUsers);
 
   const [value, setValue] = useState(ticketUser?.fee ?? '');
-  const [isPresale, setIsPresale] = useState('');
+  const [isPresale, setIsPresale] = useState(ticketUser?.hasPresale??'');
 
   const handleEditTicketUser = () => {
     const ticketUserInfo = {

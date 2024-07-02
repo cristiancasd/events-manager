@@ -5,6 +5,7 @@ export * from './tickets';
 export * from './levels';
 export * from './users';
 export * from './ticket-user';
-export * from './ticket-user';
+export * from './ticket-prospect';
+export * from './ticket-prospet-fee';
 export * from './prospects';
 export * from './attendees';

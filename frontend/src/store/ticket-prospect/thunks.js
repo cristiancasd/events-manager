@@ -1,16 +1,16 @@
 import { backendApi } from '../../api';
 import { setErrorMessage, setIsFetching, setSuccessMessage } from '../common';
 import { variableStatus } from '../../shared';
-import { setTicketUser, setTicketUsersStatus } from './ticketUsersSlice';
-import { createTicketUserPath, editTicketUserPath, findTicketUserPath } from './constants';
+import { setTicketProspect, setTicketProspectsStatus } from './ticketProspectsSlice';
+import { createTicketProspectPath, editTicketProspectPath, findTicketProspectPath } from './constants';
 
-export const startFindTicketUser = ({ userCommerceUid, eventUid }) => {
+export const startFindTicketProspect = ({ prospectUid, eventUid }) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setTicketUsersStatus({ ticketUser: variableStatus.fetching }));
+    dispatch(setTicketProspectsStatus({ ticketProspect: variableStatus.fetching }));
     try {
-      const { data } = await backendApi.get(findTicketUserPath(userCommerceUid, eventUid));
-      dispatch(setTicketUser(data));
+      const { data } = await backendApi.get(findTicketProspectPath(prospectUid, eventUid));
+      dispatch(setTicketProspect(data));
     } catch (error) {
       console.log(error);
       const message = existError(error);
@@ -19,19 +19,19 @@ export const startFindTicketUser = ({ userCommerceUid, eventUid }) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setTicketUsersStatus({ ticketUser: variableStatus.ok }));
+    dispatch(setTicketProspectsStatus({ ticketProspect: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
-export const startCreateTicketUser = (ticketUser) => {
+export const startCreateTicketProspect = (ticketProspect) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setTicketUsersStatus({ ticketUser: variableStatus.fetching }));
+    dispatch(setTicketProspectsStatus({ ticketProspect: variableStatus.fetching }));
     try {
-      const { data } = await backendApi.post(createTicketUserPath, ticketUser);
-      dispatch(setTicketUser(data));
-      dispatch(setSuccessMessage('Ticket relacionado'));
+      const { data } = await backendApi.post(createTicketProspectPath, ticketProspect);
+      dispatch(setTicketProspect(data));
+      dispatch(setSuccessMessage('Ticket-Prospect relacionado'));
       setTimeout(() => {
         dispatch(setSuccessMessage(undefined));
       }, 10);
@@ -43,19 +43,19 @@ export const startCreateTicketUser = (ticketUser) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setTicketUsersStatus({ ticketUser: variableStatus.ok }));
+    dispatch(setTicketProspectsStatus({ ticketProspect: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
-export const startEditTicketUser = (ticketUser) => {
+export const startEditTicketProspect = (ticketProspect) => {
   return async (dispatch) => {
     dispatch(setIsFetching(true));
-    dispatch(setTicketUsersStatus({ ticketUser: variableStatus.fetching }));
+    dispatch(setTicketProspectsStatus({ ticketProspect: variableStatus.fetching }));
     try {
-      const { data } = await backendApi.put(editTicketUserPath, ticketUser);
-      dispatch(setTicketUser(data));
-      dispatch(setSuccessMessage('Ticket-Usuario Editado'));
+      const { data } = await backendApi.put(editTicketProspectPath, ticketProspect);
+      dispatch(setTicketProspect(data));
+      dispatch(setSuccessMessage('Ticket-Prospect Editado'));
       setTimeout(() => {
         dispatch(setSuccessMessage(undefined));
       }, 10);
@@ -67,13 +67,13 @@ export const startEditTicketUser = (ticketUser) => {
         dispatch(setErrorMessage(undefined));
       }, 10);
     }
-    dispatch(setTicketUsersStatus({ ticketUser: variableStatus.ok }));
+    dispatch(setTicketProspectsStatus({ ticketProspect: variableStatus.ok }));
     dispatch(setIsFetching(false));
   };
 };
 
 const existError = (error, email = '') => {
-  //console.log('el error ticketUsers es ', error)
+  //console.log('el error ticketProspects es ', error)
 
   try {
     if (error.response) {
@@ -82,7 +82,7 @@ const existError = (error, email = '') => {
 
         let errorMessage = '';
 
-        if (errors[0].code == 808) return 'Ticket not found';
+        if (errors[0].code == 808) return 'Ticket-Prospect not found';
         errors.forEach((data) => {
           errorMessage += errorMessage + data.message + '\n';
         });
